@@ -37,11 +37,14 @@ class card:
             value += 20
             if (self.rank == "J"):
                 value = 28
-        elif (suits.index(self.suit) + suits.index(trump) % 2 == 0 and self.rank == "J"):
+        elif (((suits.index(self.suit) + suits.index(trump)) % 2 == 0) and self.rank == "J"):
             value = 27
         elif (self.suit == lead):
             value += 10
-        print "rank: %2i card: %s trump %s" % (value, self, trump)
+
+        #This print statement is for debugging
+        #print "rank: %2i card: %s trump %s" % (value, self, trump)
+
         return value
     def __str__(self):
         output = ""
@@ -74,16 +77,19 @@ class hand(object):
         self.cards.remove(card)
         other_hand.add(card)
 class trick(hand):
-    """Trick is inherited from Hand. Has winner"""
-    def winner(self, trump):
+    """Trick is inherited from Hand. Has best_card"""
+    def best_card(self, trump):
         lead = self.cards[0].suit
-        winner = card()
+        best_card = self.cards[0]
+        best_value = best_card.value(trump, lead)
         for each_card in self.cards:
-            if(each_card.value(trump) > winner.value(trump)):
-                winner = each_card
-        else:
-            winner = self.cards[0]
-        return self.cards.index(winner)
+            if(each_card.value(trump, lead) > best_value):
+                best_card = each_card
+                best_value = best_card.value(trump, lead)                
+        this = self.cards.index(best_card)
+        # This print statement is for debugging
+        #print best_card, "is #", this + 1
+        return self.cards.index(best_card)
 class deck(hand):
     """Deck is inherited from Hand. has: populate, deal, and shuffle"""
     def populate(self):
@@ -147,7 +153,7 @@ class player(hand):
             index += 1
     def get_bid(self, top_card = 0, dealer = 0):
         if(top_card == 0):
-            print "\033[2J\033[0;0H",
+#            print "\033[2J\033[0;0H",
             print "\nYour hand", self.index + 1, "\033[1D:", self
             bid = (raw_input("\tYour bid: Spades, Clubs, Diamonds, Hearts or Pass? ") + " ").upper()[0]
             while(1):
@@ -161,7 +167,7 @@ class player(hand):
                     print "\033[1A\033[59Cinvalid input"
                     bid = (raw_input("\tYour bid: Spades, Clubs, Diamonds, Hearts or Pass? ") + " ").upper()[0]
         else:
-            print "\033[2J\033[0;0H",
+#            print "\033[2J\033[0;0H",
             print "\nYour hand", self.index + 1, "\033[1D:" , self
             print "the top card is", top_card
             print "the dealer is", dealer + 1
@@ -179,7 +185,7 @@ class player(hand):
         return bid
     def pick_it_up(self, top_card):
         self.add(top_card)
-        print "\033[2J\033[0;0H",
+#        print "\033[2J\033[0;0H",
         print "Your hand", self.index + 1, "\033[1D:" , self
         print "     ",
         for i in range(len(self.cards)):
@@ -189,7 +195,7 @@ class player(hand):
         while(not ("1" <= card and card <= "6")):
             if (card == "Q"):
                 exit()            
-            print "\033[1A\033[33Cinvalid input"
+            print "\033[1A\033[35Cinvalid input"
             card = (raw_input("Which card do you want to discard? ") + " ").upper()[0]
         index = 0        
         for i in ["1", "2", "3", "4", "5", "6"]:
@@ -203,11 +209,13 @@ class comp(player):
             index = random.randrange(0, len(self.cards) - 1)
         except:
             index = 0
+        # This print is for debugging        
+        #print "(", self.index + 1, self.cards[index], ")\t",
         return self.cards[index]
     def get_bid(self, top_card = 0, dealer = 0):
-#        bid = "P"
+        bid = "P"        
         bid = suits[random.randrange(0,5)]
-        if (bid == None): bid = "P"
+        if (bid == None or top_card != 0): bid = "P"
         return bid
     def pick_it_up(self, top_card):
         self.add(top_card)
@@ -219,15 +227,16 @@ class euchre:
     def __init__(self):
         """Sets up and starts a game."""
         bid = ""
+#        dealer = random.randrange(0,4)
         dealer = 0
         while(not self.good_bid(bid)):
             my_deck = deck()
             my_deck.populate()
             my_deck.shuffle()
-#            players = [player(), comp(), comp(), comp(), ] 
+            players = [player(), comp(), comp(), comp(), ] 
 #            players = [player(), player(), player(), player(), ] 
 #            players = [player(), comp(), player(), comp(), ] 
-            players = [comp(), comp(), comp(), comp(), ] 
+#            players = [comp(), comp(), comp(), comp(), ] 
             my_deck.deal(players, dealer)
 
             for each_player in players:
@@ -241,11 +250,19 @@ class euchre:
         del bid
         leader = dealer + 1
         del dealer
-        tricks = [trick(), trick(), trick(), trick(), trick(),]
+        dealer = 0
+#        tricks = [trick(), trick(), trick(), trick(), trick(),]
+        tricks = 5 * [trick()]
         for each_trick in tricks:
-            each_trick = self.get_play(players, trump, leader)
-            leader = each_trick.winner(trump)
-            print "The winner was: ", leader, "of", each_trick
+            print
+            print
+            each_trick = self.get_play(players, trump, (dealer + leader) % 4)
+#            leader = self.leader_is(leader)[each_trick.best_card(trump)]
+            dealer = leader
+            leader =  each_trick.best_card(trump)
+#            print "\033[2J\033[0;0H",
+            print "The winner was: ", (dealer + leader) % 4 + 1, " = ", each_trick.cards[leader], "of", each_trick
+            dealer = leader
         for each_trick in tricks:
             while (len(each_trick.cards) > 0):      
                 each_trick.give(played_cards.cards[0], my_deck)
@@ -257,6 +274,7 @@ class euchre:
         for index in range(0, 4):
             play_this_card = players[((leader + index) % 4)].get_play(trump, played_cards)
             players[((leader + index) % 4)].give(play_this_card, played_cards)
+        print
         return played_cards
 
     def get_bid(self, players, top_card, dealer):
@@ -290,7 +308,7 @@ class euchre:
             x = [4, 1, 2, 3]
         return x
     def leader_is(self, n):
-        return dealer_is(n - 1)
+        return self.dealer_is(n - 1)
     def good_play(self):
         pass
 def main():
