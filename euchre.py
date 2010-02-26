@@ -228,8 +228,16 @@ class comp(player):
         try:
             print """Try to follow suit"""
             results.cards = self.search(suit = played_cards.cards[0].suit)
+            if ((((ranks.index(trump) + ranks.index(played_cards.cards[0].suit)) % 2) == 0) and (trump != played_cards.cards[0].suit)):
+                for card in results.cards:
+                    if(card.rank == "J"):
+                        results.remove(card(played_cards.cards[0].suit, "J"))
             results.bubble_sort()
-            index = random.randrange(0, len(results.cards) - 1)
+            if (len(results.cards) != 1):
+                index = random.randrange(0, len(results.cards) - 1)
+                index = self.cards.index(results.cards[index])                    
+            else:
+                index = 0
         except IndexError:
             print """This is the first player of trick aka the Leader"""        
             try:
@@ -246,7 +254,7 @@ class comp(player):
                         else:
                             print """All trump???"""
                             index = 0
-                index = random.randrange(0, len(self.cards) - 1)
+#                index = random.randrange(0, len(self.cards) - 1)
             except ValueError:
                 print """This is the last trick"""
                 index = 0
