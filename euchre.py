@@ -10,6 +10,19 @@ import random
 ###trump
 ###throw off
 
+
+
+# * * * * * * * * * * * * *
+# * To Do List            *
+# * - - - - - - - - - - - *
+# * Make Shell            *
+# * Make Client           *
+# * - GUI                 *
+# * - Commandline         *
+# * * * * * * * * * * * * *
+
+
+
 ranks = [None, "9", "10", "J", "Q", "K", "A",]
 suits = [None, "S", "D", "C", "H"]
 #         1    2    3    4
@@ -148,9 +161,16 @@ class player(hand):
     def set_hand(self, hand):
         """Set_hand assigns the cards to the hand"""
         self.cards = hand.cards
+    def good_play(self, card):
+        try:
+            good_play = (0 < int(card) and int(card) <= len(self.cards))
+        except ValueError:
+            good_play = ("1" <= card and card <= ["1", "2", "3", "4", "5"][len(self.cards) - 1])
+        return good_play        
+    
     def get_play(self, trump, played_cards):
         """Finds the card to play by prompting the user for input."""
-#        print "\033[2J\033[0;0H",
+        #print "\033[2J\033[0;0H",
         print "Cards played so far:", played_cards
         print "Your hand", self.index + 0, "\033[1D:" , self,
         print "Trump is: ", trump
@@ -159,7 +179,7 @@ class player(hand):
             print "        ",  i + 1,
         print
         card = ((raw_input("Which card would you like to play? ") + " ").upper()[0])
-        while(not ("1" <= card and card <= ["1", "2", "3", "4", "5"][len(self.cards) - 1])):
+        while(not self.good_play(card)):
             if (card == "q" or card == "Q"):    exit()            
             print "\033[1A\033[35Cinvalid input"
             card = (raw_input("Which card would you like to play? ") + " ").upper()[0]
@@ -170,7 +190,7 @@ class player(hand):
             index += 1
     def get_bid(self, top_card = 0, dealer = 0):
         if(top_card == 0):
-#            print "\033[2J\033[0;0H",
+            #print "\033[2J\033[0;0H",
             print "\nYour hand", self.index + 0, "\033[1D:", self
             bid = (raw_input("\tYour bid: Spades, Clubs, Diamonds, Hearts or Pass? ") + " ").upper()[0]
             while(1):
@@ -184,7 +204,7 @@ class player(hand):
                     print "\033[1A\033[59Cinvalid input"
                     bid = (raw_input("\tYour bid: Spades, Clubs, Diamonds, Hearts or Pass? ") + " ").upper()[0]
         else:
-#            print "\033[2J\033[0;0H",
+            #print "\033[2J\033[0;0H",
             if (dealer == self.index): msg = "\t Pick it up? "
             else: msg = "\tOrder it up? " 
             print "\nYour hand", self.index + 0, "\033[1D:" , self
@@ -204,7 +224,7 @@ class player(hand):
         return bid
     def pick_it_up(self, top_card):
         self.add(top_card)
-#        print "\033[2J\033[0;0H",
+        #print "\033[2J\033[0;0H",
         print "Your hand", self.index + 0, "\033[1D:" , self
         print "     ",
         for i in range(len(self.cards)):
@@ -223,11 +243,15 @@ class player(hand):
             index += 1
 class comp(player):
     """Player is inherited from hand, is a "computer" player and has limited AI. Has get_play, get_bid, pick_it_up"""
-    def get_play(self, trump, played_cards):
+    """ Cards that it can beat vs cards that beat it"""
+#    def get_play(self, trump, played_cards):
+        #return self.get_play_ai(trump, played_cards)
+    def get_play_ai(self, trump, played_cards):
         results = hand()
         try:
             print """Try to follow suit"""
             results.cards = self.search(suit = played_cards.cards[0].suit)
+            print results
             if ((((ranks.index(trump) + ranks.index(played_cards.cards[0].suit)) % 2) == 0) and (trump != played_cards.cards[0].suit)):
                 for card in results.cards:
                     if(card.rank == "J"):
@@ -262,8 +286,12 @@ class comp(player):
             print """Can't follow suit (not leader)"""
             try:
                 results.cards = self.search(suit = trump)
+                print results
                 results.bubble_sort()
-                index = random.randrange(0, len(results.cards) - 1)
+                if (len(results.cards > 1)):
+                    index = random.randrange(0, len(results.cards) - 1)
+                else:
+                    index = 0
             except ValueError:
                 print """No trump... through smallest card"""
                 cards = self.search(rank = self.cards[len(self.cards) - 1].rank)
@@ -376,7 +404,7 @@ class euchre:
         for each_trick in tricks:
             each_trick = self.get_play(players, trump, leader)
             winner = each_trick.best_card(trump)
-#            print "\033[2J\033[0;0H",
+#            #print "\033[2J\033[0;0H",
             #This is a print statement used for debugging
             #print "(",leader,"+",winner,") % 4 =", leader+winner, "% 4 =", (leader+winner) % 4
             print "The winner was: ", (leader + winner) % 4, " = ", each_trick.cards[winner], "of", each_trick
@@ -390,7 +418,10 @@ class euchre:
         """Handles the card play for all players"""
         played_cards = trick()
         for index in range(0, 4):
-            play_this_card = players[((leader + index) % 4)].get_play(trump, played_cards)
+            play_this_card2 = players[((leader + index) % 4)].get_play(trump, played_cards)
+            play_this_card = players[((leader + index) % 4)].get_play_ai(trump, played_cards)
+            if (play_this_card != play_this_card2):
+                print "\033[32m\n\033[mERRROR!!!!!!!!!!!!!\n"
             players[((leader + index) % 4)].give(play_this_card, played_cards)
         print
         return played_cards
@@ -414,21 +445,6 @@ class euchre:
             return 1
         else:
             return 0
-#    def dealer_is(self, n):
-#        x = []
-#        if (n == 0 or n == 4):
-#            x = [1, 2, 3, 4]
-#        elif (n == 1 or n == 5):
-#            x = [2, 3, 4, 1]
-#        elif (n == 2):
-#            x = [3, 4, 1, 2]
-#        elif (n == 3):
-#            x = [4, 1, 2, 3]
-#        return x
-#    def leader_is(self, n):
-#        return self.dealer_is(n - 1)
-#    def good_play(self):
-#        pass
 def main():
     euchre()
     
