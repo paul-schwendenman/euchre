@@ -12,24 +12,13 @@ import random
 
 
 
-# * * * * * * * * * * * * *
-# * To Do List            *
-# * - - - - - - - - - - - *
-# * Make Shell            *
-# * Make Client           *
-# * - GUI                 *
-# * - Commandline         *
-# * * * * * * * * * * * * *
-
-
-
+# Constants fo the euchre game.
 ranks = [None, "9", "10", "J", "Q", "K", "A",]
 suits = [None, "S", "D", "C", "H"]
-#         1    2    3    4
 suit_chars = [None, unichr(9824), unichr(9827), unichr(9829), unichr(9830)]
 #suit_chars = [None, 9824, 9827, 9829, 9830]
 
-# card Class
+
 class card:
     """Card class has: __init__, getRank, getSuit, and __str__"""
     def __init__(self, rank = None, suit = None):
@@ -70,7 +59,7 @@ class card:
         return output
 
 class hand(object):
-    """Hand of playing cards, base class __init__, __str__, clear, add, remove, and give"""
+    """Hand is used as the base class for all the rest of the card handlers. Hand of playing cards, base class __init__, __str__, clear, add, remove, and give"""
     def __init__(self):
         self.index = 0
         self.cards = []
