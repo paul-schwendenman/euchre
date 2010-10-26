@@ -26,16 +26,17 @@ suit_chars = [None, unichr(9824), unichr(9827), unichr(9829), unichr(9830)]
 class card:
     """Card class has: __init__, getRank, getSuit, and __str__"""
     def __init__(self, rank = None, suit = None):
+        """Makes a new card. by default the card is blank or has no suit or value (rank)."""
         self.rank = rank
         self.suit = suit
         self.ranks = ranks
         self.suits = suits
     def getRank(self):
-        """returns the rank of the card, i.e. 9"""
+        """returns the rank of the card, i.e. 9 or J"""
         """remove?"""
         return self.rank
     def getSuit(self):
-        """returns the suit of the card, i.e. S"""
+        """returns the suit of the card, i.e. S or D"""
         """remove?"""
         return self.suit
     def value(self, trump, lead = None):
@@ -68,6 +69,7 @@ class card:
 
         return value
     def __str__(self):
+        """prints information of the card in the form: R of S, where R is rank and S is suit"""
         output = ""
 #            output += "%2s of %s" % (self.ranks[self.rank], self.suits[self.suit])
         if (self.suit == "d" or self.suit == "D" or self.suit == "h" or self.suit == "H"):
@@ -80,10 +82,12 @@ class card:
 class hand():
     """Hand is used as the base class for all the rest of the card handlers. Hand of playing cards, base class __init__, __str__, clear, add, remove, and give"""
     def __init__(self):
+        """Blank hand. No Cards yet."""
         self.index = 0
         self.cards = []
         self.name = ""
     def __str__(self):
+        """Prints a list of cards."""
         if self.cards:
             rep = ""
             for card in self.cards:
@@ -92,16 +96,26 @@ class hand():
             rep = "<empty>"
         return rep
     def clear(self):
+        """Erases all cards in hand"""
         self.cards = []
     def add(self, card):
+        """Adds a card, given card object"""
         self.cards.append(card)
     def remove(self, card):
+        """Removes a specific card"""
         self.cards.remove(card)
     def give(self, card, other_hand):
+        """Removes a specific card and then adds it to another hand"""
         self.cards.remove(card)
         other_hand.add(card)
+    def steal(self, card, other_hand):
+        """Removes a specific card from another hand and then adds it"""
+        other_hand.remove(card)
+        self.cards.add(card)
+    
     def bubble_sort(self, trump = None):
-        "Sorts list in place and returns it. Either by trump if given or by suit."
+        """Sorts a list in place and returns it. Either by trump if given or by suit."""
+        """Separate the two functions?"""
         cards = self.cards
         for passesLeft in range(len(cards)-1, 0, -1):
             for index in range(passesLeft):
@@ -113,6 +127,8 @@ class hand():
                        cards[index], cards[index + 1] = cards[index + 1], cards[index]
         self.cards = cards
     def search(self, suit = None, rank = None):
+        """Searches for a type of card and then returns the list of all matches"""
+        """Must be better way to accomplish this"""
         cards = self.cards[:]
         for card in cards[:]:
             if ((card.suit != suit and suit != None) or (card.rank != rank and rank != None)):
@@ -121,6 +137,7 @@ class hand():
 class trick(hand):
     """Trick is inherited from Hand. Has best_card"""
     def best_card(self, trump):
+        """Returns the index of the most valuable card"""
         lead = self.cards[0].suit
         best_card = self.cards[0]
         best_value = best_card.value(trump, lead)
@@ -171,6 +188,8 @@ class player(hand):
         """Set_hand assigns the cards to the hand"""
         self.cards = hand.cards
     def good_play(self, card):
+        """Checks the validity of a card choice"""
+        """Remove this and append to the code where it is,  no reason to have this pulled out"""
         try:
             good_play = (0 < int(card) and int(card) <= len(self.cards))
         except ValueError:
@@ -198,6 +217,7 @@ class player(hand):
                 return self.cards[index]
             index += 1
     def bid(self, top_card = 0, dealer = 0):
+        """Retrieves the bid from a player"""
         if(top_card == 0):
             #print "\033[2J\033[0;0H",
             print "\nYour hand", self.index + 0, "\033[1D:", self
@@ -232,6 +252,7 @@ class player(hand):
                     bid = (raw_input(msg) + " ").upper()[0]
         return bid
     def pick_it_up(self, top_card):
+        """Function that handles adding a card to the deck and then discarding a card."""
         self.add(top_card)
         #print "\033[2J\033[0;0H",
         print "Your hand", self.index + 0, "\033[1D:" , self
@@ -251,6 +272,8 @@ class player(hand):
                 self.remove(self.cards[index])
             index += 1
     def worst_card(self, trump):
+        """Returns the lowest valued card"""
+        """Replace with sort()[:1] ?"""
         lead = self.cards[0].suit
         best_card = self.cards[0]
         best_value = best_card.value(trump, lead)
@@ -263,6 +286,8 @@ class player(hand):
         #print best_card, "is #", this + 1
         return self.cards.index(best_card)
     def best_card(self, trump):
+        """Returns the highest valued card"""
+        """Use trick? Replace with sort()[1:] ?"""
         lead = self.cards[0].suit
         best_card = self.cards[0]
         best_value = best_card.value(trump, lead)
@@ -274,14 +299,19 @@ class player(hand):
         # This print statement is for debugging
         #print best_card, "is #", this + 1
         return self.cards.index(best_card)
+    def tip():
+        """Suggest a move to the player using comp() to analyze the situation"""
+        pass
 
 
 class comp(player):
     """Player is inherited from hand, is a "computer" player and has limited AI. Has get_play, get_bid, pick_it_up"""
     """ Cards that it can beat vs cards that beat it"""
+    
 #    def get_play(self, trump, played_cards):
         #return self.get_play_ai(trump, played_cards)
     def get_play_ai(self, trump, played_cards):
+        """AI version of play, brains here?"""
         results = hand()
         try:
             print """Try to follow suit"""
@@ -351,6 +381,7 @@ class comp(player):
         return self.cards[index]
         
     def get_play_with_ifs():
+        """AI play rewritten without try...except"""
         index = 0
         this = player()
         this.set_hand(played_cards)
@@ -390,6 +421,7 @@ class comp(player):
         return self.cards[index]
 
     def bid(self, top_card = 0, dealer = 0):
+        """Get the ai bid"""
         bid = "P"
         if top_card == 0:
             """Everyone Passed"""
@@ -411,10 +443,12 @@ class comp(player):
         return bid
 
     def value(self):
+        """Returns the lump sum of the values of every card"""
         for card in self.cards:
             value += card.value
         return value    
     def pick_it_up(self, top_card):
+        """Handle adding card to hand and removing the worst"""
         self.add(top_card)
         index = 0
         index = random.randrange(0, len(self.cards) - 1)
@@ -425,6 +459,7 @@ class table:
         pass
 
     def start(self):
+        """begins a game by adding players"""
         num_players = 0
         self.players = []
 #            self.players = [player(), comp(), comp(), comp(), ] 
@@ -444,6 +479,7 @@ class bid:
 
 
     def start(self, players):
+        """Starts up the deck and deals"""
         bid = ""
         self.dealer = random.randrange(0,4)
 #        self.dealer = 0
@@ -459,10 +495,12 @@ class bid:
 
 
     def bid():
+        """Handles bidding for all players"""
         top_card = self.deck.cards[0]
         bid = self.bid(players, top_card)
         return bid
     def play(self, players, bid = 'S'):
+        """Handles the card play given a bid"""
         trump = bid
         played_cards = hand()
         del bid
