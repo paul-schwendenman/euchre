@@ -31,14 +31,6 @@ class card:
         self.suit = suit
         self.ranks = ranks
         self.suits = suits
-    def getRank(self):
-        """returns the rank of the card, i.e. 9 or J"""
-        """remove?"""
-        return self.rank
-    def getSuit(self):
-        """returns the suit of the card, i.e. S or D"""
-        """remove?"""
-        return self.suit
     def value(self, trump, lead = None):
         """Calculates the value of the card bassed on trump and a lead?
         better was to do this?"""
@@ -308,10 +300,48 @@ class comp(player):
     """Player is inherited from hand, is a "computer" player and has limited AI. Has get_play, get_bid, pick_it_up"""
     """ Cards that it can beat vs cards that beat it"""
     
-#    def get_play(self, trump, played_cards):
-        #return self.get_play_ai(trump, played_cards)
+    def get_play(self, trump, played_cards):
+        """Return the play from the "player" Compare the AI to the Human."""
+        p1 = player.get_play(self, trump, played_cards)
+        #p2 = self.get_play_ai(trump, played_cards)
+        p2 = self.get_play_ai_try(trump, played_cards)
+        if p1 != p2:
+            print "error!"
+        else:
+            print "pass"
+        return p2
     def get_play_ai(self, trump, played_cards):
-        """AI version of play, brains here?"""
+        """The new play() function"""
+        """Insert thought process here:"""
+        num = len(played_cards)
+        if(num == 0):
+            self.first()
+        elif(num == 1):
+            self.second()
+        elif(num == 2):
+            self.third()
+        elif(num == 3):
+            self.last()
+        else:
+            raise IndexError
+    def first():
+        """leader plays highest card or highest non-trump"""
+        pass
+    def second():
+        """follow suit highest
+        lowest else lowest trump
+        lowest card"""
+        pass
+    def third():
+        """if two winning hand play like two
+        else through smallest card"""
+        pass
+    def last():
+        """if two is winning play lowest
+        else lowest to take trick"""
+        pass
+    def get_play_ai_try(self, trump, played_cards):
+        """AI version of play using try...except"""
         results = hand()
         try:
             print """Try to follow suit"""
@@ -525,10 +555,7 @@ class bid:
         """Handles the card play for all players"""
         played_cards = trick()
         for index in range(0, 4):
-            play_this_card2 = players[((leader + index) % 4)].get_play(trump, played_cards)
-            play_this_card = players[((leader + index) % 4)].get_play_ai(trump, played_cards)
-            if (play_this_card != play_this_card2):
-                print "\033[32m\n\033[mERRROR!!!!!!!!!!!!!\n"
+            play_this_card = players[((leader + index) % 4)].get_play(trump, played_cards)
             players[((leader + index) % 4)].give(play_this_card, played_cards)
         print
         return played_cards
