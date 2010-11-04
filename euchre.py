@@ -12,7 +12,7 @@ import random
 
 
 
-# Constants fo the euchre game.
+# Constants for the euchre game.
 ranks = [None, "9", "10", "J", "Q", "K", "A",]
 cardname = [None, "9", "10", "J", "Q", "K", "A", "9T", "10T", "QT", "KT", "AT", "LB", "JT"]
 cardvalu = [  -1,  1 ,   2 ,  3 ,  4 ,  5 ,  10,  12 ,   15 ,  20 ,  25 ,  30 ,  31 ,  35 ]
@@ -24,7 +24,7 @@ suit_chars = [None, unichr(9824), unichr(9827), unichr(9829), unichr(9830)]
 
 
 class card:
-    """Card class has: __init__, getRank, getSuit, and __str__"""
+    """Cards are used by the players to organize the game play."""
     def __init__(self, rank = None, suit = None):
         """Makes a new card. by default the card is blank or has no suit or value (rank)."""
         self.rank = rank
@@ -40,21 +40,6 @@ class card:
             value = values["LB"]
         else:
             value = values[self.rank]
-            
-
-#        try:
-#            value = ranks.index(self.rank)
-#        except:
-#            print self.rank, "is not in", ranks
-#            exit()
-#        if (self.suit == trump):
-#            value += 20
-#            if (self.rank == "J"):
-#                value = 28
-#        elif (((suits.index(self.suit) + suits.index(trump)) % 2 == 0) and self.rank == "J"):
-#            value = 27
-#        elif (self.suit == lead):
-#            value += 10
 
         #This print statement is for debugging
         #print "rank: %2i card: %s trump %s" % (value, self, trump)
@@ -106,8 +91,8 @@ class hand():
         self.cards.add(card)
     
     def bubble_sort(self, trump = None):
-        """Sorts a list in place and returns it. Either by trump if given or by suit."""
-        """Separate the two functions?"""
+        """Sorts a list in place and returns it. Either by trump if given or by suit.
+        Separate the two functions?"""
         cards = self.cards
         for passesLeft in range(len(cards)-1, 0, -1):
             for index in range(passesLeft):
@@ -119,8 +104,8 @@ class hand():
                        cards[index], cards[index + 1] = cards[index + 1], cards[index]
         self.cards = cards
     def search(self, suit = None, rank = None):
-        """Searches for a type of card and then returns the list of all matches"""
-        """Must be better way to accomplish this"""
+        """Searches for a type of card and then returns the list of all matches
+        Must be better way to accomplish this"""
         cards = self.cards[:]
         for card in cards[:]:
             if ((card.suit != suit and suit != None) or (card.rank != rank and rank != None)):
@@ -128,7 +113,7 @@ class hand():
         return cards
 class trick(hand):
     """Trick is inherited from Hand. Has best_card"""
-    def best_card(self, trump):
+    def best_card(self, trump, allowtrump = 0):
         """Returns the index of the most valuable card"""
         lead = self.cards[0].suit
         best_card = self.cards[0]
@@ -264,8 +249,8 @@ class player(hand):
                 self.remove(self.cards[index])
             index += 1
     def worst_card(self, trump):
-        """Returns the lowest valued card"""
-        """Replace with sort()[:1] ?"""
+        """Returns the lowest valued card
+        Replace with sort()[:1] ?"""
         lead = self.cards[0].suit
         best_card = self.cards[0]
         best_value = best_card.value(trump, lead)
@@ -278,8 +263,8 @@ class player(hand):
         #print best_card, "is #", this + 1
         return self.cards.index(best_card)
     def best_card(self, trump):
-        """Returns the highest valued card"""
-        """Use trick? Replace with sort()[1:] ?"""
+        """Returns the highest valued card
+        Use trick? Replace with sort()[1:] ?"""
         lead = self.cards[0].suit
         best_card = self.cards[0]
         best_value = best_card.value(trump, lead)
@@ -326,6 +311,7 @@ class comp(player):
             raise IndexError
     def first():
         """leader plays highest card or highest non-trump"""
+        
         pass
     def second():
         """follow suit highest
@@ -484,7 +470,8 @@ class comp(player):
         index = random.randrange(0, len(self.cards) - 1)
         self.remove(self.cards[index])
 class table:
-    """Class for the table, has players."""
+    """Class for the table, has players.
+    Needs to handle: leader, dealer, points etc."""
     def __init__(self):
         pass
 
@@ -500,7 +487,8 @@ class table:
         self.players[1].name = "Phil"
         self.players[2].name = "Sierra"
         self.players[3].name = "Julia"
-
+    def __str__():
+        pass
     
 class bid:
     """Class for each hand in a game, meaning all the stuff needed to play for one hand."""
@@ -591,9 +579,7 @@ class euchre:
         
         self.bid = bid()
         mybid = self.bid.start(self.table.players)
-        self.bid.play(self.table.players, mybid)
-    def rank_cards():
-        pass        
+        self.bid.play(self.table.players, mybid)            
 
 def main():
     euchre()
