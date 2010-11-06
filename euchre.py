@@ -34,17 +34,24 @@ class card:
     def value(self, trump, lead = None):
         """Calculates the value of the card bassed on trump and a lead?
         better was to do this?"""
-        if (self.suit == trump):
-            value = values[self.rank + "T"]
-        elif (self.rank == "J" and trump == left[self.suit]):
-            value = values["LB"]
-        else:
-            value = values[self.rank]
+        value = values[self.relative_suit(trump)]
 
-        #This print statement is for debugging
+        #This print statement can be used for debugging
         #print "rank: %2i card: %s trump %s" % (value, self, trump)
 
         return value
+    def relative_suit(self, trump):
+        if (self.suit == trump):
+            value = self.rank + "T"
+        elif (self.rank == "J" and trump == left[self.suit]):
+            value = "LB"
+        else:
+            value = self.rank
+        return value
+    
+    def is_trump(self, trump):
+        return (self.relative_suit(trump)).endswith("T")
+                
     def __str__(self):
         """prints information of the card in the form: R of S, where R is rank and S is suit"""
         output = ""
@@ -72,6 +79,8 @@ class hand():
         else:
             rep = "<empty>"
         return rep
+    def __len__(self):
+        return len(self.cards)
     def clear(self):
         """Erases all cards in hand"""
         self.cards = []
@@ -84,6 +93,7 @@ class hand():
     def give(self, card, other_hand):
         """Removes a specific card and then adds it to another hand"""
         self.cards.remove(card)
+        card.number = len(other_hand.cards) 
         other_hand.add(card)
     def steal(self, card, other_hand):
         """Removes a specific card from another hand and then adds it"""
@@ -113,6 +123,36 @@ class hand():
         return cards
 class trick(hand):
     """Trick is inherited from Hand. Has best_card"""
+    def _suits(self, suit):
+        lst = []
+        for card in self.cards:
+            if (card.suit == suit):
+                lst.append(card)
+        return lst
+    def _higher(self, rank):
+        lst = []
+        for card in self.cards:
+            if (card.suit >= suit):
+                lst.append(card)
+        return lst
+    def _lower_rank(self, rank):
+        lst = []
+        for card in self.cards:
+            if (card.suit <= suit):
+                lst.append(card)
+        return lst
+    def _trump(self, trump):
+        lst = []
+        for card in self.cards:
+            if (card.is_trump(trump)):
+                lst.append(card)
+        return lst
+    def _not_trump(self, trump):
+        lst = []
+        for card in self.cards:
+            if (not card.is_trump(trump)):
+                lst.append(card)
+        return lst
     def best_card(self, trump, allowtrump = 0):
         """Returns the index of the most valuable card"""
         lead = self.cards[0].suit
@@ -159,7 +199,7 @@ class deck(hand):
             except:
                 print "Can't continue deal. Out of cards!"
         
-class player(hand):
+class player(trick):
     """Player is inherited from trick, is interactive. Has set_hand, get_play, get_bid, pick_it_up, worst_card and highest_nontrump"""
     def set_hand(self, hand):
         """Set_hand assigns the cards to the hand"""
@@ -288,44 +328,134 @@ class comp(player):
     def get_play(self, trump, played_cards):
         """Return the play from the "player" Compare the AI to the Human."""
         p1 = player.get_play(self, trump, played_cards)
-        #p2 = self.get_play_ai(trump, played_cards)
-        p2 = self.get_play_ai_try(trump, played_cards)
+        p2 = self.get_play_ai(trump, played_cards)
+        #p2 = self.get_play_ai_try(trump, played_cards)
         if p1 != p2:
             print "error!"
         else:
             print "pass"
         return p2
     def get_play_ai(self, trump, played_cards):
+        def first():
+            """leader plays highest card or highest non-trump"""
+            #self.cards.bubble_sort(trump)
+            #if (self.card[0].value(trump) == values["JT"]):
+            #    return self.card[0]
+            #else:
+            try:
+                cards = hand()
+                cards.steal(self, card("J", trump))
+                card = cards.pop(1)
+                self.add(card)
+            except:
+                cards = self._not_trump(trump)
+                card = cards.pop(1)
+            finally:
+                if 'card' in locals():    
+                    card = self.cards[0]
+            return card
+        def second():
+            """follow suit highest
+            lowest else lowest trump
+            lowest card"""
+            #self.cards.bubble_sort(trump)
+            lead = played_cards[0].suit
+            cards = trick()
+            
+            if (lead.is_trump(trump)):
+                cards = self._is_trump(trump)
+                high = cards._higher(lead.rank)
+                lower = cards._lower(lead.rank)
+                if(len(high)):
+                    card = high.pop(1)
+                else:
+                    card = lower.pop(-1)
+                if 'card' in locals():
+                    card = self._not_trump(trump).pop(-1)    
+            else:
+                cards = self._not_trump(trump)
+                cards = cards.suit(lead.suit)
+                high = cards._higher(lead.rank)
+                lower = cards._lower(lead.rank)
+                if(len(high)):
+                    card = high.pop(1)
+                else:
+                    card = lower.pop(-1)
+                if 'card' in locals():
+                    card = self._is_trump(trump).pop(-1)
+                if 'card' in locals():
+                    card = self._not_trump(trump).pop(-1)
+            return card                
+        def third():
+            """if two winning hand play like two
+            else throw smallest card"""
+            #self.cards.bubble_sort(trump)
+            if(played_cards[0].value() < played_cards[1].value()):
+                card = second()
+            else:
+                if (lead.is_trump(trump)):
+                    cards = self._is_trump(trump)
+                    cards = cards._lower(lead.rank)
+                    card = cards.pop(-1)
+                    if 'card' in locals():
+                        card = self._not_trump(trump).bubble_sort(trump).pop(-1)    
+                else:
+                    cards = self._not_trump(trump)
+                    cards = cards.suit(lead.suit)
+                    lower = cards._lower(lead.rank)
+                    card = lower.bubble_sort(trump).pop(-1)
+            return card
+        def last():
+            """if two is winning play lowest
+            else lowest to take trick"""
+            #self.cards.bubble_sort(trump)
+            if (played_cards[0].value() < played_cards[1].value() and played_cards[2].value() < played_cards[1].value()):
+                if (lead.is_trump(trump)):
+                    cards = self._is_trump(trump)
+                    cards = cards._lower(lead.rank)
+                    card = cards.pop(-1)
+                    if 'card' in locals():
+                        card = self._not_trump(trump).bubble_sort(trump).pop(-1)    
+                else:
+                    cards = self._not_trump(trump)
+                    cards = cards.suit(lead.suit)
+                    lower = cards._lower(lead.rank)
+                    card = lower.bubble_sort(trump).pop(-1)
+            else:
+                if (lead.is_trump(trump)):
+                    cards = self._is_trump(trump)
+                    high = cards._higher(lead.rank)
+                    lower = cards._lower(lead.rank)
+                    if(len(high)):
+                        card = high.pop(-1)
+                    if 'card' in locals():
+                        card = self._not_trump(trump).pop(-1)    
+                else:
+                    cards = self._not_trump(trump)
+                    cards = cards.suit(lead.suit)
+                    high = cards._higher(lead.rank)
+                    lower = cards._lower(lead.rank)
+                    if(len(high)):
+                        card = high.pop(-1)
+                    if 'card' in locals():
+                        card = self._is_trump(trump).pop(-1)
+                    if 'card' in locals():
+                        card = self._not_trump(trump).pop(-1)
+            return card
+            
         """The new play() function"""
         """Insert thought process here:"""
         num = len(played_cards)
         if(num == 0):
-            self.first()
+            first()
         elif(num == 1):
-            self.second()
+            second()
         elif(num == 2):
-            self.third()
+            third()
         elif(num == 3):
-            self.last()
+            last()
         else:
             raise IndexError
-    def first():
-        """leader plays highest card or highest non-trump"""
-        
-        pass
-    def second():
-        """follow suit highest
-        lowest else lowest trump
-        lowest card"""
-        pass
-    def third():
-        """if two winning hand play like two
-        else through smallest card"""
-        pass
-    def last():
-        """if two is winning play lowest
-        else lowest to take trick"""
-        pass
     def get_play_ai_try(self, trump, played_cards):
         """AI version of play using try...except"""
         results = hand()
@@ -436,7 +566,7 @@ class comp(player):
         print "(" , self.index, ": " , self.cards[index] , ")", self
         return self.cards[index]
 
-    def bid(self, top_card = 0, dealer = 0):
+    def _bid(self, top_card = 0, dealer = 0):
         """Get the ai bid"""
         bid = "P"
         if top_card == 0:
@@ -512,10 +642,10 @@ class bid:
             each_player.bubble_sort()
 
 
-    def bid():
+    def bid(self, players):
         """Handles bidding for all players"""
         top_card = self.deck.cards[0]
-        bid = self.bid(players, top_card)
+        bid = self.get_bid(players, top_card)
         return bid
     def play(self, players, bid = 'S'):
         """Handles the card play given a bid"""
@@ -551,22 +681,22 @@ class bid:
     def get_bid(self, players, top_card):
         """Handles the bid recovery for all players"""
         for index in range(1, 5):
-            bid = players[((self.dealer + index) % 4)].get_bid(top_card, self.dealer)
+            bid = players[((self.dealer + index) % 4)].bid(top_card, self.dealer)
             if self.good_bid(bid):
                 players[self.dealer].pick_it_up(top_card)
                 return bid
         for index in range(1, 5):
-            bid = players[((self.dealer + index) % 4)].get_bid()
+            bid = players[((self.dealer + index) % 4)].bid()
             if self.good_bid(bid):
                 return bid
         return bid
 
-#    def good_bid(self, bid):
-#        """tests to see if the bid is "Good" """
-#        if (bid == "S" or bid == "C" or bid == "H" or bid == "D"):
-#            return 1
-#        else:
-#            return 0
+    def good_bid(self, bid):
+        """tests to see if the bid is "Good" """
+        if (bid == "S" or bid == "C" or bid == "H" or bid == "D"):
+            return 1
+        else:
+            return 0
 
 
 
@@ -578,8 +708,10 @@ class euchre:
         self.table.start()
         
         self.bid = bid()
-        mybid = self.bid.start(self.table.players)
-        self.bid.play(self.table.players, mybid)            
+        self.bid.start(self.table.players)
+        #mybid = self.bid.bid(self.table.players)
+        #self.bid.play(self.table.players, mybid)            
+        self.bid.play(self.table.players)            
 
 def main():
     euchre()
