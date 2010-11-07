@@ -81,6 +81,8 @@ class hand():
         return rep
     def __len__(self):
         return len(self.cards)
+    def __getitem__(self, item):
+        return self.cards.__getitem__(item)
     def clear(self):
         """Erases all cards in hand"""
         self.cards = []
@@ -132,13 +134,13 @@ class trick(hand):
     def _higher(self, rank):
         lst = []
         for card in self.cards:
-            if (card.suit >= suit):
+            if (card.rank >= rank):
                 lst.append(card)
         return lst
-    def _lower_rank(self, rank):
+    def _lower(self, rank):
         lst = []
         for card in self.cards:
-            if (card.suit <= suit):
+            if (card.rank <= rank):
                 lst.append(card)
         return lst
     def _trump(self, trump):
@@ -327,7 +329,8 @@ class comp(player):
     
     def get_play(self, trump, played_cards):
         """Return the play from the "player" Compare the AI to the Human."""
-        p1 = player.get_play(self, trump, played_cards)
+        p1 = None
+        #p1 = player.get_play(self, trump, played_cards)
         p2 = self.get_play_ai(trump, played_cards)
         #p2 = self.get_play_ai_try(trump, played_cards)
         if p1 != p2:
@@ -345,13 +348,14 @@ class comp(player):
             try:
                 cards = hand()
                 cards.steal(self, card("J", trump))
-                card = cards.pop(1)
+                card = cards.pop(0)
                 self.add(card)
             except:
                 cards = self._not_trump(trump)
-                card = cards.pop(1)
+                if len(cards):
+                    card = cards.pop(0)
             finally:
-                if 'card' in locals():    
+                if 'card' not in locals():    
                     card = self.cards[0]
             return card
         def second():
@@ -359,103 +363,141 @@ class comp(player):
             lowest else lowest trump
             lowest card"""
             #self.cards.bubble_sort(trump)
-            lead = played_cards[0].suit
+            lead = played_cards[0]
             cards = trick()
-            
             if (lead.is_trump(trump)):
-                cards = self._is_trump(trump)
+                cards.cards = self._trump(trump)
                 high = cards._higher(lead.rank)
                 lower = cards._lower(lead.rank)
-                if(len(high)):
-                    card = high.pop(1)
-                else:
+                if (len(high)):
+                    card = high.pop(0)
+                if ((len(lower)) and ('card' not in locals())):
                     card = lower.pop(-1)
-                if 'card' in locals():
-                    card = self._not_trump(trump).pop(-1)    
+                #print "a", locals()
+                if 'card' not in locals():
+                    card = self._not_trump(trump)[-1]    
             else:
-                cards = self._not_trump(trump)
-                cards = cards.suit(lead.suit)
+                cards.cards = self._not_trump(trump)
+                cards.cards = cards._suits(lead.suit)
                 high = cards._higher(lead.rank)
                 lower = cards._lower(lead.rank)
-                if(len(high)):
-                    card = high.pop(1)
-                else:
+                trump_lst = self._trump(trump)
+                if (len(high)):
+                    #print high
+                    card = high.pop(0)
+                if ((len(lower)) and ('card' not in locals())):
+                    #print lower
                     card = lower.pop(-1)
-                if 'card' in locals():
-                    card = self._is_trump(trump).pop(-1)
-                if 'card' in locals():
-                    card = self._not_trump(trump).pop(-1)
+                if ((len(trump_lst)) and ('card' not in locals())):
+                    #print trump_lst
+                    card = self._trump(trump)[-1]
+                #print "b", locals()
+                if 'card' not in locals():
+                    card = self._not_trump(trump)[-1]
             return card                
         def third():
             """if two winning hand play like two
             else throw smallest card"""
             #self.cards.bubble_sort(trump)
-            if(played_cards[0].value() < played_cards[1].value()):
+            if(played_cards[0].value(trump) < played_cards[1].value(trump)):
+                #print "Play like two"
                 card = second()
             else:
+                lead = played_cards[0]
+                cards = trick()
                 if (lead.is_trump(trump)):
-                    cards = self._is_trump(trump)
-                    cards = cards._lower(lead.rank)
-                    card = cards.pop(-1)
-                    if 'card' in locals():
-                        card = self._not_trump(trump).bubble_sort(trump).pop(-1)    
-                else:
-                    cards = self._not_trump(trump)
-                    cards = cards.suit(lead.suit)
+                    #print "this 1"
+                    cards.cards = self._trump(trump)
                     lower = cards._lower(lead.rank)
-                    card = lower.bubble_sort(trump).pop(-1)
+                    high = cards._higher(lead.rank)
+                    if (len(lower)):
+                        card = lower.pop(-1)
+                    if ((len(high)) and ('card' not in locals())):
+                        card = high.pop(-1)
+                    if not 'card' in locals():
+                        card = self._not_trump(trump)[-1]    
+                else:
+                    #print "this 2"
+                    cards.cards = self._not_trump(trump)
+                    cards.cards = cards._suits(lead.suit)
+                    lower = cards._lower(lead.rank)
+                    try:
+                        card = lower.pop(-1)
+                    except:
+                        card = self.cards[-1]
             return card
         def last():
             """if two is winning play lowest
             else lowest to take trick"""
             #self.cards.bubble_sort(trump)
-            if (played_cards[0].value() < played_cards[1].value() and played_cards[2].value() < played_cards[1].value()):
+            lead = played_cards[0]
+            cards = trick()
+            if (played_cards[0].value(trump) < played_cards[1].value(trump) and played_cards[2].value(trump) < played_cards[1].value(trump)):
+                #print "this 1"
                 if (lead.is_trump(trump)):
-                    cards = self._is_trump(trump)
+                    #print "this 2"
+                    cards.cards = self._trump(trump)
                     cards = cards._lower(lead.rank)
-                    card = cards.pop(-1)
-                    if 'card' in locals():
-                        card = self._not_trump(trump).bubble_sort(trump).pop(-1)    
+                    if len(cards):
+                        card = cards.pop(-1)
+                    if 'card' not in locals():
+                        card = self._not_trump(trump).bubble_sort(trump)[-1]    
                 else:
-                    cards = self._not_trump(trump)
-                    cards = cards.suit(lead.suit)
+                    #print "this 3"
+                    cards.cards = self._not_trump(trump)
+                    cards.cards = cards._suits(lead.suit)
                     lower = cards._lower(lead.rank)
-                    card = lower.bubble_sort(trump).pop(-1)
+                    try:
+                        card = lower.pop(-1)
+                    except:
+                        card = self.cards[-1]
             else:
                 if (lead.is_trump(trump)):
-                    cards = self._is_trump(trump)
+                    #print "this 4"
+                    cards.cards = self._trump(trump)
                     high = cards._higher(lead.rank)
                     lower = cards._lower(lead.rank)
-                    if(len(high)):
+                    if (len(high)):
                         card = high.pop(-1)
-                    if 'card' in locals():
-                        card = self._not_trump(trump).pop(-1)    
+                    if (len(lower)):
+                        card = lower.pop(-1)
+                    if 'card' not in locals():
+                        card = self._not_trump(trump)[-1]    
                 else:
-                    cards = self._not_trump(trump)
-                    cards = cards.suit(lead.suit)
+                    #print "this 5"
+                    cards.cards = self._not_trump(trump)
+                    cards.cards = cards._suits(lead.suit)
                     high = cards._higher(lead.rank)
                     lower = cards._lower(lead.rank)
+                    trump_lst = self._trump(trump)
                     if(len(high)):
+                        #print "this 6"
                         card = high.pop(-1)
-                    if 'card' in locals():
-                        card = self._is_trump(trump).pop(-1)
-                    if 'card' in locals():
-                        card = self._not_trump(trump).pop(-1)
+                    if ((len(trump_lst)) and ('card' not in locals())):
+                        #print "that 1"
+                        card = self._trump(trump)[-1]
+                    if 'card' not in locals():
+                        #print "this 3"
+                        card = self._not_trump(trump)[-1]
+            if not card:
+                #print card
+                raise IndexError
             return card
             
         """The new play() function"""
         """Insert thought process here:"""
         num = len(played_cards)
         if(num == 0):
-            first()
+            card = first()
         elif(num == 1):
-            second()
+            card = second()
         elif(num == 2):
-            third()
+            card = third()
         elif(num == 3):
-            last()
+            card = last()
         else:
             raise IndexError
+        return card
     def get_play_ai_try(self, trump, played_cards):
         """AI version of play using try...except"""
         results = hand()
