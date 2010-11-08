@@ -329,8 +329,10 @@ class comp(player):
     
     def get_play(self, trump, played_cards):
         """Return the play from the "player" Compare the AI to the Human."""
-        p1 = None
-        #p1 = player.get_play(self, trump, played_cards)
+        return self.get_play_test(trump, played_cards)
+    def get_play_test(self, trump, played_cards):
+        """Return the play from the "player" Compare the AI to the Human."""
+        p1 = player.get_play(self, trump, played_cards)
         p2 = self.get_play_ai(trump, played_cards)
         #p2 = self.get_play_ai_try(trump, played_cards)
         if p1 != p2:
@@ -437,11 +439,14 @@ class comp(player):
                 if (lead.is_trump(trump)):
                     #print "this 2"
                     cards.cards = self._trump(trump)
-                    cards = cards._lower(lead.rank)
-                    if len(cards):
-                        card = cards.pop(-1)
-                    if 'card' not in locals():
-                        card = self._not_trump(trump).bubble_sort(trump)[-1]    
+                    lower = cards._lower(lead.rank)
+                    high = cards._higher(lead.rank)
+                    if (len(lower)):
+                        card = lower.pop(-1)
+                    if ((len(high)) and ('card' not in locals())):
+                        card = high.pop(-1)
+                    if not 'card' in locals():
+                        card = self._not_trump(trump)[-1]    
                 else:
                     #print "this 3"
                     cards.cards = self._not_trump(trump)
@@ -479,9 +484,6 @@ class comp(player):
                     if 'card' not in locals():
                         #print "this 3"
                         card = self._not_trump(trump)[-1]
-            if not card:
-                #print card
-                raise IndexError
             return card
             
         """The new play() function"""
@@ -687,10 +689,11 @@ class bid:
     def bid(self, players):
         """Handles bidding for all players"""
         top_card = self.deck.cards[0]
-        bid = self.get_bid(players, top_card)
-        return bid
+        bid, index = self.get_bid(players, top_card)
+        return (bid, index)
     def play(self, players, bid = 'S'):
         """Handles the card play given a bid"""
+        team = 0
         trump = bid
         played_cards = hand()
         del bid
@@ -708,9 +711,15 @@ class bid:
              #print "(",leader,"+",winner,") % 4 =", leader+winner, "% 4 =", (leader+winner) % 4
             print "The winner was: ", (leader + winner) % 4, " = ", each_trick.cards[winner], "of", each_trick
             leader = leader + winner
+            if (leader % 2):
+                team += 1
+            else:
+                team -= 1
+            
         for each_trick in tricks:
             while (len(each_trick.cards) > 0):      
                 each_trick.give(played_cards.cards[0], self.deck)
+        return team
     def get_play(self, players, trump, leader):
         """Handles the card play for all players"""
         played_cards = trick()
@@ -726,12 +735,12 @@ class bid:
             bid = players[((self.dealer + index) % 4)].bid(top_card, self.dealer)
             if self.good_bid(bid):
                 players[self.dealer].pick_it_up(top_card)
-                return bid
+                return (bid, index)
         for index in range(1, 5):
             bid = players[((self.dealer + index) % 4)].bid()
             if self.good_bid(bid):
-                return bid
-        return bid
+                return (bid, index)
+        return (bid, index)
 
     def good_bid(self, bid):
         """tests to see if the bid is "Good" """
@@ -746,14 +755,35 @@ class euchre:
     """Highest level class creates a game for play"""
     def __init__(self):
         """Sets up and starts a game."""
+        team = [0, 0]
         self.table = table()
         self.table.start()
         
+        index = 0
         self.bid = bid()
-        self.bid.start(self.table.players)
-        #mybid = self.bid.bid(self.table.players)
-        #self.bid.play(self.table.players, mybid)            
-        self.bid.play(self.table.players)            
+        while(team[0] < 10 and team[1] < 10):
+            self.bid.start(self.table.players)
+            (mybid, index) = self.bid.bid(self.table.players)
+            result = self.bid.play(self.table.players, mybid)            
+            #result = self.bid.play(self.table.players)
+            if (result == 5):
+                team[index % 2] += 2
+                print "Team %c gains 2" % (['A', 'B'][index % 2])
+            elif (result > 0):
+                team[index % 2] +=1
+                print "Team %c gains 1" % (['A', 'B'][index % 2])
+            elif (result < 0):
+                team[(index + 1) % 2] +=2
+                print "Team %c euchred. Team %c gains 2" % ((['A', 'B'][(index) % 2]),(['A', 'B'][(index + 1) % 2]))
+            else:
+                raise IndexError
+        if (team[0] > 10):
+            print "Team B wins!... 1, 3"
+        else:
+            print "Team A wins!... 0, 2"
+
+                
+                 
 
 def main():
     euchre()
