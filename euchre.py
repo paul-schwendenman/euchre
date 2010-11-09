@@ -114,7 +114,7 @@ class hand():
                 else:
                     if (cards[index].value(trump) < cards[index + 1].value(trump)):
                        cards[index], cards[index + 1] = cards[index + 1], cards[index]
-        self.cards = cards
+        return cards
     def search(self, suit = None, rank = None):
         """Searches for a type of card and then returns the list of all matches
         Must be better way to accomplish this"""
@@ -332,13 +332,13 @@ class comp(player):
         return self.get_play_test(trump, played_cards)
     def get_play_test(self, trump, played_cards):
         """Return the play from the "player" Compare the AI to the Human."""
-        p1 = player.get_play(self, trump, played_cards)
+        #p1 = player.get_play(self, trump, played_cards)
         p2 = self.get_play_ai(trump, played_cards)
         #p2 = self.get_play_ai_try(trump, played_cards)
-        if p1 != p2:
-            print "error!"
-        else:
-            print "pass"
+        #if p1 != p2:
+        #    print "error!"
+        #else:
+        #    print "pass"
         return p2
     def get_play_ai(self, trump, played_cards):
         def first():
@@ -610,7 +610,7 @@ class comp(player):
         print "(" , self.index, ": " , self.cards[index] , ")", self
         return self.cards[index]
 
-    def _bid(self, top_card = 0, dealer = 0):
+    def bid(self, top_card = 0, dealer = 0):
         """Get the ai bid"""
         bid = "P"
         if top_card == 0:
@@ -621,28 +621,30 @@ class comp(player):
         elif dealer != 0:
             """Put Intelligent bidding ie do and don't order put etc..."""
             if (self.value(top_card.suit) > 85):
-                bid = suit        
+                bid = top_card.suit        
         else:
             """Top Card exists, check score (stupid bidding) """
             if (self.value(top_card.suit) > 85):
-                bid = suit
+                bid = top_card.suit
 
 #        bid = suits[random.randrange(0,5)]
 #        if (bid == None or top_card != 0): bid = "P"
 
         return bid
 
-    def value(self):
+    def value(self, trump):
         """Returns the lump sum of the values of every card"""
+        value = 0
         for card in self.cards:
-            value += card.value
+            value += card.value(trump)
         return value    
     def pick_it_up(self, top_card):
         """Handle adding card to hand and removing the worst"""
         self.add(top_card)
         index = 0
-        index = random.randrange(0, len(self.cards) - 1)
-        self.remove(self.cards[index])
+        #index = random.randrange(0, len(self.cards) - 1)
+        self.bubble_sort(top_card.suit)
+        self.remove(self.cards[-1])
 class table:
     """Class for the table, has players.
     Needs to handle: leader, dealer, points etc."""
@@ -653,10 +655,10 @@ class table:
         """begins a game by adding players"""
         num_players = 0
         self.players = []
-#            self.players = [player(), comp(), comp(), comp(), ] 
-#            self.players = [player(), player(), player(), player(), ] 
-#            self.players = [player(), comp(), player(), comp(), ] 
-        self.players = [comp(), comp(), comp(), comp(), ] 
+        self.players = [player(), comp(), comp(), comp(), ] 
+#        self.players = [player(), player(), player(), player(), ] 
+#        self.players = [player(), comp(), player(), comp(), ] 
+#        self.players = [comp(), comp(), comp(), comp(), ] 
         self.players[0].name = "Paul"
         self.players[1].name = "Phil"
         self.players[2].name = "Sierra"
@@ -677,13 +679,13 @@ class bid:
 #        self.dealer = 0
         self.deck = deck()
         self.deck.populate()
-        self.deck.bubble_sort()
+        self.deck.cards = self.deck.bubble_sort()
         self.deck.shuffle()
         self.deck.deal(players, self.dealer)
 
         for each_player in players:
             each_player.index = players.index(each_player)
-            each_player.bubble_sort()
+            each_player.cards = each_player.bubble_sort()
 
 
     def bid(self, players):
@@ -699,7 +701,7 @@ class bid:
         del bid
         print "trump:\t\t", trump, "\ndealer:\t\t", self.dealer
         for each_player in players:
-            each_player.bubble_sort(trump)
+            each_player.cards = each_player.bubble_sort(trump)
         leader = self.dealer + 1
         del self.dealer
         tricks = 5 * [trick()] #tricks = [trick(), trick(), trick(), trick(), trick(),]
@@ -735,11 +737,11 @@ class bid:
             bid = players[((self.dealer + index) % 4)].bid(top_card, self.dealer)
             if self.good_bid(bid):
                 players[self.dealer].pick_it_up(top_card)
-                return (bid, index)
+                return (bid, ((self.dealer + index) % 4))
         for index in range(1, 5):
             bid = players[((self.dealer + index) % 4)].bid()
             if self.good_bid(bid):
-                return (bid, index)
+                return (bid, ((self.dealer + index) % 4))
         return (bid, index)
 
     def good_bid(self, bid):
@@ -757,13 +759,16 @@ class euchre:
         """Sets up and starts a game."""
         team = [0, 0]
         self.table = table()
-        self.table.start()
         
         index = 0
         self.bid = bid()
         while(team[0] < 10 and team[1] < 10):
+            self.table.start()
             self.bid.start(self.table.players)
             (mybid, index) = self.bid.bid(self.table.players)
+            if (mybid == "P"):
+                continue
+            print mybid, index
             result = self.bid.play(self.table.players, mybid)            
             #result = self.bid.play(self.table.players)
             if (result == 5):
