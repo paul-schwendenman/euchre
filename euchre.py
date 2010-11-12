@@ -149,7 +149,7 @@ class trick(hand):
             if (card.is_trump(trump)):
                 lst.append(card)
         return lst
-    def _not_trump(self, trump):
+    def _notTrump(self, trump):
         lst = []
         for card in self.cards:
             if (not card.is_trump(trump)):
@@ -235,6 +235,7 @@ class player(trick):
             if (i == card):
                 return self.cards[index]
             index += 1
+        print "\033[2J\033[0;0H",
     def bid(self, top_card = 0, dealer = 0):
         """Retrieves the bid from a player"""
         if(top_card == 0):
@@ -269,6 +270,7 @@ class player(trick):
                 else:
                     print "\033[1A\033[21Cinvalid input"
                     bid = (raw_input(msg) + " ").upper()[0]
+        print "\033[2J\033[0;0H",
         return bid
     def pick_it_up(self, top_card):
         """Function that handles adding a card to the deck and then discarding a card."""
@@ -290,6 +292,7 @@ class player(trick):
             if (i == card):
                 self.remove(self.cards[index])
             index += 1
+        print "\033[2J\033[0;0H",
     def worst_card(self, trump):
         """Returns the lowest valued card
         Replace with sort()[:1] ?"""
@@ -353,7 +356,7 @@ class comp(player):
                 card = cards.pop(0)
                 self.add(card)
             except:
-                cards = self._not_trump(trump)
+                cards = self._notTrump(trump)
                 if len(cards):
                     card = cards.pop(0)
             finally:
@@ -377,9 +380,9 @@ class comp(player):
                     card = lower.pop(-1)
                 #print "a", locals()
                 if 'card' not in locals():
-                    card = self._not_trump(trump)[-1]    
+                    card = self._notTrump(trump)[-1]    
             else:
-                cards.cards = self._not_trump(trump)
+                cards.cards = self._notTrump(trump)
                 cards.cards = cards._suits(lead.suit)
                 high = cards._higher(lead.rank)
                 lower = cards._lower(lead.rank)
@@ -395,7 +398,7 @@ class comp(player):
                     card = self._trump(trump)[-1]
                 #print "b", locals()
                 if 'card' not in locals():
-                    card = self._not_trump(trump)[-1]
+                    card = self._notTrump(trump)[-1]
             return card                
         def third():
             """if two winning hand play like two
@@ -417,10 +420,10 @@ class comp(player):
                     if ((len(high)) and ('card' not in locals())):
                         card = high.pop(-1)
                     if not 'card' in locals():
-                        card = self._not_trump(trump)[-1]    
+                        card = self._notTrump(trump)[-1]    
                 else:
                     #print "this 2"
-                    cards.cards = self._not_trump(trump)
+                    cards.cards = self._notTrump(trump)
                     cards.cards = cards._suits(lead.suit)
                     lower = cards._lower(lead.rank)
                     try:
@@ -446,10 +449,10 @@ class comp(player):
                     if ((len(high)) and ('card' not in locals())):
                         card = high.pop(-1)
                     if not 'card' in locals():
-                        card = self._not_trump(trump)[-1]    
+                        card = self._notTrump(trump)[-1]    
                 else:
                     #print "this 3"
-                    cards.cards = self._not_trump(trump)
+                    cards.cards = self._notTrump(trump)
                     cards.cards = cards._suits(lead.suit)
                     lower = cards._lower(lead.rank)
                     try:
@@ -467,10 +470,10 @@ class comp(player):
                     if (len(lower)):
                         card = lower.pop(-1)
                     if 'card' not in locals():
-                        card = self._not_trump(trump)[-1]    
+                        card = self._notTrump(trump)[-1]    
                 else:
                     #print "this 5"
-                    cards.cards = self._not_trump(trump)
+                    cards.cards = self._notTrump(trump)
                     cards.cards = cards._suits(lead.suit)
                     high = cards._higher(lead.rank)
                     lower = cards._lower(lead.rank)
@@ -483,7 +486,7 @@ class comp(player):
                         card = self._trump(trump)[-1]
                     if 'card' not in locals():
                         #print "this 3"
-                        card = self._not_trump(trump)[-1]
+                        card = self._notTrump(trump)[-1]
             return card
             
         """The new play() function"""
@@ -665,8 +668,14 @@ class table:
         self.players[3].name = "Julia"
     def __str__():
         pass
+    def pause():
+        pass
+    def msg():
+        pass
+    def ask():
+        pass
     
-class bid:
+class game:
     """Class for each hand in a game, meaning all the stuff needed to play for one hand."""
     def __init__(self):
         pass
@@ -687,7 +696,6 @@ class bid:
             each_player.index = players.index(each_player)
             each_player.cards = each_player.bubble_sort()
 
-
     def bid(self, players):
         """Handles bidding for all players"""
         top_card = self.deck.cards[0]
@@ -705,31 +713,26 @@ class bid:
         leader = self.dealer + 1
         del self.dealer
         tricks = 5 * [trick()] #tricks = [trick(), trick(), trick(), trick(), trick(),]
-        for each_trick in tricks:
-            each_trick = self.get_play(players, trump, leader)
-            winner = each_trick.best_card(trump)
+        for _trick in tricks:
+            for index in range(0, 4):
+                play_this_card = players[((leader + index) % 4)].get_play(trump, played_cards)
+                players[((leader + index) % 4)].give(play_this_card, _trick)
+            print
+            winner = _trick.best_card(trump)
 #            #print "\033[2J\033[0;0H",
             #This is a print statement used for debugging
              #print "(",leader,"+",winner,") % 4 =", leader+winner, "% 4 =", (leader+winner) % 4
-            print "The winner was: ", (leader + winner) % 4, " = ", each_trick.cards[winner], "of", each_trick
+            print "The winner was: ", (leader + winner) % 4, " = ", _trick.cards[winner], "of", _trick
             leader = leader + winner
             if (leader % 2):
                 team += 1
             else:
                 team -= 1
             
-        for each_trick in tricks:
-            while (len(each_trick.cards) > 0):      
-                each_trick.give(played_cards.cards[0], self.deck)
+        for _trick in tricks:
+            while (len(_trick.cards) > 0):      
+                _trick.give(_trick.cards[0], self.deck)
         return team
-    def get_play(self, players, trump, leader):
-        """Handles the card play for all players"""
-        played_cards = trick()
-        for index in range(0, 4):
-            play_this_card = players[((leader + index) % 4)].get_play(trump, played_cards)
-            players[((leader + index) % 4)].give(play_this_card, played_cards)
-        print
-        return played_cards
 
     def get_bid(self, players, top_card):
         """Handles the bid recovery for all players"""
@@ -761,15 +764,15 @@ class euchre:
         self.table = table()
         
         index = 0
-        self.bid = bid()
+        self.game = game()
         while(team[0] < 10 and team[1] < 10):
             self.table.start()
-            self.bid.start(self.table.players)
-            (mybid, index) = self.bid.bid(self.table.players)
+            self.game.start(self.table.players)
+            (mybid, index) = self.game.bid(self.table.players)
             if (mybid == "P"):
                 continue
             print mybid, index
-            result = self.bid.play(self.table.players, mybid)            
+            result = self.game.play(self.table.players, mybid)            
             #result = self.bid.play(self.table.players)
             if (result == 5):
                 team[index % 2] += 2
