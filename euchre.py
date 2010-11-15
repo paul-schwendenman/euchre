@@ -54,13 +54,15 @@ class card:
                 
     def __str__(self):
         """prints information of the card in the form: R of S, where R is rank and S is suit"""
-        output = ""
+#        output = ""
 #            output += "%2s of %s" % (self.ranks[self.rank], self.suits[self.suit])
-        if (self.suit == "d" or self.suit == "D" or self.suit == "h" or self.suit == "H"):
-            output += "\033[0;31m"
-        output += "%2s of %s" % (self.rank, self.suit) + "\033[m"
+#        if (self.suit == "d" or self.suit == "D" or self.suit == "h" or self.suit == "H"):
+#            output += "\033[0;31m"
+#        output += "%2s of %s" % (self.rank, self.suit) 
+#        output += "\033[m"
 #        output += "%2s of" % (self.rank) + suit_chars[suits.index(self.suit)] + "\033[m"
-        return output
+#        return output
+        return "%2s of %s" % (self.rank, self.suit)
 
 
 class hand():
@@ -203,6 +205,18 @@ class deck(hand):
         
 class player(trick):
     """Player is inherited from trick, is interactive. Has set_hand, get_play, get_bid, pick_it_up, worst_card and highest_nontrump"""
+    def __init__(self, table = None):
+        """Blank hand. No Cards yet."""
+        self.index = 0
+        self.cards = []
+        self.name = ""
+        self.table = table
+
+    def set_table(self, table):
+        self.table = table
+    def ask(top_card, trump, dealer, played_cards, cards, team, msg, error):
+        return self.table.display(top_card, trump, dealer, played_cards, cards, team, msg, error)
+        
     def set_hand(self, hand):
         """Set_hand assigns the cards to the hand"""
         self.cards = hand.cards
@@ -662,6 +676,8 @@ class table:
 #        self.players = [player(), player(), player(), player(), ] 
 #        self.players = [player(), comp(), player(), comp(), ] 
 #        self.players = [comp(), comp(), comp(), comp(), ] 
+        for each_player in self.players:
+            each_player.set_table(self)
         self.players[0].name = "Paul"
         self.players[1].name = "Phil"
         self.players[2].name = "Sierra"
@@ -714,6 +730,7 @@ class game:
         del self.dealer
         tricks = 5 * [trick()] #tricks = [trick(), trick(), trick(), trick(), trick(),]
         for _trick in tricks:
+            #for index, player in enumurate(players):
             for index in range(0, 4):
                 play_this_card = players[((leader + index) % 4)].get_play(trump, played_cards)
                 players[((leader + index) % 4)].give(play_this_card, _trick)
