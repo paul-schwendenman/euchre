@@ -750,23 +750,36 @@ class table:
         
             #player 1
             stdscr.move(12, 2)
-            stdscr.addstr("1: ")
+            if dealer == 0:
+                stdscr.addstr("*1*: ")
+            else:    
+                stdscr.addstr("1: ")
             printCard(p1)
             #partner
             #stdscr.move(1, 22)
             #stdscr.addstr("[]")
             stdscr.move(2, 22)
-            stdscr.addstr("P: ")
+            if dealer == 1:
+                stdscr.addstr("*P*: ")
+            else:    
+                stdscr.addstr("P: ")
             printCard(pa)
         
             #player3
             stdscr.move(12, 44)
-            stdscr.addstr("3: ")
+            if dealer == 2:
+                stdscr.addstr("*3*: ")
+            else:    
+                stdscr.addstr("3: ")
+
             printCard(p3)
             
             #you
             stdscr.move(22, 22)
-            stdscr.addstr("U: ")
+            if dealer == 3:
+                stdscr.addstr("*U*: ")
+            else:    
+                stdscr.addstr("U: ")
             printCard(u)
             
             #points
@@ -868,8 +881,8 @@ class game:
                 players[((leader + index) % 4)].give(play_this_card, _trick)
                 #print "this ", play_this_card
             #print
-            _trick._shift(1 - leader)
             winner = _trick.best_card(trump)
+            _trick._shift(1 - leader)
 #            #print "\033[2J\033[0;0H",
             #This is a print statement used for debugging
              #print "(",leader,"+",winner,") % 4 =", leader+winner, "% 4 =", (leader+winner) % 4
