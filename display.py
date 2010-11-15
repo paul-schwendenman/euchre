@@ -31,28 +31,6 @@ def display(top_card = None, trump = "S", dealer = 0, played_cards = [], cards =
         except:
             pass
 
-        #return func(stdscr, *args, **kwargs)
-        return my.table(stdscr, top_card, trump, dealer, played_cards, cards, team, msg, error)
-    finally:
-        # Set everything back to normal
-        stdscr.keypad(0)
-        curses.echo()
-        curses.nocbreak()
-        curses.endwin()
-
-
-class table():
-    def __init__(self):
-#        self.played_cards = [A, D, C, B]
-#        self.played_cards = [C, D, A]
-        self.played_cards = [A, C]
-#        self.played_cards = [A]
-#        self.played_cards = []
-        self.cards = euchre.hand()
-        self.cards.cards = 4 * [A] + [B]
-        self.team = [4, 5]
-        self.msg = "play these cards? "
-    def table(self, scr, top_card, trump, dealer, played_cards, cards, team, msg, error):
         #self.msg = str(curses.has_colors())
         if (len(played_cards) == 0):
             p1 = "1: "
@@ -82,54 +60,73 @@ class table():
     
     
         #player 1
-        scr.move(12, 2)
-        scr.addstr(p1)
+        stdscr.move(12, 2)
+        stdscr.addstr(p1)
         #partner
-        #scr.move(1, 22)
-        #scr.addstr("[]")
-        scr.move(2, 22)
-        scr.addstr(pa)
+        #stdscr.move(1, 22)
+        #stdscr.addstr("[]")
+        stdscr.move(2, 22)
+        stdscr.addstr(pa)
         
         #player3
-        scr.move(12, 44)
-        scr.addstr(p3)
+        stdscr.move(12, 44)
+        stdscr.addstr(p3)
         
         #you
-        scr.move(22, 22)
-        scr.addstr(u)
+        stdscr.move(22, 22)
+        stdscr.addstr(u)
         
         #points
-        scr.move(21,44)
-        scr.addstr("Team 1: " + str(team[0]))
-        scr.move(22,44)
-        scr.addstr("Team 2: " + str(team[1]))
+        stdscr.move(21,44)
+        stdscr.addstr("Team 1: " + str(team[0]))
+        stdscr.move(22,44)
+        stdscr.addstr("Team 2: " + str(team[1]))
     
         #trump
-        scr.move(23,1)
-        scr.addstr("Trump: " + str(trump))
+        stdscr.move(23,1)
+        stdscr.addstr("Trump: " + str(trump))
 
         #cards
-        scr.move(24, 1)
-        scr.addstr("Your cards: " + str(cards))        
+        stdscr.move(24, 1)
+        stdscr.addstr("Your cards: " + str(cards))        
 
         #error msg
-        scr.move(23, 15)
+        stdscr.move(23, 15)
         if not (error == ""):
             curses.init_pair(1, curses.COLOR_RED, curses.COLOR_WHITE)
-            scr.addstr(error, curses.color_pair(1))        
+            stdscr.addstr(error, curses.color_pair(1))        
 
 
         #msg
-        scr.move(25, 1)
-        scr.addstr(msg)        
+        stdscr.move(25, 1)
+        stdscr.addstr(msg)        
         #input line
 
         #Refresh
-        scr.refresh()
-        scr.border()
-#        scr.move(12,22) move to center
-        #return scr.getch()
-        return scr.getkey()
+        stdscr.refresh()
+        stdscr.border()
+#        stdscr.move(12,22) move to center
+        #return stdscr.getch()
+        return stdscr.getkey()
+    finally:
+        # Set everything back to normal
+        stdscr.keypad(0)
+        curses.echo()
+        curses.nocbreak()
+        curses.endwin()
+
+
+class table():
+    def __init__(self):
+#        self.played_cards = [A, D, C, B]
+#        self.played_cards = [C, D, A]
+        self.played_cards = [A, C]
+#        self.played_cards = [A]
+#        self.played_cards = []
+        self.cards = euchre.hand()
+        self.cards.cards = 4 * [A] + [B]
+        self.team = [4, 5]
+        self.msg = "play these cards? "
 
 #curses.wrapper(table, [])
 #curses.wrapper(table, [], [1, 6])
