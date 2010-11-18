@@ -357,19 +357,7 @@ class player(trick):
         pass
 
 class testPlayer(player):
-    """Player is inherited from trick, is interactive. Has set_hand, get_play, get_bid, pick_it_up, worst_card and highest_nontrump"""
-    def set_hand(self, hand):
-        """Set_hand assigns the cards to the hand"""
-        self.cards = hand.cards
-    def good_play(self, card):
-        """Checks the validity of a card choice"""
-        """Remove this and append to the code where it is,  no reason to have this pulled out"""
-        try:
-            good_play = (0 < int(card) and int(card) <= len(self.cards))
-        except ValueError:
-            good_play = ("1" <= card and card <= ["1", "2", "3", "4", "5"][len(self.cards) - 1])
-        return good_play        
-    
+    """A simple test player is inherited from player, is interactive. No "graphics" """
     def get_play(self, trump, played_cards):
         """Finds the card to play by prompting the user for input."""
         print "Cards played so far:", played_cards
@@ -443,39 +431,6 @@ class testPlayer(player):
                 self.remove(self.cards[index])
             index += 1
         print "\033[2J\033d[0;0H",
-    def worst_card(self, trump):
-        """Returns the lowest valued card
-        Replace with sort()[:1] ?"""
-        lead = self.cards[0].suit
-        best_card = self.cards[0]
-        best_value = best_card.value(trump, lead)
-        for each_card in self.cards:
-            if(each_card.value(trump, lead) > best_value):
-                best_card = each_card
-                best_value = best_card.value(trump, lead)                
-        this = self.cards.index(best_card)
-        # This print statement is for debugging
-        #print best_card, "is #", this + 1
-        return self.cards.index(best_card)
-    def best_card(self, trump):
-        """Returns the highest valued card
-        Use trick? Replace with sort()[1:] ?"""
-        lead = self.cards[0].suit
-        best_card = self.cards[0]
-        best_value = best_card.value(trump, lead)
-        for each_card in self.cards:
-            if(each_card.value(trump, lead) > best_value):
-                best_card = each_card
-                best_value = best_card.value(trump, lead)                
-        this = self.cards.index(best_card)
-        # This print statement is for debugging
-        #print best_card, "is #", this + 1
-        return self.cards.index(best_card)
-    def tip():
-        """Suggest a move to the player using comp() to analyze the situation"""
-        pass
-
-
 
 class comp(player):
     """Player is inherited from hand, is a "computer" player and has limited AI. Has get_play, get_bid, pick_it_up"""
