@@ -99,10 +99,18 @@ class hand():
         """Removes a specific card and then adds it to another hand"""
         self.cards.remove(card)
         card.number = len(other_hand.cards) 
+        try:
+            card.owner = self.index
+        except:
+            raise Exception("No owner")
         other_hand.add(card)
     def steal(self, card, other_hand):
         """Removes a specific card from another hand and then adds it"""
         other_hand.remove(card)
+        try:
+            card_owner = other_hand.index
+        except:
+            pass
         self.cards.add(card)
     
     def bubble_sort(self, trump = None):
@@ -163,7 +171,7 @@ class trick(hand):
         tail = self.cards[n:]
         self.cards[n:] = []
         tail.extend(self.cards)
-        self.cards = tail
+        return tail
                                         
     def best_card(self, trump, allowtrump = 0):
         """Returns the index of the most valuable card"""
@@ -177,7 +185,7 @@ class trick(hand):
         this = self.cards.index(best_card)
         # This print statement is for debugging
         #print best_card, "is #", this + 1
-        return self.cards.index(best_card)
+        return best_card
 
 class deck(hand):
     """Deck is inherited from Hand. has: populate, deal, and shuffle"""
@@ -223,8 +231,23 @@ class player(trick):
     def set_table(self, table):
         self.table = table
 
-    def ask(self, msg = "", played_cards = [], trump = None, top_card = None, dealer = None, error = ""):
-        return self.table.display(top_card = top_card, trump = trump, dealer = dealer, played_cards = played_cards, cards = self.cards, msg = msg, error = error)
+    def ask(self, msg = "", played_cards = [], trump = None, top_card = None, dealer = None, error = "", players = 0):
+        return self.table.display(top_card = top_card, trump = trump, dealer = dealer, played_cards = played_cards, cards = self.cards, msg = msg, error = error, players = players)
+
+    def results(self, winner, leader, played_cards):
+        try:
+            #msg = ("The winner was: " + str(winner.owner + leader) + " = " + str(played_cards.cards[(leader + winner.owner) % 4]))
+            msg = ("The winner was: " + str(winner))
+        except:
+            #msg = ("The winner was: " + str(winner.owner + leader))
+            msg = ("The winner was: " + str(winner))
+            print played_cards
+        perspective = played_cards._shift(self.index - leader + 1)
+        self.table.display(msg = msg, played_cards = perspective)
+        print msg
+        print "trick: ", played_cards
+        print "shift: ", perspective
+        leader = winner
         
     def set_hand(self, hand):
         """Set_hand assigns the cards to the hand"""
@@ -245,8 +268,11 @@ class player(trick):
         card = self.ask(msg = "Which card would you like to play? ", played_cards = played_cards, trump = trump)
         card = ((card + " ").upper()[0])
         while(not self.good_play(card)):
-            if (card == "q" or card == "Q"):    exit()            
-            card = self.ask(msg = "Which card would you like to play? ", error = "invalid card", played_cards = played_cards, trump = trump)
+            if (card == "Q"):    exit()            
+            if (card == "I"):
+                card = self.ask(msg = "Which card would you like to play? ", played_cards = played_cards, trump = trump, players = 1)
+            else:
+                card = self.ask(msg = "Which card would you like to play? ", error = "invalid card", played_cards = played_cards, trump = trump)
             card = ((card + " ").upper()[0])
         #print "You picked:", card, " of ", self
         #print "played cards ", played_cards
@@ -298,7 +324,125 @@ class player(trick):
             if (i == card):
                 self.remove(self.cards[index])
             index += 1
-        #print "\033[2J\033[0;0H",
+    def worst_card(self, trump):
+        """Returns the lowest valued card
+        Replace with sort()[:1] ?"""
+        lead = self.cards[0].suit
+        best_card = self.cards[0]
+        best_value = best_card.value(trump, lead)
+        for each_card in self.cards:
+            if(each_card.value(trump, lead) > best_value):
+                best_card = each_card
+                best_value = best_card.value(trump, lead)                
+        this = self.cards.index(best_card)
+        # This print statement is for debugging
+        #print best_card, "is #", this + 1
+        return self.cards.index(best_card)
+    def best_card(self, trump):
+        """Returns the highest valued card
+        Use trick? Replace with sort()[1:] ?"""
+        lead = self.cards[0].suit
+        best_card = self.cards[0]
+        best_value = best_card.value(trump, lead)
+        for each_card in self.cards:
+            if(each_card.value(trump, lead) > best_value):
+                best_card = each_card
+                best_value = best_card.value(trump, lead)                
+        this = self.cards.index(best_card)
+        # This print statement is for debugging
+        #print best_card, "is #", this + 1
+        return self.cards.index(best_card)
+    def tip():
+        """Suggest a move to the player using comp() to analyze the situation"""
+        pass
+
+class testPlayer(player):
+    """Player is inherited from trick, is interactive. Has set_hand, get_play, get_bid, pick_it_up, worst_card and highest_nontrump"""
+    def set_hand(self, hand):
+        """Set_hand assigns the cards to the hand"""
+        self.cards = hand.cards
+    def good_play(self, card):
+        """Checks the validity of a card choice"""
+        """Remove this and append to the code where it is,  no reason to have this pulled out"""
+        try:
+            good_play = (0 < int(card) and int(card) <= len(self.cards))
+        except ValueError:
+            good_play = ("1" <= card and card <= ["1", "2", "3", "4", "5"][len(self.cards) - 1])
+        return good_play        
+    
+    def get_play(self, trump, played_cards):
+        """Finds the card to play by prompting the user for input."""
+        print "Cards played so far:", played_cards
+        print "Your hand", self.index + 0, "\033[1D:" , self,
+        print "Trump is: ", trump
+        print "     ",
+        for i in range(len(self.cards)):
+            print "        ",  i + 1,
+        print
+        card = ((raw_input("Which card would you like to play? ") + " ").upper()[0])
+        while(not self.good_play(card)):
+            if (card == "q" or card == "Q"):    exit()            
+            print "\033[1A\033[35Cinvalid input"
+            card = (raw_input("Which card would you like to play? ") + " ").upper()[0]
+        index = 0        
+        for i in ["1", "2", "3", "4", "5"]:
+            if (i == card):
+                return self.cards[index]
+            index += 1
+    def bid(self, top_card = 0, dealer = 0):
+        """Retrieves the bid from a player"""
+        if(top_card == 0):
+            print "\nYour hand", self.index + 0, "\033[1D:", self
+            bid = (raw_input("\tYour bid: Spades, Clubs, Diamonds, Hearts or Pass? ") + " ").upper()[0]
+            while(1):
+                if (bid == "S" or bid == "C" or bid == "H" or bid == "D"):
+                    return bid
+                elif (bid == "Q"):
+                    exit()
+                elif (bid == "P"):
+                    break
+                else:
+                    print "\033[1A\033[59Cinvalid input"
+                    bid = (raw_input("\tYour bid: Spades, Clubs, Diamonds, Hearts or Pass? ") + " ").upper()[0]
+        else:
+            if (dealer == self.index): msg = "\t Pick it up? "
+            else: msg = "\tOrder it up? " 
+            print "\nYour hand", self.index + 0, "\033[1D:" , self
+            print "the top card is", top_card
+            print "the dealer is", dealer + 0
+            bid = (raw_input(msg) + " ").upper()[0]
+            while(1):
+                if (bid == "Y"):
+                    return top_card.suit
+                elif (bid == "N" or bid == "P"):
+                    break
+                elif (bid == "Q"):
+                    exit()
+                else:
+                    print "\033[1A\033[21Cinvalid input"
+                    bid = (raw_input(msg) + " ").upper()[0]
+        print "\033[2J\033[0;0H",
+        return bid
+    def pick_it_up(self, top_card):
+        """Function that handles adding a card to the deck and then discarding a card."""
+        self.add(top_card)
+        print "Your hand", self.index + 0, "\033[1D:" , self
+        print "     ",
+        for i in range(len(self.cards)):
+            print "        ",  i + 1,
+        print
+        card = (raw_input("Which card do you want to discard? ") + " ").upper()[0]
+        while(not ("1" <= card and card <= "6")):
+            if (card == "Q"):
+                exit()            
+            print "\033[1A\033[35Cinvalid input"
+            card = (raw_input("Which card do you want to discard? ") + " ").upper()[0]
+        index = 0        
+        for i in ["1", "2", "3", "4", "5", "6"]:
+            if (i == card):
+                self.remove(self.cards[index])
+            index += 1
+        print "\033[2J\033d[0;0H",
     def worst_card(self, trump):
         """Returns the lowest valued card
         Replace with sort()[:1] ?"""
@@ -332,6 +476,7 @@ class player(trick):
         pass
 
 
+
 class comp(player):
     """Player is inherited from hand, is a "computer" player and has limited AI. Has get_play, get_bid, pick_it_up"""
     """ Cards that it can beat vs cards that beat it"""
@@ -349,6 +494,8 @@ class comp(player):
         #else:
         #    print "pass"
         return p2
+    def results(self, winner, leader, played_cards):
+        pass
     def get_play_ai(self, trump, played_cards):
         def first():
             """leader plays highest card or highest non-trump"""
@@ -667,6 +814,7 @@ class table:
         num_players = 0
         self.players = []
         self.players = [player(), comp(), comp(), comp(), ] 
+#        self.players = [testPlayer(), comp(), comp(), comp(), ] 
 #        self.players = [player(), player(), player(), player(), ] 
 #        self.players = [player(), comp(), player(), comp(), ] 
 #        self.players = [comp(), comp(), comp(), comp(), ] 
@@ -678,7 +826,7 @@ class table:
         self.players[3].name = "Julia"
     def __str__():
         pass
-    def display(self, top_card = None, trump = None, dealer = 0, played_cards = [], cards = [], msg = "", error = ""):
+    def display(self, top_card = None, trump = None, dealer = 0, played_cards = [], cards = [], msg = "", error = "", players = 0):
         ## Pulled from curses.wrapper 2.6, modified.
         def printCard(card):
             if card == None:
@@ -715,6 +863,8 @@ class table:
                 pass
             stdscr.erase()
 
+            if ((25, 50) > stdscr.getmaxyx()):
+                raise Exception("Make your window bigger")                 
             #Set Red, Black Cards:
             curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
             curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
@@ -821,6 +971,19 @@ class table:
             stdscr.addstr(msg)        
             #input line
     
+            #players
+
+            if (players and ((29, 1) < stdscr.getmaxyx())):
+                y, x = stdscr.getyx()
+                for index, eachPlayer in enumerate(self.players):
+                    stdscr.move(y + 1 + index, 1)
+                    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+                    curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
+
+                    for card in eachPlayer.cards:
+                        printCard(card)
+                stdscr.move(25, x)                   
+    
             #Refresh
             stdscr.refresh()
             stdscr.border()
@@ -882,13 +1045,11 @@ class game:
                 #print "this ", play_this_card
             #print
             winner = _trick.best_card(trump)
-            _trick._shift(1 - leader)
-#            #print "\033[2J\033[0;0H",
             #This is a print statement used for debugging
-             #print "(",leader,"+",winner,") % 4 =", leader+winner, "% 4 =", (leader+winner) % 4
-            msg = ("The winner was: " + str(winner) + " = " + str(_trick.cards[winner]))
-            self.table.display(msg = msg, played_cards = _trick)
-            leader = winner
+            for _player in players:
+                _player.results(winner, leader, _trick)
+            
+            leader = winner.owner
             if (leader % 2):
                 team += 1
             else:
