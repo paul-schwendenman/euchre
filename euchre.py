@@ -166,12 +166,15 @@ class trick(hand):
             if (not card.is_trump(trump)):
                 lst.append(card)
         return lst
-    def _shift(self, n):
+    def _shift(self, n, destructive = 0):
         n = n % len(self.cards)
         tail = self.cards[n:]
         self.cards[n:] = []
         tail.extend(self.cards)
-        return tail
+        if destructive:
+            self.cards = tail
+        else:
+            return tail
                                         
     def best_card(self, trump, allowtrump = 0):
         """Returns the index of the most valuable card"""
@@ -231,8 +234,8 @@ class player(trick):
     def set_table(self, table):
         self.table = table
 
-    def ask(self, msg = "", played_cards = [], trump = None, top_card = None, dealer = None, error = "", players = 0):
-        return self.table.display(top_card = top_card, trump = trump, dealer = dealer, played_cards = played_cards, cards = self.cards, msg = msg, error = error, players = players)
+    def ask(self, msg = "", played_cards = [], trump = None, top_card = None, error = "", players = 0):
+        return self.table.display(top_card = top_card, trump = trump, played_cards = played_cards, cards = self.cards, msg = msg, error = error, players = players)
 
     def results(self, winner, leader, played_cards):
         try:
@@ -280,6 +283,7 @@ class player(trick):
     def bid(self, top_card = 0, dealer = 0):
         """Retrieves the bid from a player"""
         if(top_card == 0):
+            self.bubble_sort()
             bid = self.ask(msg = "Your bid: Spades, Clubs, Diamonds, Hearts or Pass? ")
             bid = bid.upper()
             #bid = ((bid + " ").upper()[0])
@@ -294,9 +298,10 @@ class player(trick):
                     bid = self.ask(msg = "Your bid: Spades, Clubs, Diamonds, Hearts or Pass? ", error = "invalid bid")
                     bid = bid.upper()
         else:
+            self.bubble_sort(top_card.suit)
             if (dealer == self.index): msg = "\t Pick it up? "
             else: msg = "\tOrder it up? " 
-            bid = self.ask(msg = msg, dealer = dealer, top_card = top_card)
+            bid = self.ask(msg = msg, top_card = top_card)
             bid = bid.upper()
             while(1):
                 if (bid == "Y"):
@@ -306,18 +311,19 @@ class player(trick):
                 elif (bid == "Q"):
                     exit()
                 else:
-                    bid = self.ask(msg = msg, error="Invalid Bid", dealer = dealer, top_card = top_card)
+                    bid = self.ask(msg = msg, error="Invalid Bid", top_card = top_card)
                     bid = bid.upper()
         return bid
     def pick_it_up(self, top_card):
         """Function that handles adding a card to the deck and then discarding a card."""
         self.add(top_card)
-        card = self.ask(msg = "Which card do you want to discard? ")
+        self.bubble_sort(top_card.suit)
+        card = self.ask(msg = "Ordered up. Which card do you want to discard? ", top_card = top_card)
         card = card.upper()
         while(not ("1" <= card and card <= "6")):
             if (card == "Q"):
                 exit()            
-            card = self.ask(msg = "Which card do you want to discard? ", error="Invalid Card")
+            card = self.ask(msg = "Which card do you want to discard? ", error="Invalid Card", top_card = top_card)
             card = card.upper()
         index = 0        
         for i in ["1", "2", "3", "4", "5", "6"]:
@@ -409,7 +415,6 @@ class testPlayer(player):
                 else:
                     print "\033[1A\033[21Cinvalid input"
                     bid = (raw_input(msg) + " ").upper()[0]
-        print "\033[2J\033[0;0H",
         return bid
     def pick_it_up(self, top_card):
         """Function that handles adding a card to the deck and then discarding a card."""
@@ -775,13 +780,24 @@ class table:
 #        self.players = [comp(), comp(), comp(), comp(), ] 
         for each_player in self.players:
             each_player.set_table(self)
+            each_player.tricks_taken = 0
         self.players[0].name = "Paul"
         self.players[1].name = "Phil"
         self.players[2].name = "Sierra"
         self.players[3].name = "Julia"
     def __str__():
         pass
-    def display(self, top_card = None, trump = None, dealer = 0, played_cards = [], cards = [], msg = "", error = "", players = 0):
+    def _shift(self, n, destructive = 0):
+        n = n % len(self.players)
+        tail = self.players[n:]
+        self.players[n:] = []
+        tail.extend(self.players)
+        if destructive:
+            self.players = tail
+        else:
+            return tail
+        
+    def display(self, top_card = None, trump = None, played_cards = [], cards = [], msg = "", error = "", players = 0):
         ## Pulled from curses.wrapper 2.6, modified.
         def printCard(card):
             if card == None:
@@ -855,43 +871,56 @@ class table:
         
             #player 1
             stdscr.move(12, 2)
-            if dealer == 0:
+            if self.game.dealer == 1:
                 stdscr.addstr("*1*: ")
             else:    
                 stdscr.addstr("1: ")
             printCard(p1)
+            stdscr.move(13, 2)
+            for i in range(0, self.players[1].tricks_taken):
+                stdscr.addstr("[],")
             #partner
             #stdscr.move(1, 22)
             #stdscr.addstr("[]")
             stdscr.move(2, 22)
-            if dealer == 1:
+            if self.game.dealer == 2:
                 stdscr.addstr("*P*: ")
             else:    
                 stdscr.addstr("P: ")
             printCard(pa)
+            stdscr.move(3, 22)
+            for i in range(0, self.players[2].tricks_taken):
+                stdscr.addstr("[],")
         
             #player3
             stdscr.move(12, 44)
-            if dealer == 2:
+            if self.game.dealer == 3:
                 stdscr.addstr("*3*: ")
             else:    
                 stdscr.addstr("3: ")
 
             printCard(p3)
+            stdscr.move(13, 44)
+            for i in range(0, self.players[3].tricks_taken):
+                stdscr.addstr("[],")
             
             #you
             stdscr.move(22, 22)
-            if dealer == 3:
+            if self.game.dealer == 0:
                 stdscr.addstr("*U*: ")
             else:    
                 stdscr.addstr("U: ")
             printCard(u)
-            
+
+            stdscr.move(23, 22)
+            for i in range(0, self.players[0].tricks_taken):
+                stdscr.addstr("[],")
+
             #points
-            stdscr.move(21,44)
-            stdscr.addstr("Team 1: " + str(self.game.team[0]))
-            stdscr.move(22,44)
-            stdscr.addstr("Team 2: " + str(self.game.team[1]))
+            stdscr.move(21,40)
+            stdscr.addstr(" Your Team: " + str(self.game.team[1]))
+            stdscr.move(22,40)
+            stdscr.addstr("Other Team: " + str(self.game.team[0]))
         
             #trump or top_card - not both
             stdscr.move(23,1)
@@ -908,7 +937,8 @@ class table:
                 curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
                 curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
 
-                for card in cards:
+                for index, card in enumerate(cards):
+                    stdscr.addstr(str(index + 1) + ".")
                     printCard(card)
             else:
                 stdscr.addstr(msg)        
@@ -926,8 +956,7 @@ class table:
             stdscr.addstr(msg)        
             #input line
     
-            #players
-
+            #print each player's hand
             if (players and ((29, 1) < stdscr.getmaxyx())):
                 y, x = stdscr.getyx()
                 for index, eachPlayer in enumerate(self.players):
@@ -961,10 +990,10 @@ class game:
     def start(self, table):
         """Starts up the deck and deals"""
         self.table = table
-        players = table.players
         bid = ""
-        self.dealer = random.randrange(0,4)
-#        self.dealer = 0
+        dealer = random.randrange(0,4)
+        self.table._shift(self.dealer, 1)
+        players = table.players
         self.deck = deck()
         self.deck.populate()
         self.deck.cards = self.deck.bubble_sort()
@@ -989,7 +1018,7 @@ class game:
         for each_player in players:
             each_player.cards = each_player.bubble_sort(trump)
         leader = self.dealer + 1
-        del self.dealer
+#        del self.dealer
         tricks = 5 * [trick()] #tricks = [trick(), trick(), trick(), trick(), trick(),]
         for _trick in tricks:
             #for index, player in enumurate(players):
@@ -1000,15 +1029,16 @@ class game:
                 #print "this ", play_this_card
             #print
             winner = _trick.best_card(trump)
+            players[winner.owner].tricks_taken += 1 
             #This is a print statement used for debugging
             for _player in players:
                 _player.results(winner, leader, _trick)
             
             leader = winner.owner
             if (leader % 2):
-                team += 1
-            else:
                 team -= 1
+            else:
+                team += 1
             
 #        for _trick in tricks:
             while (len(_trick.cards) > 0):      
@@ -1021,11 +1051,11 @@ class game:
             bid = players[((self.dealer + index) % 4)].bid(top_card, self.dealer)
             if self.good_bid(bid):
                 players[self.dealer].pick_it_up(top_card)
-                return (bid, ((self.dealer + index) % 4))
+                return (bid, index)
         for index in range(1, 5):
             bid = players[((self.dealer + index) % 4)].bid()
             if self.good_bid(bid):
-                return (bid, ((self.dealer + index) % 4))
+                return (bid, index)
         return (bid, index)
 
     def good_bid(self, bid):
@@ -1041,13 +1071,15 @@ class euchre:
     """Highest level class creates a game for play"""
     def __init__(self):
         """Sets up and starts a game."""
-        self.team = [0, 0]
         self.table = table()
         
         index = 0
         self.game = game()
-        while(self.team[0] < 10 and self.team[1] < 10):
-            self.table.start(self)
+        self.game.team = [0, 0]
+        team = self.game.team
+        self.game.dealer = 0
+        while(team[0] < 10 and team[1] < 10):
+            self.table.start(self.game)
             self.game.start(self.table)
             (mybid, index) = self.game.bid(self.table.players)
             if (mybid == "P"):
@@ -1056,17 +1088,20 @@ class euchre:
             result = self.game.play(self.table.players, mybid)            
             #result = self.bid.play(self.table.players)
             if (result == 5):
-                self.team[index % 2] += 2
+                team[(index + 1) % 2] += 2
                 print "Team %c gains 2" % (['A', 'B'][index % 2])
             elif (result > 0):
-                self.team[index % 2] +=1
+                team[(index + 1) % 2] +=1
                 print "Team %c gains 1" % (['A', 'B'][index % 2])
             elif (result < 0):
-                self.team[(index + 1) % 2] +=2
+                team[(index + 0) % 2] +=2
                 print "Team %c euchred. Team %c gains 2" % ((['A', 'B'][(index) % 2]),(['A', 'B'][(index + 1) % 2]))
             else:
                 raise IndexError
-        if (self.team[0] > 10):
+            self.table._shift(1)
+            self.game.dealer += 1
+            self.game.dealer %= 4
+        if (team[0] > 10):
             print "Team A wins!... 0, 2"
         else:
             print "Team A wins!... 1, 3"
