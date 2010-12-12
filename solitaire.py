@@ -1,8 +1,5 @@
 #! /usr/bin/env python
 
-
-"Use this to help me!"
-
 """Solitaire game, much like the one that comes with MS Windows.
 
 Limitations:

@@ -1,4 +1,5 @@
 import random
+import curses
 
 #shuffle
 #set scores to zero
@@ -54,13 +55,15 @@ class card:
                 
     def __str__(self):
         """prints information of the card in the form: R of S, where R is rank and S is suit"""
-        output = ""
+#        output = ""
 #            output += "%2s of %s" % (self.ranks[self.rank], self.suits[self.suit])
-        if (self.suit == "d" or self.suit == "D" or self.suit == "h" or self.suit == "H"):
-            output += "\033[0;31m"
-        output += "%2s of %s" % (self.rank, self.suit) + "\033[m"
+#        if (self.suit == "d" or self.suit == "D" or self.suit == "h" or self.suit == "H"):
+#            output += "\033[0;31m"
+#        output += "%2s of %s" % (self.rank, self.suit) 
+#        output += "\033[m"
 #        output += "%2s of" % (self.rank) + suit_chars[suits.index(self.suit)] + "\033[m"
-        return output
+#        return output
+        return "%2s of %s" % (self.rank, self.suit)
 
 
 class hand():
@@ -96,10 +99,18 @@ class hand():
         """Removes a specific card and then adds it to another hand"""
         self.cards.remove(card)
         card.number = len(other_hand.cards) 
+        try:
+            card.owner = self.index
+        except:
+            raise Exception("No owner")
         other_hand.add(card)
     def steal(self, card, other_hand):
         """Removes a specific card from another hand and then adds it"""
         other_hand.remove(card)
+        try:
+            card_owner = other_hand.index
+        except:
+            pass
         self.cards.add(card)
     
     def bubble_sort(self, trump = None):
@@ -155,6 +166,16 @@ class trick(hand):
             if (not card.is_trump(trump)):
                 lst.append(card)
         return lst
+    def _shift(self, n, destructive = 0):
+        n = n % len(self.cards)
+        tail = self.cards[n:]
+        self.cards[n:] = []
+        tail.extend(self.cards)
+        if destructive:
+            self.cards = tail
+        else:
+            return tail
+                                        
     def best_card(self, trump, allowtrump = 0):
         """Returns the index of the most valuable card"""
         lead = self.cards[0].suit
@@ -167,7 +188,7 @@ class trick(hand):
         this = self.cards.index(best_card)
         # This print statement is for debugging
         #print best_card, "is #", this + 1
-        return self.cards.index(best_card)
+        return best_card
 
 class deck(hand):
     """Deck is inherited from Hand. has: populate, deal, and shuffle"""
@@ -203,6 +224,34 @@ class deck(hand):
         
 class player(trick):
     """Player is inherited from trick, is interactive. Has set_hand, get_play, get_bid, pick_it_up, worst_card and highest_nontrump"""
+    def __init__(self, table = None):
+        """Blank hand. No Cards yet."""
+        self.index = 0
+        self.cards = []
+        self.name = ""
+        self.table = table
+
+    def set_table(self, table):
+        self.table = table
+
+    def ask(self, msg = "", played_cards = [], trump = None, top_card = None, error = "", players = 0):
+        return self.table.display(top_card = top_card, trump = trump, played_cards = played_cards, cards = self.cards, msg = msg, error = error, players = players)
+
+    def results(self, winner, leader, played_cards):
+        try:
+            #msg = ("The winner was: " + str(winner.owner + leader) + " = " + str(played_cards.cards[(leader + winner.owner) % 4]))
+            msg = ("The winner was: " + str(winner))
+        except:
+            #msg = ("The winner was: " + str(winner.owner + leader))
+            msg = ("The winner was: " + str(winner))
+            print played_cards
+        perspective = played_cards._shift(self.index - leader + 1)
+        self.table.display(msg = msg, played_cards = perspective)
+        print msg
+        print "trick: ", played_cards
+        print "shift: ", perspective
+        leader = winner
+        
     def set_hand(self, hand):
         """Set_hand assigns the cards to the hand"""
         self.cards = hand.cards
@@ -217,31 +266,27 @@ class player(trick):
     
     def get_play(self, trump, played_cards):
         """Finds the card to play by prompting the user for input."""
-        #print "\033[2J\033[0;0H",
-        print "Cards played so far:", played_cards
-        print "Your hand", self.index + 0, "\033[1D:" , self,
-        print "Trump is: ", trump
-        print "     ",
-        for i in range(len(self.cards)):
-            print "        ",  i + 1,
-        print
-        card = ((raw_input("Which card would you like to play? ") + " ").upper()[0])
+#        for i in range(len(self.cards)):
+#            print "        ",  i + 1,
+        card = self.ask(msg = "Which card would you like to play? ", played_cards = played_cards, trump = trump)
+        card = ((card + " ").upper()[0])
         while(not self.good_play(card)):
-            if (card == "q" or card == "Q"):    exit()            
-            print "\033[1A\033[35Cinvalid input"
-            card = (raw_input("Which card would you like to play? ") + " ").upper()[0]
-        index = 0        
-        for i in ["1", "2", "3", "4", "5"]:
-            if (i == card):
-                return self.cards[index]
-            index += 1
-        print "\033[2J\033[0;0H",
+            if (card == "Q"):    exit()            
+            if (card == "I"):
+                card = self.ask(msg = "Which card would you like to play? ", played_cards = played_cards, trump = trump, players = 1)
+            else:
+                card = self.ask(msg = "Which card would you like to play? ", error = "invalid card", played_cards = played_cards, trump = trump)
+            card = ((card + " ").upper()[0])
+        #print "You picked:", card, " of ", self
+        #print "played cards ", played_cards
+        return self.cards[int(card) - 1]
     def bid(self, top_card = 0, dealer = 0):
         """Retrieves the bid from a player"""
         if(top_card == 0):
-            #print "\033[2J\033[0;0H",
-            print "\nYour hand", self.index + 0, "\033[1D:", self
-            bid = (raw_input("\tYour bid: Spades, Clubs, Diamonds, Hearts or Pass? ") + " ").upper()[0]
+            self.bubble_sort()
+            bid = self.ask(msg = "Your bid: Spades, Clubs, Diamonds, Hearts or Pass? ")
+            bid = bid.upper()
+            #bid = ((bid + " ").upper()[0])
             while(1):
                 if (bid == "S" or bid == "C" or bid == "H" or bid == "D"):
                     return bid
@@ -250,16 +295,14 @@ class player(trick):
                 elif (bid == "P"):
                     break
                 else:
-                    print "\033[1A\033[59Cinvalid input"
-                    bid = (raw_input("\tYour bid: Spades, Clubs, Diamonds, Hearts or Pass? ") + " ").upper()[0]
+                    bid = self.ask(msg = "Your bid: Spades, Clubs, Diamonds, Hearts or Pass? ", error = "invalid bid")
+                    bid = bid.upper()
         else:
-            #print "\033[2J\033[0;0H",
+            self.bubble_sort(top_card.suit)
             if (dealer == self.index): msg = "\t Pick it up? "
             else: msg = "\tOrder it up? " 
-            print "\nYour hand", self.index + 0, "\033[1D:" , self
-            print "the top card is", top_card
-            print "the dealer is", dealer + 0
-            bid = (raw_input(msg) + " ").upper()[0]
+            bid = self.ask(msg = msg, top_card = top_card)
+            bid = bid.upper()
             while(1):
                 if (bid == "Y"):
                     return top_card.suit
@@ -268,31 +311,25 @@ class player(trick):
                 elif (bid == "Q"):
                     exit()
                 else:
-                    print "\033[1A\033[21Cinvalid input"
-                    bid = (raw_input(msg) + " ").upper()[0]
-        print "\033[2J\033[0;0H",
+                    bid = self.ask(msg = msg, error="Invalid Bid", top_card = top_card)
+                    bid = bid.upper()
         return bid
     def pick_it_up(self, top_card):
         """Function that handles adding a card to the deck and then discarding a card."""
         self.add(top_card)
-        #print "\033[2J\033[0;0H",
-        print "Your hand", self.index + 0, "\033[1D:" , self
-        print "     ",
-        for i in range(len(self.cards)):
-            print "        ",  i + 1,
-        print
-        card = (raw_input("Which card do you want to discard? ") + " ").upper()[0]
+        self.bubble_sort(top_card.suit)
+        card = self.ask(msg = "Ordered up. Which card do you want to discard? ", top_card = top_card)
+        card = card.upper()
         while(not ("1" <= card and card <= "6")):
             if (card == "Q"):
                 exit()            
-            print "\033[1A\033[35Cinvalid input"
-            card = (raw_input("Which card do you want to discard? ") + " ").upper()[0]
+            card = self.ask(msg = "Which card do you want to discard? ", error="Invalid Card", top_card = top_card)
+            card = card.upper()
         index = 0        
         for i in ["1", "2", "3", "4", "5", "6"]:
             if (i == card):
                 self.remove(self.cards[index])
             index += 1
-        print "\033[2J\033[0;0H",
     def worst_card(self, trump):
         """Returns the lowest valued card
         Replace with sort()[:1] ?"""
@@ -325,6 +362,80 @@ class player(trick):
         """Suggest a move to the player using comp() to analyze the situation"""
         pass
 
+class testPlayer(player):
+    """A simple test player is inherited from player, is interactive. No "graphics" """
+    def get_play(self, trump, played_cards):
+        """Finds the card to play by prompting the user for input."""
+        print "Cards played so far:", played_cards
+        print "Your hand", self.index + 0, "\033[1D:" , self,
+        print "Trump is: ", trump
+        print "     ",
+        for i in range(len(self.cards)):
+            print "        ",  i + 1,
+        print
+        card = ((raw_input("Which card would you like to play? ") + " ").upper()[0])
+        while(not self.good_play(card)):
+            if (card == "q" or card == "Q"):    exit()            
+            print "\033[1A\033[35Cinvalid input"
+            card = (raw_input("Which card would you like to play? ") + " ").upper()[0]
+        index = 0        
+        for i in ["1", "2", "3", "4", "5"]:
+            if (i == card):
+                return self.cards[index]
+            index += 1
+    def bid(self, top_card = 0, dealer = 0):
+        """Retrieves the bid from a player"""
+        if(top_card == 0):
+            print "\nYour hand", self.index + 0, "\033[1D:", self
+            bid = (raw_input("\tYour bid: Spades, Clubs, Diamonds, Hearts or Pass? ") + " ").upper()[0]
+            while(1):
+                if (bid == "S" or bid == "C" or bid == "H" or bid == "D"):
+                    return bid
+                elif (bid == "Q"):
+                    exit()
+                elif (bid == "P"):
+                    break
+                else:
+                    print "\033[1A\033[59Cinvalid input"
+                    bid = (raw_input("\tYour bid: Spades, Clubs, Diamonds, Hearts or Pass? ") + " ").upper()[0]
+        else:
+            if (dealer == self.index): msg = "\t Pick it up? "
+            else: msg = "\tOrder it up? " 
+            print "\nYour hand", self.index + 0, "\033[1D:" , self
+            print "the top card is", top_card
+            print "the dealer is", dealer + 0
+            bid = (raw_input(msg) + " ").upper()[0]
+            while(1):
+                if (bid == "Y"):
+                    return top_card.suit
+                elif (bid == "N" or bid == "P"):
+                    break
+                elif (bid == "Q"):
+                    exit()
+                else:
+                    print "\033[1A\033[21Cinvalid input"
+                    bid = (raw_input(msg) + " ").upper()[0]
+        return bid
+    def pick_it_up(self, top_card):
+        """Function that handles adding a card to the deck and then discarding a card."""
+        self.add(top_card)
+        print "Your hand", self.index + 0, "\033[1D:" , self
+        print "     ",
+        for i in range(len(self.cards)):
+            print "        ",  i + 1,
+        print
+        card = (raw_input("Which card do you want to discard? ") + " ").upper()[0]
+        while(not ("1" <= card and card <= "6")):
+            if (card == "Q"):
+                exit()            
+            print "\033[1A\033[35Cinvalid input"
+            card = (raw_input("Which card do you want to discard? ") + " ").upper()[0]
+        index = 0        
+        for i in ["1", "2", "3", "4", "5", "6"]:
+            if (i == card):
+                self.remove(self.cards[index])
+            index += 1
+        print "\033[2J\033d[0;0H",
 
 class comp(player):
     """Player is inherited from hand, is a "computer" player and has limited AI. Has get_play, get_bid, pick_it_up"""
@@ -343,6 +454,8 @@ class comp(player):
         #else:
         #    print "pass"
         return p2
+    def results(self, winner, leader, played_cards):
+        pass
     def get_play_ai(self, trump, played_cards):
         def first():
             """leader plays highest card or highest non-trump"""
@@ -501,6 +614,7 @@ class comp(player):
         elif(num == 3):
             card = last()
         else:
+            print "played cards, raise error", played_cards
             raise IndexError
         return card
     def get_play_ai_try(self, trump, played_cards):
@@ -654,26 +768,218 @@ class table:
     def __init__(self):
         pass
 
-    def start(self):
+    def start(self, game):
         """begins a game by adding players"""
+        self.game = game
         num_players = 0
         self.players = []
         self.players = [player(), comp(), comp(), comp(), ] 
+#        self.players = [testPlayer(), comp(), comp(), comp(), ] 
 #        self.players = [player(), player(), player(), player(), ] 
 #        self.players = [player(), comp(), player(), comp(), ] 
 #        self.players = [comp(), comp(), comp(), comp(), ] 
+        for each_player in self.players:
+            each_player.set_table(self)
+            each_player.tricks_taken = 0
         self.players[0].name = "Paul"
         self.players[1].name = "Phil"
         self.players[2].name = "Sierra"
         self.players[3].name = "Julia"
     def __str__():
         pass
-    def pause():
-        pass
-    def msg():
-        pass
-    def ask():
-        pass
+    def _shift(self, n, destructive = 0):
+        n = n % len(self.players)
+        tail = self.players[n:]
+        self.players[n:] = []
+        tail.extend(self.players)
+        if destructive:
+            self.players = tail
+        else:
+            return tail
+        
+    def display(self, top_card = None, trump = None, played_cards = [], cards = [], msg = "", error = "", players = 0):
+        ## Pulled from curses.wrapper 2.6, modified.
+        def printCard(card):
+            if card == None:
+                pass
+            elif (card.suit in ["D", "H"]):
+                stdscr.addstr(str(card) + ", ", curses.color_pair(2))
+            elif (card.suit in ["S", "C"]):
+                stdscr.addstr(str(card) + ", ", curses.color_pair(3))
+            else:
+                stdscr.addstr(str(card) + ", ")
+                raise Exception("Suit not H, D, S, C")
+            
+        try:
+            # Initialize curses
+            stdscr = curses.initscr()
+    
+            # Turn off echoing of keys, and enter cbreak mode,
+            # where no buffering is performed on keyboard input
+            curses.noecho()
+            curses.cbreak()
+
+            # In keypad mode, escape sequences for special keys
+            # (like the cursor keys) will be interpreted and
+            # a special value like curses.KEY_LEFT will be returned
+            stdscr.keypad(1)
+
+            # Start color, too.  Harmless if the terminal doesn't have
+            # color; user can test with has_color() later on.  The try/catch
+            # works around a minor bit of over-conscientiousness in the curses
+            # module -- the error return from C start_color() is ignorable.
+            try:
+                curses.start_color()
+            except:
+                pass
+            stdscr.erase()
+
+            if ((25, 50) > stdscr.getmaxyx()):
+                raise Exception("Make your window bigger")                 
+            #Set Red, Black Cards:
+            curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+            curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
+
+
+            #self.msg = str(curses.has_colors())
+            if (len(played_cards) == 0):
+                p1 = None
+                pa = None
+                p3 = None
+                u  = None
+            elif (len(played_cards) == 1):
+                p1 = None
+                pa = None
+                p3 = played_cards[0]
+                u  = None
+            elif (len(played_cards) == 2):
+                p1 = None
+                pa = played_cards[0]
+                p3 = played_cards[1]
+                u  = None
+            elif (len(played_cards) == 3):
+                p1 = played_cards[0]
+                pa = played_cards[1]
+                p3 = played_cards[2]
+                u  = None
+            elif (len(played_cards) == 4):
+                p1 = played_cards[0]
+                pa = played_cards[1]
+                p3 = played_cards[2]
+                u  = played_cards[3]
+        
+        
+            #player 1
+            stdscr.move(12, 2)
+            if self.game.dealer == 1:
+                stdscr.addstr("*1*: ")
+            else:    
+                stdscr.addstr("1: ")
+            printCard(p1)
+            stdscr.move(13, 2)
+            for i in range(0, self.players[1].tricks_taken):
+                stdscr.addstr("[],")
+            #partner
+            #stdscr.move(1, 22)
+            #stdscr.addstr("[]")
+            stdscr.move(2, 22)
+            if self.game.dealer == 2:
+                stdscr.addstr("*P*: ")
+            else:    
+                stdscr.addstr("P: ")
+            printCard(pa)
+            stdscr.move(3, 22)
+            for i in range(0, self.players[2].tricks_taken):
+                stdscr.addstr("[],")
+        
+            #player3
+            stdscr.move(12, 44)
+            if self.game.dealer == 3:
+                stdscr.addstr("*3*: ")
+            else:    
+                stdscr.addstr("3: ")
+
+            printCard(p3)
+            stdscr.move(13, 44)
+            for i in range(0, self.players[3].tricks_taken):
+                stdscr.addstr("[],")
+            
+            #you
+            stdscr.move(22, 22)
+            if self.game.dealer == 0:
+                stdscr.addstr("*U*: ")
+            else:    
+                stdscr.addstr("U: ")
+            printCard(u)
+
+            stdscr.move(23, 22)
+            for i in range(0, self.players[0].tricks_taken):
+                stdscr.addstr("[],")
+
+            #points
+            stdscr.move(21,40)
+            stdscr.addstr(" Your Team: " + str(self.game.team[1]))
+            stdscr.move(22,40)
+            stdscr.addstr("Other Team: " + str(self.game.team[0]))
+        
+            #trump or top_card - not both
+            stdscr.move(23,1)
+            if trump:
+                stdscr.addstr("Trump: " + str(trump))
+            elif top_card:
+                stdscr.addstr("Top Card: ")
+                printCard(top_card)
+    
+            #cards
+            stdscr.move(24, 1)
+            if cards:
+                stdscr.addstr("Your cards: ")
+                curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+                curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
+
+                for index, card in enumerate(cards):
+                    stdscr.addstr(str(index + 1) + ".")
+                    printCard(card)
+            else:
+                stdscr.addstr(msg)        
+                msg = ""
+    
+            #error msg
+            stdscr.move(23, 25)
+            if not (error == ""):
+                curses.init_pair(1, curses.COLOR_RED, curses.COLOR_WHITE)
+                stdscr.addstr(error, curses.color_pair(1))        
+    
+    
+            #msg
+            stdscr.move(25, 1)
+            stdscr.addstr(msg)        
+            #input line
+    
+            #print each player's hand
+            if (players and ((29, 1) < stdscr.getmaxyx())):
+                y, x = stdscr.getyx()
+                for index, eachPlayer in enumerate(self.players):
+                    stdscr.move(y + 1 + index, 1)
+                    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+                    curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
+
+                    for card in eachPlayer.cards:
+                        printCard(card)
+                stdscr.move(25, x)                   
+    
+            #Refresh
+            stdscr.refresh()
+            stdscr.border()
+    #        stdscr.move(12,22) move to center
+            #return stdscr.getch()
+            return stdscr.getkey()
+        finally:
+            # Set everything back to normal
+            stdscr.keypad(0)
+            curses.echo()
+            curses.nocbreak()
+            curses.endwin()
     
 class game:
     """Class for each hand in a game, meaning all the stuff needed to play for one hand."""
@@ -681,11 +987,13 @@ class game:
         pass
 
 
-    def start(self, players):
+    def start(self, table):
         """Starts up the deck and deals"""
+        self.table = table
         bid = ""
-        self.dealer = random.randrange(0,4)
-#        self.dealer = 0
+        dealer = random.randrange(0,4)
+        self.table._shift(self.dealer, 1)
+        players = table.players
         self.deck = deck()
         self.deck.populate()
         self.deck.cards = self.deck.bubble_sort()
@@ -705,31 +1013,34 @@ class game:
         """Handles the card play given a bid"""
         team = 0
         trump = bid
-        played_cards = hand()
         del bid
-        print "trump:\t\t", trump, "\ndealer:\t\t", self.dealer
+        #print "trump:\t\t", trump, "\ndealer:\t\t", self.dealer
         for each_player in players:
             each_player.cards = each_player.bubble_sort(trump)
         leader = self.dealer + 1
-        del self.dealer
+#        del self.dealer
         tricks = 5 * [trick()] #tricks = [trick(), trick(), trick(), trick(), trick(),]
         for _trick in tricks:
+            #for index, player in enumurate(players):
             for index in range(0, 4):
-                play_this_card = players[((leader + index) % 4)].get_play(trump, played_cards)
+                #print index
+                play_this_card = players[((leader + index) % 4)].get_play(trump, _trick)
                 players[((leader + index) % 4)].give(play_this_card, _trick)
-            print
+                #print "this ", play_this_card
+            #print
             winner = _trick.best_card(trump)
-#            #print "\033[2J\033[0;0H",
+            players[winner.owner].tricks_taken += 1 
             #This is a print statement used for debugging
-             #print "(",leader,"+",winner,") % 4 =", leader+winner, "% 4 =", (leader+winner) % 4
-            print "The winner was: ", (leader + winner) % 4, " = ", _trick.cards[winner], "of", _trick
-            leader = leader + winner
-            if (leader % 2):
-                team += 1
-            else:
-                team -= 1
+            for _player in players:
+                _player.results(winner, leader, _trick)
             
-        for _trick in tricks:
+            leader = winner.owner
+            if (leader % 2):
+                team -= 1
+            else:
+                team += 1
+            
+#        for _trick in tricks:
             while (len(_trick.cards) > 0):      
                 _trick.give(_trick.cards[0], self.deck)
         return team
@@ -740,11 +1051,11 @@ class game:
             bid = players[((self.dealer + index) % 4)].bid(top_card, self.dealer)
             if self.good_bid(bid):
                 players[self.dealer].pick_it_up(top_card)
-                return (bid, ((self.dealer + index) % 4))
+                return (bid, index)
         for index in range(1, 5):
             bid = players[((self.dealer + index) % 4)].bid()
             if self.good_bid(bid):
-                return (bid, ((self.dealer + index) % 4))
+                return (bid, index)
         return (bid, index)
 
     def good_bid(self, bid):
@@ -760,35 +1071,40 @@ class euchre:
     """Highest level class creates a game for play"""
     def __init__(self):
         """Sets up and starts a game."""
-        team = [0, 0]
         self.table = table()
         
         index = 0
         self.game = game()
+        self.game.team = [0, 0]
+        team = self.game.team
+        self.game.dealer = 0
         while(team[0] < 10 and team[1] < 10):
-            self.table.start()
-            self.game.start(self.table.players)
+            self.table.start(self.game)
+            self.game.start(self.table)
             (mybid, index) = self.game.bid(self.table.players)
             if (mybid == "P"):
                 continue
-            print mybid, index
+            print "mybid, index", mybid, index
             result = self.game.play(self.table.players, mybid)            
             #result = self.bid.play(self.table.players)
             if (result == 5):
-                team[index % 2] += 2
+                team[(index + 1) % 2] += 2
                 print "Team %c gains 2" % (['A', 'B'][index % 2])
             elif (result > 0):
-                team[index % 2] +=1
+                team[(index + 1) % 2] +=1
                 print "Team %c gains 1" % (['A', 'B'][index % 2])
             elif (result < 0):
-                team[(index + 1) % 2] +=2
+                team[(index + 0) % 2] +=2
                 print "Team %c euchred. Team %c gains 2" % ((['A', 'B'][(index) % 2]),(['A', 'B'][(index + 1) % 2]))
             else:
                 raise IndexError
+            self.table._shift(1)
+            self.game.dealer += 1
+            self.game.dealer %= 4
         if (team[0] > 10):
-            print "Team B wins!... 1, 3"
-        else:
             print "Team A wins!... 0, 2"
+        else:
+            print "Team A wins!... 1, 3"
 
                 
                  
