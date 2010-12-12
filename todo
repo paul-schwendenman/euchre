@@ -1,7 +1,5 @@
-rewrite some code.
-think about how this should be done
-scoring
-going alone
-server - client
-gui
-auto-set values
+separate the different computer ai's
+move the curses from euchre.py to player-curses
+clean and scrub
+
+follow the written sheet and get it running again
