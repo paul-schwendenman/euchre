@@ -1,5 +1,5 @@
 class comp(player):
-    """Player is inherited from hand, is a "computer" player and has limited AI. Has get_play, get_bid, pick_it_up"""
+    """Comp is inherited from player, is a "computer" player and has limited AI. Has get_play, get_bid, pick_it_up"""
     """ Cards that it can beat vs cards that beat it"""
     
     def get_play(self, trump, played_cards):
@@ -178,115 +178,6 @@ class comp(player):
             print "played cards, raise error", played_cards
             raise IndexError
         return card
-    def get_play_ai_try(self, trump, played_cards):
-        """AI version of play using try...except"""
-        results = hand()
-        try:
-            print """Try to follow suit"""
-            results.cards = self.search(suit = played_cards.cards[0].suit)
-            print results
-            if ((((ranks.index(trump) + ranks.index(played_cards.cards[0].suit)) % 2) == 0) and (trump != played_cards.cards[0].suit)):
-                for card in results.cards:
-                    if(card.rank == "J"):
-                        results.remove(card(played_cards.cards[0].suit, "J"))
-            results.bubble_sort()
-            if (len(results.cards) != 1):
-                index = random.randrange(0, len(results.cards) - 1)
-                index = self.cards.index(results.cards[index])                    
-            else:
-                index = 0
-        except IndexError:
-            print """This is the first player of trick aka the Leader"""        
-            try:
-                print """What should I lead?"""
-                if (self.cards[0].value(trump) == 28):
-                    index = 0
-                else:
-                    print """Don't have the right"""
-                    for card in self.cards:
-                        if (card.value(trump) < 20):
-                            print """Highest non-trump"""
-                            index = self.cards.index(card)
-                            break
-                        else:
-                            print """All trump???"""
-                            index = 0
-#                index = random.randrange(0, len(self.cards) - 1)
-            except ValueError:
-                print """This is the last trick"""
-                index = 0
-        except ValueError:
-            print """Can't follow suit (not leader)"""
-            try:
-                results.cards = self.search(suit = trump)
-                print results
-                results.bubble_sort()
-                if (len(results.cards > 1)):
-                    index = random.randrange(0, len(results.cards) - 1)
-                else:
-                    index = 0
-            except ValueError:
-                print """No trump... through smallest card"""
-                cards = self.search(rank = self.cards[len(self.cards) - 1].rank)
-                try:
-                    print """More than one?"""
-                    index = random.randrange(0, len(cards) - 1)
-                except ValueError:
-                    print """The first (and only) one"""
-                    index = 0
-                finally:
-                    print """Reassign index from "cards" to self.cards"""
-                    index = self.cards.index(cards[index])                    
-            except:
-                print """This is the last trick"""
-                index = 0
-        else:
-            pass
-        finally:
-            pass
-        print "(" , self.index, ": " , self.cards[index] , ")", self
-        
-        return self.cards[index]
-        
-    def get_play_with_ifs():
-        """AI play rewritten without try...except"""
-        index = 0
-        this = player()
-        this.set_hand(played_cards)
-        if (len(played_cards.cards) > 0):
-            if (len(self.search(played_cards.cards[0].suit)) > 0):
-                cards = self.search(played_cards.cards[0].suit)
-                for card in cards:
-                    print card,
-                print
-                this.bubble_sort(trump)
-                index = len(cards) - 1
-                for card in cards:
-                    if (card.value(trump) > played_cards.cards[0].value(trump)):
-                        index = cards.index(card)
-            elif(len(self.search(trump)) > 0):
-                cards = self.search(trump)
-                this.bubble_sort(trump)
-                index = len(cards) - 1
-                for card in cards:
-                    if (card.value(trump) > played_cards.cards[0].value(trump)):
-                        index = cards.index(card)
-            else:
-                pass
-#                index = random.randrange(0, len(self.cards) - 1)
-        else:
-            cards = self.cards
-            if ((cards[0].value(trump)) > 27):
-                index = 0
-            else:
-                for card in cards:
-                    if card.value(trump) < 20:
-                        index = cards.index(card)
-                        break
-         
-        # This print is for debugging        
-        print "(" , self.index, ": " , self.cards[index] , ")", self
-        return self.cards[index]
 
     def bid(self, top_card = 0, dealer = 0):
         """Get the ai bid"""

@@ -1,5 +1,5 @@
-separate the different computer ai's
-move the curses from euchre.py to player-curses
-clean and scrub
+[X] separate the different computer ai's
+[ ] move the curses from euchre.py to player-curses
+[ ] clean and scrub
 
 follow the written sheet and get it running again
