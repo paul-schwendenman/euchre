@@ -1,9 +1,11 @@
-[X] separate the different computer ai's
-[X] move the curses from euchre.py to player-curses
+Coding Problems
 [ ] clean and scrub
-[ ] make a logger -- based off of player_test.py
 [ ] Research kwargs for locals... then pass those instead.
+[ ] Use for player in players._shift(leader) rather than [index + leader]
 
+"Mental Mistakes"
 [ ] if left bower lead they don't follow suit!
+[ ] its not recognizing the left. read logs?
+[ ] make it know the the leading suit wins.
 
-follow the written sheet and get it running again
+Look at sheet and other todo's

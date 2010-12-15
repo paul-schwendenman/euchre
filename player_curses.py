@@ -5,7 +5,7 @@ suits = [None, "S", "D", "C", "H"]
 
 class player_curses(player):
     """Player is inherited from player, is interactive. Has set_hand, get_play, get_bid, pick_it_up, worst_card and highest_nontrump"""
-    def display(self, top_card = None, trump = None, played_cards = [], cards = [], msg = "", error = "", team = [99,99], players = [], dealer = None):
+    def display(self, top_card = None, trump = None, played_cards = [], cards = [], msg = "", error = "", team = [99,99], players = [], dealer = None, secret = 0):
         ## Pulled from curses.wrapper 2.6, modified.
         def printCard(card):
             if card == None:
@@ -171,8 +171,8 @@ class player_curses(player):
             stdscr.addstr(msg)        
             #input line
     
-            #print each player's hand
-            if (players and ((29, 1) < stdscr.getmaxyx())):
+            #secret "i" -- print each player's hand
+            if (secret and ((29, 1) < stdscr.getmaxyx())):
                 y, x = stdscr.getyx()
                 for index, eachPlayer in enumerate(players):
                     stdscr.move(y + 1 + index, 1)

@@ -4,6 +4,7 @@ import random
 #import basics
 from basics import deck
 from player_curses import *
+from player_test import *
 from comp import *
 from logger import log
 
@@ -29,10 +30,11 @@ class table:
         num_players = 0
         self.players = []
         self.players = [player_curses(), comp(), comp(), comp(), ] 
+#        self.players = [player_test(), comp(), comp(), comp(), ] 
 #        self.players = [testPlayer(), comp(), comp(), comp(), ] 
 #        self.players = [player(), player(), player(), player(), ] 
 #        self.players = [player(), comp(), player(), comp(), ] 
-        self.players = [comp(), comp(), comp(), comp(), ] 
+#        self.players = [comp(), comp(), comp(), comp(), ] 
         for each_player in self.players:
             each_player.set_table(self)
             each_player.tricks_taken = 0
@@ -73,10 +75,10 @@ class game:
         self.deck.shuffle()
         self.deck.deal(players, self.dealer)
 
-        for each_player in players:
+        for index, each_player in enumerate(players):
             each_player.index = players.index(each_player)
             each_player.cards = each_player.bubble_sort()
-            log(each_player)
+            log(index, ": ", each_player)
 
     def bid(self, players):
         """Handles bidding for all players"""
@@ -91,11 +93,9 @@ class game:
             if self.good_bid(bid):
                 return (bid, index)
         return (bid, index)
-    def play(self, players, bid = 'S'):
+    def play(self, players, trump):
         """Handles the card play given a bid"""
         team = 0
-        trump = bid
-        del bid
         #print "trump:\t\t", trump, "\ndealer:\t\t", self.dealer
         for each_player in players:
             each_player.cards = each_player.bubble_sort(trump)
@@ -107,14 +107,13 @@ class game:
             for index in range(0, 4):
                 #print index
                 play_this_card = players[((leader + index) % 4)].play(trump, _trick, self.dealer, self.team, players)
-                log(index, ":\t", play_this_card)
+                log((leader + index)%4, ":\t", play_this_card)
                 players[((leader + index) % 4)].give(play_this_card, _trick)
                 #print "this ", play_this_card
             #print
             winner = _trick.best_card(trump)
             players[winner.owner].tricks_taken += 1 
             log(winner.owner, ":\t", players[winner.owner].tricks_taken)
-            #This is a print statement used for debugging
             for _player in players:
                 _player.results(winner, leader, _trick, self.team, players)
             
@@ -149,28 +148,33 @@ class euchre:
         self.game.team = [0, 0]
         team = self.game.team
         self.game.dealer = 0
+        log("********* New Game *****************")
         while(team[0] < 10 and team[1] < 10):
+            #keep playing until someone gets ten points.
             self.table.start(self.game)
             self.game.start(self.table)
             (mybid, index) = self.game.bid(self.table.players)
-            log("Bid: ", mybid, " Index:", index % 4)
+            log("Bid: ", mybid, " Index:", (index + self.game.dealer) % 4)
+            log("Dealer: ", self.game.dealer)
             if (mybid == "P"):
                 continue
-            #print "mybid, index", mybid, index
             
             result = self.game.play(self.table.players, mybid)            
-            #result = self.bid.play(self.table.players)
+
             log("Result:\t", result)
 
             if (result == 5):
+                #You took them all! Take two.
                 team[(index + 1) % 2] += 2
                 print "Team %c gains 2" % (['A', 'B'][index % 2])
                 log("Team %s gains 2" % (['A...0,2', 'B...1,3'][index % 2]))
             elif (result > 0):
+                #Made the bid
                 team[(index + 1) % 2] +=1
                 print "Team %c gains 1" % (['A', 'B'][index % 2])
                 log("Team %s gains 1" % (['A...0,2', 'B...1,3'][index % 2]))
             elif (result < 0):
+                #Other team won give them two.
                 team[(index + 0) % 2] +=2
                 print "Team %c euchred. Team %c gains 2" % ((['A', 'B'][(index) % 2]),(['A', 'B'][(index + 1) % 2]))
                 log("Team %s euchred. Team %s gains 2" % ((['A...0,2', 'B...1,3'][(index) % 2]),(['A...0,2', 'B...1,3'][(index + 1) % 2])))
@@ -183,8 +187,8 @@ class euchre:
             print "Team A wins!... 0, 2"
             log("Team A wins!... 0, 2")
         else:
-            print "Team A wins!... 1, 3"
-            log("Team A wins!... 1, 3")
+            print "Team B wins!... 1, 3"
+            log("Team B wins!... 1, 3")
 
                 
                  

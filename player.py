@@ -33,7 +33,7 @@ class player(trick):
         while(not self.good_play(card)):
             if (card == "Q"):    exit()            
             if (card == "I"):
-                card = self.display(msg = "Which card would you like to play? ", played_cards = played_cards, trump = trump, players = 1, dealer = dealer, team = team)
+                card = self.display(msg = "Which card would you like to play? ", played_cards = played_cards, trump = trump, players = players, dealer = dealer, team = team, secret = 1)
             else:
                 card = self.display(msg = "Which card would you like to play? ", error = "invalid card", played_cards = played_cards, trump = trump, dealer = dealer, team = team)
             card = ((card + " ").upper()[0])
