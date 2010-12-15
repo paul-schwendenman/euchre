@@ -1,7 +1,14 @@
-def log(*msg):
-    b = []
-    for index, a in enumerate(msg):
-        b.append(str(msg[index]))
+def log(*args, **kwargs):
+    msg = []
+    for item in args:
+        msg.append(str(item))
     with open("log", "a") as f:
-        f.writelines(b)
-        f.writelines("\n") 
+        if msg:
+            f.writelines(msg)
+            f.writelines("\n") 
+        elif kwargs:
+            f.writelines(str(kwargs))
+            f.writelines("\n") 
+        else:
+            f.writelines("\n") 
+                    

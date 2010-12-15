@@ -2,15 +2,19 @@ from player import *
 
 class player_test(player):
     """A simple test player is inherited from player, is interactive. No "graphics" """
-    def display(self, top_card = None, trump = None, played_cards = [], cards = [], msg = "", error = "", players = 0, dealer = None):
+    def display(self, top_card = None, trump = None, played_cards = 0, cards = [], msg = "", error = "", players = 0, dealer = None, team = []):
+        if (team):
+            print "Score: ", team
         if (trump):
             print "Trump is: ", trump
         if (top_card): 
             print "the top card is", top_card
         if (dealer): 
             print "the dealer is", dealer + 0
-        if (len(played_cards)):
+        if (played_cards):
             print "Cards played so far:", played_cards
+        elif (played_cards != 0):
+            print "Cards played so far: None"
         print "Your hand", self.index + 0, "\033[1D :" , self
         print "                ",
         for i in range(len(self.cards)):

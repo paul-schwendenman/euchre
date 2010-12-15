@@ -19,9 +19,6 @@ class player(trick):
             print played_cards
         perspective.cards = played_cards._shift(self.index - leader + 1)
         self.display(msg = msg, played_cards = perspective, team = team, players = players)
-        print msg
-        print "trick: ", played_cards
-        print "shift: ", perspective
         leader = winner
     
     def play(self, trump, played_cards, dealer, team, players):
