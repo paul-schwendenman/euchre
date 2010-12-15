@@ -1,9 +1,9 @@
-import "comp"
+from comp import *
 
 class comp_try(comp):
     """Comp_try is inherited from comp and picks the cards different, everything else the same."""
     
-    def get_play_ai(self, trump, played_cards):
+    def ai(self, trump, played_cards):
         """AI version of play using try...except"""
         results = hand()
         try:

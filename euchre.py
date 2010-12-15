@@ -1,4 +1,11 @@
-import curses
+import random
+#import basics, player
+
+#import basics
+from basics import deck
+from player_curses import *
+from comp import *
+from logger import log
 
 #shuffle
 #set scores to zero
@@ -9,11 +16,6 @@ import curses
 ##else 
 ###trump
 ###throw off
-
-
-
-        
-
 
 class table:
     """Class for the table, has players.
@@ -26,11 +28,11 @@ class table:
         self.game = game
         num_players = 0
         self.players = []
-        self.players = [player(), comp(), comp(), comp(), ] 
+        self.players = [player_curses(), comp(), comp(), comp(), ] 
 #        self.players = [testPlayer(), comp(), comp(), comp(), ] 
 #        self.players = [player(), player(), player(), player(), ] 
 #        self.players = [player(), comp(), player(), comp(), ] 
-#        self.players = [comp(), comp(), comp(), comp(), ] 
+        self.players = [comp(), comp(), comp(), comp(), ] 
         for each_player in self.players:
             each_player.set_table(self)
             each_player.tricks_taken = 0
@@ -64,6 +66,7 @@ class game:
         dealer = random.randrange(0,4)
         self.table._shift(self.dealer, 1)
         players = table.players
+#        self.deck = basics.deck()
         self.deck = deck()
         self.deck.populate()
         self.deck.cards = self.deck.bubble_sort()
@@ -73,11 +76,20 @@ class game:
         for each_player in players:
             each_player.index = players.index(each_player)
             each_player.cards = each_player.bubble_sort()
+            log(each_player)
 
     def bid(self, players):
         """Handles bidding for all players"""
         top_card = self.deck.cards[0]
-        bid, index = self.get_bid(players, top_card)
+        for index in range(1, 5):
+            bid = players[((self.dealer + index) % 4)].bid(top_card, self.dealer, players, self.team)
+            if self.good_bid(bid):
+                players[self.dealer].pick_it_up(top_card, self.dealer, self.team)
+                return (bid, index)
+        for index in range(1, 5):
+            bid = players[((self.dealer + index) % 4)].bid()
+            if self.good_bid(bid):
+                return (bid, index)
         return (bid, index)
     def play(self, players, bid = 'S'):
         """Handles the card play given a bid"""
@@ -94,15 +106,17 @@ class game:
             #for index, player in enumurate(players):
             for index in range(0, 4):
                 #print index
-                play_this_card = players[((leader + index) % 4)].get_play(trump, _trick)
+                play_this_card = players[((leader + index) % 4)].play(trump, _trick, self.dealer, self.team, players)
+                log(index, ":\t", play_this_card)
                 players[((leader + index) % 4)].give(play_this_card, _trick)
                 #print "this ", play_this_card
             #print
             winner = _trick.best_card(trump)
             players[winner.owner].tricks_taken += 1 
+            log(winner.owner, ":\t", players[winner.owner].tricks_taken)
             #This is a print statement used for debugging
             for _player in players:
-                _player.results(winner, leader, _trick)
+                _player.results(winner, leader, _trick, self.team, players)
             
             leader = winner.owner
             if (leader % 2):
@@ -114,19 +128,6 @@ class game:
             while (len(_trick.cards) > 0):      
                 _trick.give(_trick.cards[0], self.deck)
         return team
-
-    def get_bid(self, players, top_card):
-        """Handles the bid recovery for all players"""
-        for index in range(1, 5):
-            bid = players[((self.dealer + index) % 4)].bid(top_card, self.dealer)
-            if self.good_bid(bid):
-                players[self.dealer].pick_it_up(top_card)
-                return (bid, index)
-        for index in range(1, 5):
-            bid = players[((self.dealer + index) % 4)].bid()
-            if self.good_bid(bid):
-                return (bid, index)
-        return (bid, index)
 
     def good_bid(self, bid):
         """tests to see if the bid is "Good" """
@@ -152,20 +153,27 @@ class euchre:
             self.table.start(self.game)
             self.game.start(self.table)
             (mybid, index) = self.game.bid(self.table.players)
+            log("Bid: ", mybid, " Index:", index % 4)
             if (mybid == "P"):
                 continue
-            print "mybid, index", mybid, index
+            #print "mybid, index", mybid, index
+            
             result = self.game.play(self.table.players, mybid)            
             #result = self.bid.play(self.table.players)
+            log("Result:\t", result)
+
             if (result == 5):
                 team[(index + 1) % 2] += 2
                 print "Team %c gains 2" % (['A', 'B'][index % 2])
+                log("Team %s gains 2" % (['A...0,2', 'B...1,3'][index % 2]))
             elif (result > 0):
                 team[(index + 1) % 2] +=1
                 print "Team %c gains 1" % (['A', 'B'][index % 2])
+                log("Team %s gains 1" % (['A...0,2', 'B...1,3'][index % 2]))
             elif (result < 0):
                 team[(index + 0) % 2] +=2
                 print "Team %c euchred. Team %c gains 2" % ((['A', 'B'][(index) % 2]),(['A', 'B'][(index + 1) % 2]))
+                log("Team %s euchred. Team %s gains 2" % ((['A...0,2', 'B...1,3'][(index) % 2]),(['A...0,2', 'B...1,3'][(index + 1) % 2])))
             else:
                 raise IndexError
             self.table._shift(1)
@@ -173,8 +181,10 @@ class euchre:
             self.game.dealer %= 4
         if (team[0] > 10):
             print "Team A wins!... 0, 2"
+            log("Team A wins!... 0, 2")
         else:
             print "Team A wins!... 1, 3"
+            log("Team A wins!... 1, 3")
 
                 
                  

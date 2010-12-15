@@ -1,3 +1,5 @@
+import random
+
 # Constants for the euchre game.
 ranks = [None, "9", "10", "J", "Q", "K", "A",]
 cardname = [None, "9", "10", "J", "Q", "K", "A", "9T", "10T", "QT", "KT", "AT", "LB", "JT"]
@@ -7,6 +9,7 @@ left = { "S" : "C", "C" : "S", "D" : "H", "H" : "D"}
 suits = [None, "S", "D", "C", "H"]
 suit_chars = [None, unichr(9824), unichr(9827), unichr(9829), unichr(9830)]
 #suit_chars = [None, 9824, 9827, 9829, 9830]
+bower = "J"
 
 
 class card:
@@ -29,7 +32,7 @@ class card:
     def relative_suit(self, trump):
         if (self.suit == trump):
             value = self.rank + "T"
-        elif (self.rank == "J" and trump == left[self.suit]):
+        elif (self.rank == bower and trump == left[self.suit]):
             value = "LB"
         else:
             value = self.rank

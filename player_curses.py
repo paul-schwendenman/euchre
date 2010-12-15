@@ -1,8 +1,11 @@
-import "player"
+from player import *
+import curses
+
+suits = [None, "S", "D", "C", "H"]
 
 class player_curses(player):
     """Player is inherited from player, is interactive. Has set_hand, get_play, get_bid, pick_it_up, worst_card and highest_nontrump"""
-    def display(self, top_card = None, trump = None, played_cards = [], cards = [], msg = "", error = "", players = 0):
+    def display(self, top_card = None, trump = None, played_cards = [], cards = [], msg = "", error = "", team = [99,99], players = [], dealer = None):
         ## Pulled from curses.wrapper 2.6, modified.
         def printCard(card):
             if card == None:
@@ -76,56 +79,62 @@ class player_curses(player):
         
             #player 1
             stdscr.move(12, 2)
-            if self.game.dealer == 1:
+            if dealer == 1:
                 stdscr.addstr("*1*: ")
             else:    
                 stdscr.addstr("1: ")
             printCard(p1)
             stdscr.move(13, 2)
-            for i in range(0, self.players[1].tricks_taken):
-                stdscr.addstr("[],")
+            if (players):
+                for i in range(0, players[1].tricks_taken):
+                    stdscr.addstr("[],")
             #partner
             #stdscr.move(1, 22)
             #stdscr.addstr("[]")
             stdscr.move(2, 22)
-            if self.game.dealer == 2:
+            if dealer == 2:
                 stdscr.addstr("*P*: ")
             else:    
                 stdscr.addstr("P: ")
             printCard(pa)
             stdscr.move(3, 22)
-            for i in range(0, self.players[2].tricks_taken):
-                stdscr.addstr("[],")
+            if (players):
+                for i in range(0, players[2].tricks_taken):
+                    stdscr.addstr("[],")
         
             #player3
             stdscr.move(12, 44)
-            if self.game.dealer == 3:
+            if dealer == 3:
                 stdscr.addstr("*3*: ")
             else:    
                 stdscr.addstr("3: ")
 
             printCard(p3)
             stdscr.move(13, 44)
-            for i in range(0, self.players[3].tricks_taken):
-                stdscr.addstr("[],")
+            if (players):
+                for i in range(0, players[3].tricks_taken):
+                    stdscr.addstr("[],")
             
             #you
             stdscr.move(22, 22)
-            if self.game.dealer == 0:
+            if dealer == 0:
                 stdscr.addstr("*U*: ")
             else:    
                 stdscr.addstr("U: ")
             printCard(u)
 
             stdscr.move(23, 22)
-            for i in range(0, self.players[0].tricks_taken):
-                stdscr.addstr("[],")
+
+            if (players):
+                for i in range(0, players[0].tricks_taken):
+                    stdscr.addstr("[],")
+
 
             #points
             stdscr.move(21,40)
-            stdscr.addstr(" Your Team: " + str(self.game.team[1]))
+            stdscr.addstr(" Your Team: " + str(team[1]))
             stdscr.move(22,40)
-            stdscr.addstr("Other Team: " + str(self.game.team[0]))
+            stdscr.addstr("Other Team: " + str(team[0]))
         
             #trump or top_card - not both
             stdscr.move(23,1)
@@ -137,6 +146,7 @@ class player_curses(player):
     
             #cards
             stdscr.move(24, 1)
+            cards = self.cards
             if cards:
                 stdscr.addstr("Your cards: ")
                 curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
@@ -164,7 +174,7 @@ class player_curses(player):
             #print each player's hand
             if (players and ((29, 1) < stdscr.getmaxyx())):
                 y, x = stdscr.getyx()
-                for index, eachPlayer in enumerate(self.players):
+                for index, eachPlayer in enumerate(players):
                     stdscr.move(y + 1 + index, 1)
                     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
                     curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)

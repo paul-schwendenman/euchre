@@ -1,5 +1,9 @@
 [X] separate the different computer ai's
-[ ] move the curses from euchre.py to player-curses
+[X] move the curses from euchre.py to player-curses
 [ ] clean and scrub
+[ ] make a logger -- based off of player_test.py
+[ ] Research kwargs for locals... then pass those instead.
+
+[ ] if left bower lead they don't follow suit!
 
 follow the written sheet and get it running again

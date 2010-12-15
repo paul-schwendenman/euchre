@@ -1,23 +1,25 @@
+from player import *
+
 class comp(player):
     """Comp is inherited from player, is a "computer" player and has limited AI. Has get_play, get_bid, pick_it_up"""
     """ Cards that it can beat vs cards that beat it"""
     
-    def get_play(self, trump, played_cards):
+    def play(self, trump, played_cards, dealer, team, players):
         """Return the play from the "player" Compare the AI to the Human."""
-        return self.get_play_test(trump, played_cards)
+        return self.ai(trump, played_cards)
     def get_play_test(self, trump, played_cards):
         """Return the play from the "player" Compare the AI to the Human."""
         #p1 = player.get_play(self, trump, played_cards)
-        p2 = self.get_play_ai(trump, played_cards)
+        p2 = self.ai(trump, played_cards)
         #p2 = self.get_play_ai_try(trump, played_cards)
         #if p1 != p2:
         #    print "error!"
         #else:
         #    print "pass"
         return p2
-    def results(self, winner, leader, played_cards):
+    def results(self, winner, leader, played_cards, team, players):
         pass
-    def get_play_ai(self, trump, played_cards):
+    def ai(self, trump, played_cards):
         def first():
             """leader plays highest card or highest non-trump"""
             #self.cards.bubble_sort(trump)
@@ -179,7 +181,7 @@ class comp(player):
             raise IndexError
         return card
 
-    def bid(self, top_card = 0, dealer = 0):
+    def bid(self, top_card = 0, dealer = 0, players = 0, team = [98, 98]):
         """Get the ai bid"""
         bid = "P"
         if top_card == 0:
@@ -207,7 +209,7 @@ class comp(player):
         for card in self.cards:
             value += card.value(trump)
         return value    
-    def pick_it_up(self, top_card):
+    def pick_it_up(self, top_card, dealer, team):
         """Handle adding card to hand and removing the worst"""
         self.add(top_card)
         index = 0

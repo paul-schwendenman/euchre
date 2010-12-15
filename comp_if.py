@@ -3,7 +3,7 @@ import "comp"
 class comp_if(comp):
     """Comp_if is inherited from comp and picks the cards different, everything else the same."""
     
-    def get_play_ai(self, trump, played_cards):
+    def ai(self, trump, played_cards):
         """AI play rewritten without try...except"""
         index = 0
         this = player()
