@@ -1,5 +1,3 @@
-#!/ usr/bin/env python
-# tms.py (SERVER)
 import socket
 import sys
 
@@ -8,14 +6,14 @@ port = 5643
 class player_server():
     def __init__(self):
         import socket
-        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server_socket.bind(("", 5000))
-        server_socket.listen(5)
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_socket.bind(("", 5000))
+        self.server_socket.listen(5)
 
-    def chat(self, msg):
+    def chat(self):
         print "TCPServer Waiting for client on port 5000"
         while 1:
-                client_socket, address = server_socket.accept()
+                client_socket, address = self.server_socket.accept()
                 print "I got a connection from ", address
                 while 1:
                         data = raw_input ( "SEND( TYPE q or Q to Quit):" )
@@ -33,4 +31,7 @@ class player_server():
                         else:
                                 print "RECIEVED:" , data
                 
+if __name__ == "__main__":
+    p = player_server()
+    p.chat()
  
