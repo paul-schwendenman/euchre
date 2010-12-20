@@ -2,7 +2,8 @@ import socket
 from cPickle import dumps, loads
 
 class player_client():
-    def __init__(self, port = 5000):
+    def __init__(self, player, port = 5000):
+        self.player = player
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect_ex(("localhost", port))
 
@@ -19,8 +20,7 @@ class player_client():
                 self.client_socket.close()
         return data
     def display(self, data):
-        
-
+        data["result"] = self.player.display(**data)        
         return data
 
 
