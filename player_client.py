@@ -7,28 +7,29 @@ class player_client():
         self.client_socket.connect_ex(("localhost", port))
 
     def chat(self):
-#        while 1:
         data = loads(self.client_socket.recv(512))
         if (data["quit"]):
             self.client_socket.close()
-#            break;
         else:
-            print "RECIEVED:" , data
             data = self.display(data)
             if (not data["quit"]):
                 self.client_socket.send(dumps(data))
             else:
                 self.client_socket.send(dumps(data))
                 self.client_socket.close()
-#                break;
+        return data
     def display(self, data):
-        data["msg"] = "Whats shaken?"
-        #x = raw_input()
+        
+
         return data
 
 
 if __name__ == "__main__":
     p = player_client()
-    p.chat()
+    data = {}
+    data["quit"] = 0
+    while not data["quit"]:
+        data = p.chat()
+        print data
 
 
