@@ -1,3 +1,4 @@
+import player_test
 import socket
 from cPickle import dumps, loads
 
@@ -12,20 +13,29 @@ class player_client():
         if (data["quit"]):
             self.client_socket.close()
         else:
-            data = self.display(data)
+            data = self.ask(data)
             if (not data["quit"]):
                 self.client_socket.send(dumps(data))
             else:
                 self.client_socket.send(dumps(data))
                 self.client_socket.close()
         return data
-    def display(self, data):
-        data["result"] = self.player.display(**data)        
+    def ask(self, data):
+        try:
+            del data["quit"]
+        except KeyError:
+            pass
+        data["result"] = self.player.ask(**data)        
+        if data["result"] == "q" or data["result"] == "Q":
+            data["quit"] = 1
+        else:
+            data["quit"] = 0
         return data
 
 
 if __name__ == "__main__":
-    p = player_client()
+    player = player_test.player_test()
+    p = player_client(player)
     data = {}
     data["quit"] = 0
     while not data["quit"]:

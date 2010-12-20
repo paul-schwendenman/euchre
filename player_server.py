@@ -32,14 +32,12 @@ class player_server():
     ask = chat                
 if __name__ == "__main__":
     server_socket = open_socket()
-    a = {"quit":0,"msg":"yes"}
+    a = {'played_cards': [], 'team': [0, 0], 'cards': [], 'players': [], 'secret': 0, 'error': '', 'msg': '\t Pick it up? ', 'dealer': 0, 'trump': None} 
+
     p = player_server(server_socket)
     p2 = player_server(server_socket)
     print "echo 1",p.chat(**a)
     print "echo 2",p2.chat(**a)
-    print "echo 1",p.chat(**{"quit":0,"a":0,"gr":54})
-    print "echo 2",p2.ask(a=4,gf=5, quit =0)
- 
     a["quit"] = 1
     print "close 1",p.chat(**a)
     print "close 2",p2.chat(**a)
