@@ -2,9 +2,9 @@ import socket
 from cPickle import dumps, loads
 
 class player_client():
-    def __init__(self, index = 0):
+    def __init__(self, port = 5000):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect(("localhost", 5000 + index))
+        self.client_socket.connect_ex(("localhost", port))
 
     def chat(self):
 #        while 1:
