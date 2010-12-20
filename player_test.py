@@ -2,7 +2,7 @@ from player import *
 
 class player_test(player):
     """A simple test player is inherited from player, is interactive. No "graphics" """
-    def display(self, top_card = None, trump = None, played_cards = 0, cards = [], msg = "", error = "", players = 0, dealer = None, team = []):
+    def ask(self, top_card = None, trump = None, played_cards = 0, cards = [], msg = "", error = "", players = 0, dealer = None, team = [], secret = 0):
         if (team):
             print "Score: ", team
         if (trump):

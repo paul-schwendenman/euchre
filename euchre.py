@@ -29,7 +29,7 @@ class table:
         self.game = game
         num_players = 0
         self.players = []
-        self.players = [player_curses(), comp(), comp(), comp(), ] 
+        self.players = [player_test(), comp(), comp(), comp(), ] 
 #        self.players = [player_test(), comp(), comp(), comp(), ] 
 #        self.players = [player(), player(), player(), player(), ] 
 #        self.players = [player(), comp(), player(), comp(), ] 

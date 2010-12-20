@@ -9,5 +9,6 @@ g.this(**a)
 g.this(**b)
 this = "peas   "
 that = "carrots"
+g.this(this=this,that=that)
 g.this(**locals())
 

@@ -18,21 +18,21 @@ class player(trick):
             msg = ("The winner was: " + str(winner) + "\n")
             print played_cards
         perspective.cards = played_cards._shift(self.index - leader + 1)
-        self.display(msg = msg, played_cards = perspective, team = team, players = players)
+        self.ask(msg = msg, played_cards = perspective, team = team, players = players)
         leader = winner
     
     def play(self, trump, played_cards, dealer, team, players):
         """Finds the card to play by prompting the user for input."""
 #        for i in range(len(self.cards)):
 #            print "        ",  i + 1,
-        card = self.display(msg = "Which card would you like to play? ", played_cards = played_cards, trump = trump, dealer = dealer, team = team, players = players)
+        card = self.ask(msg = "Which card would you like to play? ", played_cards = played_cards, trump = trump, dealer = dealer, team = team, players = players)
         card = ((card + " ").upper()[0])
         while(not self.good_play(card)):
             if (card == "Q"):    exit()            
             if (card == "I"):
-                card = self.display(msg = "Which card would you like to play? ", played_cards = played_cards, trump = trump, players = players, dealer = dealer, team = team, secret = 1)
+                card = self.ask(msg = "Which card would you like to play? ", played_cards = played_cards, trump = trump, players = players, dealer = dealer, team = team, secret = 1)
             else:
-                card = self.display(msg = "Which card would you like to play? ", error = "invalid card", played_cards = played_cards, trump = trump, dealer = dealer, team = team)
+                card = self.ask(msg = "Which card would you like to play? ", error = "invalid card", played_cards = played_cards, trump = trump, dealer = dealer, team = team)
             card = ((card + " ").upper()[0])
         #print "You picked:", card, " of ", self
         #print "played cards ", played_cards
@@ -41,7 +41,7 @@ class player(trick):
         """Retrieves the bid from a player"""
         if(top_card == 0):
             self.bubble_sort()
-            bid = self.display(msg = "Your bid: Spades, Clubs, Diamonds, Hearts or Pass? ", dealer = dealer, team = team)
+            bid = self.ask(msg = "Your bid: Spades, Clubs, Diamonds, Hearts or Pass? ", dealer = dealer, team = team)
             bid = bid.upper()
             #bid = ((bid + " ").upper()[0])
             while(1):
@@ -52,13 +52,13 @@ class player(trick):
                 elif (bid == "P"):
                     break
                 else:
-                    bid = self.display(msg = "Your bid: Spades, Clubs, Diamonds, Hearts or Pass? ", error = "invalid bid", dealer = dealer, team = team)
+                    bid = self.ask(msg = "Your bid: Spades, Clubs, Diamonds, Hearts or Pass? ", error = "invalid bid", dealer = dealer, team = team)
                     bid = bid.upper()
         else:
             self.bubble_sort(top_card.suit)
             if (dealer == self.index): msg = "\t Pick it up? "
             else: msg = "\tOrder it up? " 
-            bid = self.display(msg = msg, top_card = top_card, dealer = dealer, team = team)
+            bid = self.ask(msg = msg, top_card = top_card, dealer = dealer, team = team)
             bid = bid.upper()
             while(1):
                 if (bid == "Y"):
@@ -68,19 +68,19 @@ class player(trick):
                 elif (bid == "Q"):
                     exit()
                 else:
-                    bid = self.display(msg = msg, error="Invalid Bid", top_card = top_card, dealer = dealer, team = team)
+                    bid = self.ask(msg = msg, error="Invalid Bid", top_card = top_card, dealer = dealer, team = team)
                     bid = bid.upper()
         return bid
     def pick_it_up(self, top_card, dealer, team):
         """Function that handles adding a card to the deck and then discarding a card."""
         self.add(top_card)
         self.bubble_sort(top_card.suit)
-        card = self.display(msg = "Ordered up. Which card do you want to discard? ", dealer = dealer, top_card = top_card, team = team)
+        card = self.ask(msg = "Ordered up. Which card do you want to discard? ", dealer = dealer, top_card = top_card, team = team)
         card = card.upper()
         while(not ("1" <= card and card <= "6")):
             if (card == "Q"):
                 exit()            
-            card = self.display(msg = "Which card do you want to discard? ", error="Invalid Card", dealer = dealer, top_card = top_card, team = team)
+            card = self.ask(msg = "Which card do you want to discard? ", error="Invalid Card", dealer = dealer, top_card = top_card, team = team)
             card = card.upper()
         index = 0        
         for i in ["1", "2", "3", "4", "5", "6"]:
