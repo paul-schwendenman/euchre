@@ -146,7 +146,6 @@ class player_curses(player):
     
             #cards
             stdscr.move(24, 1)
-            cards = self.cards
             if cards:
                 stdscr.addstr("Your cards: ")
                 curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)

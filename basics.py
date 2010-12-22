@@ -52,7 +52,10 @@ class card:
 #        output += "%2s of" % (self.rank) + suit_chars[suits.index(self.suit)] + "\033[m"
 #        return output
         return "%2s of %s" % (self.rank, self.suit)
-
+    def __getstate__(self):
+        return self.rank, self.suit
+    def __setstate__(self, state):
+        self.rank, self.suit = state        
 
 class hand():
     """Hand is used as the base class for all the rest of the card handlers. Hand of playing cards, base class __init__, __str__, clear, add, remove, and give"""
@@ -122,6 +125,20 @@ class hand():
             if ((card.suit != suit and suit != None) or (card.rank != rank and rank != None)):
                 cards.remove(card)
         return cards
+    def __getstate__(self):
+        if self.cards:
+            print self.cards
+            cards = [card.__getstate__() for card in self.cards]
+        else:
+            cards = self.cards
+        return self.name, self.index, cards        
+    def __setstate__(self, state):
+        self.name, self.index, cards = state
+        blank = card()
+        if cards:    
+            self.cards = [card.__setstate__(card(), a) for a in cards]        
+        else:
+            self.cards = cards
 class trick(hand):
     """Trick is inherited from Hand. Has best_card"""
     def _suits(self, suit):
@@ -155,6 +172,7 @@ class trick(hand):
                 lst.append(card)
         return lst
     def _shift(self, n, destructive = 0):
+        if not self.cards: return self.cards
         n = n % len(self.cards)
         tail = self.cards[n:]
         self.cards[n:] = []

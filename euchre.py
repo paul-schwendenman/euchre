@@ -4,7 +4,8 @@ import random
 #import basics
 from basics import deck
 from player_curses import *
-from player_test import *
+#from player_test import *
+from player_server import *
 from comp import *
 from logger import log
 
@@ -29,7 +30,10 @@ class table:
         self.game = game
         num_players = 0
         self.players = []
-        self.players = [player_test(), comp(), comp(), comp(), ] 
+        server_socket = self.game.server_socket
+#        self.players = [player_server(server_socket), comp(), player_curses(), comp(), ] 
+        self.players = [player_curses(), comp(), player_curses(), comp(), ] 
+#        self.players = [player_curses(), comp(), comp(), comp(), ] 
 #        self.players = [player_test(), comp(), comp(), comp(), ] 
 #        self.players = [player(), player(), player(), player(), ] 
 #        self.players = [player(), comp(), player(), comp(), ] 
@@ -57,6 +61,7 @@ class table:
 class game:
     """Class for each hand in a game, meaning all the stuff needed to play for one hand."""
     def __init__(self):
+        self.server_socket = open_socket()
         pass
 
 
