@@ -1,5 +1,5 @@
 import socket
-from pickle import dumps, loads
+from cPickle import dumps, loads
 from player import *
 
 def open_socket(port = 5000):
@@ -32,12 +32,14 @@ class player_server(player):
             except EOFError:
                 result = "Q"
             except:
+                num = 0
                 try:
                     self.client_socket.send(dumps({"quit":1}))
-                except:                    
+                except:
+                    num = 1                    
                     pass
                 import sys
-                print "Unexpected error:", sys.exc_info()[0]
+                print "Unexpected error:", sys.exc_info()[num]
                 raise
                      
             

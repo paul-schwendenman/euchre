@@ -186,9 +186,13 @@ class comp(player):
         bid = "P"
         if top_card == 0:
             """Everyone Passed"""
-            for suit in suits: 
-                if self.value(suit) > 85:
-                    bid = suit
+            values = []
+            for suit in enumerate(suits): 
+                values.append(self.value(suit))
+            values.sort()
+            value = values.pop()      
+            if value > 85:
+                bid = suit
         elif dealer != 0:
             """Put Intelligent bidding ie do and don't order put etc..."""
             if (self.value(top_card.suit) > 85):
@@ -216,4 +220,25 @@ class comp(player):
         #index = random.randrange(0, len(self.cards) - 1)
         self.bubble_sort(top_card.suit)
         self.remove(self.cards[-1])
+        return "6"
+    def ask(self, **kwargs):
+        msg = kwargs["msg"]
+        self.cards = kwargs["cards"]
+        if (msg[:7] == "The win"): # Results
+            pass
+        elif (msg[-6:] == "play? "): # Play
+            return self.play(kwargs["trump"], kwargs["played_cards"], kwargs["dealer"], kwargs["team"], kwargs["players"])
+        elif (msg[-4:] == "up? " or msg[-6:] == "Pass? "): # Bid
+            try:
+                return self.bid(kwargs["top_card"], kwargs["dealer"], kwargs["players"], kwargs["team"])
+            except KeyError:
+                try:
+                    return self.bid(kwargs["top_card"], kwargs["dealer"])
+                except KeyError:
+                    return self.bid()            
+        elif (msg[:5] == "Order"): # Pick it Up
+            return self.pick_it_up(kwargs["top_card"], kwargs["dealer"], kwargs["team"])
+        else: # Bad
+            print "|%s|" % msg
+            raise Exception("Should have called one of those ^")
 

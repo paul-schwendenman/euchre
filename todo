@@ -34,4 +34,8 @@ Worthless and Cool
 background trying to learn how to beat them...agressive, passive, etc.
 [ ] Add color schemes for curses
 
-Look at sheet and other todo's
+[ ] Look at sheet and other todo's
+[ ] Look at commit mesg. todos
+
+[ ] Figure out why for _trick in tricks, doesnt work for the next trick
+something to do with 2 * [trick()] and [trick(), trick()]

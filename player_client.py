@@ -1,7 +1,5 @@
-import player_test
-import player_curses
 import socket
-from pickle import dumps, loads
+from cPickle import dumps, loads
 import time
 
 class player_client():
@@ -50,7 +48,7 @@ class player_client():
         except KeyError:
             pass
         data["result"] = self.player.ask(**data)        
-        print "result: ", data["result"]
+#        print "result: ", data["result"]
         if data["result"] == "q" or data["result"] == "Q":
             data["quit"] = 1
         else:
@@ -67,7 +65,12 @@ class player_client():
 
 
 if __name__ == "__main__":
+    #import player_test
+    import player_curses
+    #import comp
+
     player = player_curses.player_curses()
+    #player = comp.comp()
     p = player_client(player)
     data = {}
     data["quit"] = 0

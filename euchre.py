@@ -24,14 +24,9 @@ class table:
     Needs to handle: leader, dealer, points etc."""
     def __init__(self):
         self.server_socket = open_socket()
-        pass
-
-    def start(self, game):
-        """begins a game by adding players"""
-        self.game = game
         self.players = []
-#        self.players = [player_server(server_socket), comp(), player_curses(), comp(), ] 
-        self.players = [player_server(self.server_socket), comp(), player_curses(), comp(), ] 
+        self.players = [player_server(self.server_socket), comp(), player_server(self.server_socket), comp(), ] 
+#        self.players = [player_server(self.server_socket), comp(), player_curses(), comp(), ] 
 #        self.players = [player_curses(), comp(), player_curses(), comp(), ] 
 #        self.players = [player_curses(), comp(), comp(), comp(), ] 
 #        self.players = [player_test(), comp(), comp(), comp(), ] 
@@ -43,10 +38,16 @@ class table:
         self.players[2].name = "Sierra"
         self.players[3].name = "Julia"
 
+        pass
+
+    def start(self, game):
+        """begins a game by adding players"""
+        self.game = game
 
         num_players = 0
         for each_player in self.players:
             each_player.tricks_taken = 0
+            each_player.clear()
     def __str__():
         pass
     def _split(self, n):
@@ -65,6 +66,7 @@ class table:
 class game:
     """Class for each hand in a game, meaning all the stuff needed to play for one hand."""
     def __init__(self):
+        self.deck = deck()
         pass
 
 
@@ -74,58 +76,59 @@ class game:
         bid = ""
         dealer = random.randrange(0,4)
         self.table._shift(self.dealer, 1)
-        players = table.players
+
 #        players = self.table.players
 #        self.deck = basics.deck()
-        self.deck = deck()
         self.deck.populate()
         self.deck.cards = self.deck.bubble_sort()
         self.deck.shuffle()
-        self.deck.deal(players, self.dealer)
 
-        for index, each_player in enumerate(players):
-            each_player.index = players.index(each_player)
+        self.deck.deal(self.table.players, self.dealer)
+
+        for index, each_player in enumerate(self.table.players):
+            each_player.index = index
             each_player.cards = each_player.bubble_sort()
             log(index, ": ", each_player)
 
-    def bid(self, players):
+    def bid(self):
         """Handles bidding for all players"""
         top_card = self.deck.cards[0]
         for index in range(1, 5):
-            bid = players[((self.dealer + index) % 4)].bid(top_card, self.dealer, players, self.team)
+            bid = self.table.players[((self.dealer + index) % 4)].bid(top_card, self.dealer, self.table.players, self.team)
             log("I, ", self.dealer + index, "-", bid)
             if self.good_bid(bid):
-                players[self.dealer].pick_it_up(top_card, self.dealer, self.team)
+                self.table.players[self.dealer].pick_it_up(top_card, self.dealer, self.team)
                 return (bid, index)
         for index in range(1, 5):
-            bid = players[((self.dealer + index) % 4)].bid(team = self.team)
+            bid = self.table.players[((self.dealer + index) % 4)].bid(team = self.team)
             log("I, ", self.dealer + index, "-", bid)
             if self.good_bid(bid):
                 return (bid, index)
         return (bid, index)
-    def play(self, players, trump):
+    def play(self, trump):
         """Handles the card play given a bid"""
         team = 0
         #print "trump:\t\t", trump, "\ndealer:\t\t", self.dealer
-        for each_player in players:
+        for each_player in self.table.players:
             each_player.cards = each_player.bubble_sort(trump)
         leader = self.dealer + 1
 #        del self.dealer
-        tricks = 5 * [trick()] #tricks = [trick(), trick(), trick(), trick(), trick(),]
+        #tricks = 5 * [trick()] 
+        tricks = [trick(), trick(), trick(), trick(), trick(),]
         for _trick in tricks:
-            #for index, player in enumurate(players):
+            #for index, player in enumurate(self.table.players):
             for index in range(0, 4):
                 #print index
-                play_this_card = players[((leader + index) % 4)].play(trump, _trick, self.dealer, self.team, players)
+                play_this_card = self.table.players[((leader + index) % 4)].play(trump, _trick, self.dealer, self.team, self.table.players)
                 log((leader + index)%4, ":\t", play_this_card)
-                players[((leader + index) % 4)].give(play_this_card, _trick)
+                self.table.players[((leader + index) % 4)].give(play_this_card, _trick)
                 #print "this ", play_this_card
             #print
             winner = _trick.best_card(trump)
-            players[winner.owner].tricks_taken += 1 
-            log(winner.owner, ":\t", players[winner.owner].tricks_taken)
-            for _player_ in players:
-                _player_.results(winner, leader, _trick, self.team, players, self.dealer)
+            self.table.players[winner.owner].tricks_taken += 1 
+            log(winner.owner, ":\t", self.table.players[winner.owner].tricks_taken)
+            for _player_ in self.table.players:
+                _player_.results(winner, leader, _trick, self.team, self.table.players, self.dealer)
             
             leader = winner.owner
             if (leader % 2):
@@ -133,9 +136,8 @@ class game:
             else:
                 team += 1
             
-#        for _trick in tricks:
-            while (len(_trick.cards) > 0):      
-                _trick.give(_trick.cards[0], self.deck)
+        for _trick in tricks:
+            _trick.clear()
         return team
 
     def good_bid(self, bid):
@@ -163,13 +165,13 @@ class euchre:
             #keep playing until someone gets ten points.
             self.table.start(self.game)
             self.game.start(self.table)
-            (mybid, index) = self.game.bid(self.table.players)
+            (mybid, index) = self.game.bid()
             log("Bid: ", mybid, " Index:", (index + self.game.dealer) % 4)
             log("Dealer: ", self.game.dealer)
             if (mybid == "P"):
                 continue
             
-            result = self.game.play(self.table.players, mybid)            
+            result = self.game.play(mybid)            
 
             log("Result:\t", result)
 
