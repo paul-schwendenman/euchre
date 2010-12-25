@@ -127,18 +127,16 @@ class hand():
         return cards
     def __getstate__(self):
         if self.cards:
-            print self.cards
             cards = [card.__getstate__() for card in self.cards]
         else:
             cards = self.cards
-        return self.name, self.index, cards        
+        return self.name, self.index, cards
     def __setstate__(self, state):
         self.name, self.index, cards = state
-        blank = card()
-        if cards:    
-            self.cards = [card.__setstate__(card(), a) for a in cards]        
-        else:
-            self.cards = cards
+        self.cards = []
+        for index, _card_ in enumerate(cards):
+            self.cards.append(card(*_card_))
+        
 class trick(hand):
     """Trick is inherited from Hand. Has best_card"""
     def _suits(self, suit):
@@ -171,16 +169,17 @@ class trick(hand):
             if (not card.is_trump(trump)):
                 lst.append(card)
         return lst
+    def _split(self, n):
+        return self.cards[:n], self.cards[n:]
+
     def _shift(self, n, destructive = 0):
-        if not self.cards: return self.cards
-        n = n % len(self.cards)
-        tail = self.cards[n:]
-        self.cards[n:] = []
-        tail.extend(self.cards)
+        b, a = self._split(n)
+        c = a + b
+
         if destructive:
-            self.cards = tail
+            self.cards = c
         else:
-            return tail
+            return c
                                         
     def best_card(self, trump, allowtrump = 0):
         """Returns the index of the most valuable card"""

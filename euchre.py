@@ -4,7 +4,7 @@ import random
 #import basics
 from basics import deck
 from player_curses import *
-#from player_test import *
+from player_test import *
 from player_server import *
 from comp import *
 from logger import log
@@ -23,45 +23,48 @@ class table:
     """Class for the table, has players.
     Needs to handle: leader, dealer, points etc."""
     def __init__(self):
+        self.server_socket = open_socket()
         pass
 
     def start(self, game):
         """begins a game by adding players"""
         self.game = game
-        num_players = 0
         self.players = []
-        server_socket = self.game.server_socket
 #        self.players = [player_server(server_socket), comp(), player_curses(), comp(), ] 
-        self.players = [player_curses(), comp(), player_curses(), comp(), ] 
+        self.players = [player_server(self.server_socket), comp(), player_curses(), comp(), ] 
+#        self.players = [player_curses(), comp(), player_curses(), comp(), ] 
 #        self.players = [player_curses(), comp(), comp(), comp(), ] 
 #        self.players = [player_test(), comp(), comp(), comp(), ] 
 #        self.players = [player(), player(), player(), player(), ] 
 #        self.players = [player(), comp(), player(), comp(), ] 
 #        self.players = [comp(), comp(), comp(), comp(), ] 
-        for each_player in self.players:
-            each_player.set_table(self)
-            each_player.tricks_taken = 0
         self.players[0].name = "Paul"
         self.players[1].name = "Phil"
         self.players[2].name = "Sierra"
         self.players[3].name = "Julia"
+
+
+        num_players = 0
+        for each_player in self.players:
+            each_player.tricks_taken = 0
     def __str__():
         pass
+    def _split(self, n):
+        return self.players[:n], self.players[n:]
+
     def _shift(self, n, destructive = 0):
-        n = n % len(self.players)
-        tail = self.players[n:]
-        self.players[n:] = []
-        tail.extend(self.players)
+        b, a = self._split(n)
+        c = a + b
+
         if destructive:
-            self.players = tail
+            self.players = c
         else:
-            return tail
+            return c
         
     
 class game:
     """Class for each hand in a game, meaning all the stuff needed to play for one hand."""
     def __init__(self):
-        self.server_socket = open_socket()
         pass
 
 
@@ -72,6 +75,7 @@ class game:
         dealer = random.randrange(0,4)
         self.table._shift(self.dealer, 1)
         players = table.players
+#        players = self.table.players
 #        self.deck = basics.deck()
         self.deck = deck()
         self.deck.populate()
@@ -120,8 +124,8 @@ class game:
             winner = _trick.best_card(trump)
             players[winner.owner].tricks_taken += 1 
             log(winner.owner, ":\t", players[winner.owner].tricks_taken)
-            for _player in players:
-                _player.results(winner, leader, _trick, self.team, players)
+            for _player_ in players:
+                _player_.results(winner, leader, _trick, self.team, players, self.dealer)
             
             leader = winner.owner
             if (leader % 2):

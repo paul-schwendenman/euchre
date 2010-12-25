@@ -8,11 +8,17 @@ class player_client():
     def __init__(self, player, port = 5000):
         self.player = player
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        for i in range(0,4):
-            if not self.client_socket.connect_ex(("localhost", port)):
-                break
-            time.sleep(i+1)
-
+        try:
+            for i in range(0,15):
+                if not self.client_socket.connect_ex(("localhost", port)):
+                    break
+                time.sleep(1)
+            self.client_socket.getpeername()
+        except KeyboardInterrupt:
+            exit()
+        except socket.error:
+            print "No connection Found."
+            exit()
     def chat(self):
         data = self.client_socket.recv(4096)
         try: 
@@ -25,7 +31,6 @@ class player_client():
             print "Unexpected error:", sys.exc_info()[0]
             raise
 
-#        print data
 #        for card in data["cards"]:
 #            print card,
 #        print
@@ -53,7 +58,7 @@ class player_client():
         return data
     def recv():
         data = self.client_socket.recv(1024)
-        print data
+        #print data
         try:
             data = loads(da)
         except:
@@ -68,6 +73,5 @@ if __name__ == "__main__":
     data["quit"] = 0
     while not data["quit"]:
         data = p.chat()
-#        print data
 
 

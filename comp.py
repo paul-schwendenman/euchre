@@ -17,7 +17,7 @@ class comp(player):
         #else:
         #    print "pass"
         return p2
-    def results(self, winner, leader, played_cards, team, players):
+    def results(self, winner, leader, played_cards, team, players, dealer):
         pass
     def ai(self, trump, played_cards):
         def first():

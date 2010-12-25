@@ -5,9 +5,16 @@ Whats next
 [ ] Rules!!!
 
 Coding Problems
+[X] Doesn't correctly show the played cards on result, for multiple human players
+(both local and remote)
+[ ] Loses the "players" if euchre.py line 77 includes self.? Closes the
+connection on remote.
+[ ] euchre.py (128) irregular value trace for where it is being changed
+
 [ ] clean and scrub
 [ ] Research kwargs for locals... then pass those instead.
 [ ] Use for player in players._shift(leader) rather than [index + leader]
+
 
 "Mental Mistakes"
 [ ] Fix leading - shold think of left as right if they have the right etc.
@@ -18,5 +25,13 @@ Coding Problems
 Worthless and Cool
 [ ] Different Ways to Deal 22, 23, 32, 33
 [ ] Cut the Deck?
+[ ] Learning use (results) for logged memory and improvement.
+[ ] Make a self teaching euchre manual... auto generate rules
+[ ] Teach it new styles of play 
+[ ] Self modifying card "value" sheet
+[ ] Self modifying code
+[ ] Have it learn playing styles from humans... and mimic thier style in
+background trying to learn how to beat them...agressive, passive, etc.
+[ ] Add color schemes for curses
 
 Look at sheet and other todo's

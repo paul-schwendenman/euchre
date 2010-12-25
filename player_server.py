@@ -18,6 +18,7 @@ class player_server(player):
         data["cards"] = self.cards
         try:
             data["quit"]
+
         except KeyError:
             data["quit"] = 0
         if (data["quit"]):
@@ -31,6 +32,11 @@ class player_server(player):
             except EOFError:
                 result = "Q"
             except:
+                try:
+                    self.client_socket.send(dumps({"quit":1}))
+                except:                    
+                    pass
+                import sys
                 print "Unexpected error:", sys.exc_info()[0]
                 raise
                      
