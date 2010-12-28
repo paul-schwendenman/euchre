@@ -200,6 +200,7 @@ class deck(hand):
     """Deck is inherited from Hand. has: populate, deal, and shuffle"""
     def populate(self):
         """Builds the deck with cards"""
+        self.clear()
         for suit in suits[1:]:
             for rank in ranks[1:]:
                 self.add(card(rank, suit))
@@ -227,4 +228,6 @@ class deck(hand):
                 self.give(top_card, hands[((dealer + index) % 4)])
             except:
                 print "Can't continue deal. Out of cards!"
+        if (len(self) != 4):
+            raise Exception ("Kitty to big misdeal")
 

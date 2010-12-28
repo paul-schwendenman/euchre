@@ -21,26 +21,9 @@ class both(deck, trick):
   pass
 
 aaa = both()
-bbb = both()
 
 aaa.populate()
-#aaa.shuffle()
-
-
-
-for rank in ranks:
-  bbb.cards = aaa._higher(rank)
-  print rank, ": ", bbb
-  print
-  
-  
-  
-# _suits works.
-# _trump suceeded.
-# _notTrump also suceeded
-# _higher fails... "A" < "K" < "Q" do it by rank.index() not string value
-# _lower also fails
-
+aaa.shuffle()
 
 
 

@@ -84,7 +84,7 @@ class game:
         self.deck.shuffle()
 
         self.deck.deal(self.table.players, self.dealer)
-
+        log("kitty: ", self.deck)
         for index, each_player in enumerate(self.table.players):
             each_player.index = index
             each_player.cards = each_player.bubble_sort()
@@ -93,6 +93,7 @@ class game:
     def bid(self):
         """Handles bidding for all players"""
         top_card = self.deck.cards[0]
+        log("top card: ",top_card)
         for index in range(1, 5):
             bid = self.table.players[((self.dealer + index) % 4)].bid(top_card, self.dealer, self.table.players, self.team)
             log("I, ", self.dealer + index, "-", bid)
