@@ -39,7 +39,8 @@ class card:
         return value
     
     def is_trump(self, trump):
-        return (self.relative_suit(trump)).endswith("T")
+        rs = self.relative_suit(trump)
+        return ((rs).endswith("T")) or (rs == "LB")
                 
     def __str__(self):
         """prints information of the card in the form: R of S, where R is rank and S is suit"""
@@ -148,13 +149,13 @@ class trick(hand):
     def _higher(self, rank):
         lst = []
         for card in self.cards:
-            if (card.rank >= rank):
+            if (ranks.index(card.rank) >= ranks.index(rank)):
                 lst.append(card)
         return lst
     def _lower(self, rank):
         lst = []
         for card in self.cards:
-            if (card.rank <= rank):
+            if (ranks.index(card.rank) <= ranks.index(rank)):
                 lst.append(card)
         return lst
     def _trump(self, trump):

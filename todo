@@ -1,25 +1,20 @@
 Whats next
-[ ] GTK
-[ ] Add goning "alone"
+[ ] TK
+[ ] Add going "alone"
 [ ] Add who made the bid
 [ ] Rules!!!
+[ ] Add a json settings file. use load and dump.
 
 Coding Problems
-[X] Doesn't correctly show the played cards on result, for multiple human players
-(both local and remote)
-[ ] Loses the "players" if euchre.py line 77 includes self.? Closes the
-connection on remote.
-[ ] euchre.py (128) irregular value trace for where it is being changed
-
 [ ] clean and scrub
 [ ] Research kwargs for locals... then pass those instead.
 [ ] Use for player in players._shift(leader) rather than [index + leader]
 
 
 "Mental Mistakes"
-[ ] Fix leading - shold think of left as right if they have the right etc.
-[ ] if left bower lead they don't follow suit!
-[ ] its not recognizing the left. read logs?
+[ ] Fix leading - should think of left as right if they have the right etc.
+[X] if left bower lead they don't follow suit!
+[X] its not recognizing the left. read logs?
 [ ] make it know the the leading suit wins.
 
 Worthless and Cool
@@ -30,7 +25,7 @@ Worthless and Cool
 [ ] Teach it new styles of play 
 [ ] Self modifying card "value" sheet
 [ ] Self modifying code
-[ ] Have it learn playing styles from humans... and mimic thier style in
+[ ] Have it learn playing styles from humans... and mimic their style in
 background trying to learn how to beat them...agressive, passive, etc.
 [ ] Add color schemes for curses
 

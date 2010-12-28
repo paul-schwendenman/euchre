@@ -13,19 +13,34 @@ cc = trick()
 dd = trick()
 ee = trick()
 
+
 aa.cards = [a,b,c,d]
 bb.cards = [a,f,c,e]
-dd.cards = ["a","b","c","d"]
 
-print aa
+class both(deck, trick):
+  pass
 
-print a
+aaa = both()
+bbb = both()
 
-from pickle import dumps, loads
+aaa.populate()
+#aaa.shuffle()
 
-aaa = dumps(a)
-print loads(aaa)
 
-qqq = dumps(aa)
-cc = loads(qqq)
-print cc
+
+for rank in ranks:
+  bbb.cards = aaa._higher(rank)
+  print rank, ": ", bbb
+  print
+  
+  
+  
+# _suits works.
+# _trump suceeded.
+# _notTrump also suceeded
+# _higher fails... "A" < "K" < "Q" do it by rank.index() not string value
+# _lower also fails
+
+
+
+
