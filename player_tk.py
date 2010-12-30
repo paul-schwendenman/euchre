@@ -7,59 +7,68 @@
 from Tkinter import *
 import random
 import basics
+from player_client import player_client
 
  
 def Pass():
     pass
 
-class player_tk():
-    def __init__(self):
+class player_tk(player_client):
+    def __init__(self, master):
         # change this to the directory your card GIFs are in
         self.image_dir = "~/expanded-euchre/pics/"
         self.photo1 = PhotoImage(file=self.image_dir+"C2.gif")
         
-
+        self.master  = master        
+        
         # now load all card images into a dictionary
         self.create_images()
         #print image_dict # test
+        
+        #player_client.__init__(self, None)
 
     def display(self, top_card = None, trump = None, played_cards = 0, cards = [], msg = "", error = "", players = 0, dealer = None, team = []):
         pass
 
-    #def ask(self, top_card = None, trump = None, played_cards = [], cards = [], msg = "", error = "", team = [99,99], players = [], dealer = None, secret = 0):
-    def ask(self, top_card = None, trump = None, played_cards = [], cards = [], msg = "", error = "", team = [99,99], players = [], dealer = None, secret = 0):
+    def ask(self, top_card = None, trump = None, played_cards = basics.trick(), cards = [], msg = "", error = "", team = [99,99], players = [], dealer = None, secret = 0, quit = 0):
+    #def ask(self, data):
         # in top: played_cards, top_card, score? (team)
-
+        master = self.master
+        self.cards = cards
         self.top_frame = Frame(master)
         self.top_frame.pack(side=TOP)
 
         self.bottom_frame = Frame(master)
         self.bottom_frame.pack(side=BOTTOM)
         # in bottom: cards / msg / input / error /
-        self.msg = Label(bottom_frame, text = msg)
-        self.show_score(bottom_frame, team)
+        self.msg = Label(self.bottom_frame, text = msg)
+        self.msg.pack()
+        self.show_score(self.bottom_frame, team)
         
         if (msg[:7] == "The win"): # Results
             self.show_played(self.top_frame, played_cards, dealer)
 
         elif (msg[-6:] == "play? "): # Play
             self.show_played(self.top_frame, played_cards, dealer)
-            self.trump = Label(bottom_frame, text = trump)
-            self.show_cards(bottom_frame)
+            self.show_trump(self.bottom_frame, trump)
+            self.show_cards(self.bottom_frame)
 
         elif (msg[-4:] == "up? "):#Bid
-            self.show_card(top_card, self.top_frame, relief=FLAT)
-            self.show_cards(bottom_frame)
+            self.show_played(self.top_frame, played_cards, dealer)
+            self.show_card(top_card, self.top_frame, text = "Top Card: ", relief=FLAT)
+            self.show_cards(self.bottom_frame)
             self.show_yesno(self.bottom_frame, top_card)
 
         elif (msg[-6:] == "Pass? "): # Bid
-            self.show_cards(bottom_frame)
+            self.show_played(self.top_frame, played_cards, dealer)
+            self.show_cards(self.bottom_frame)
             self.show_bid(self.bottom_frame)
 
         elif (msg[:5] == "Order"): # Pick it Up
+            trump = top_card.suit
             self.show_played(self.top_frame, played_cards, dealer)
-            self.trump = Label(bottom_frame, text = trump)
-            self.show_cards(bottom_frame)
+            self.show_trump(self.bottom_frame, trump)
+            self.show_cards(self.bottom_frame)
 
         else: # Bad
             print "|%s|" % msg
@@ -68,10 +77,14 @@ class player_tk():
         if error:
             tkMessageBox.showerror("Error", error)
 
+    def show_trump(self, master, trump):
+        self.trump = Label(master, text = "Trump: " + str(trump))
+        self.trump.pack()
+
 
     def show_score(self, master, scores):
         frame = Frame(master)
-        frame.pack(side.RIGHT)
+        frame.pack(side=RIGHT)
         teams = ["Your Team: ", "Other Team: "]
         
         for index, score in enumerate(scores):
@@ -87,9 +100,9 @@ class player_tk():
         rows = [1,0,1,2]
         columns = [2,1,0,1]
         dummys = 4 * [basics.card()]
-        played_cards.reverse()
+        played_cards.cards.reverse()
 #        for index, _card in enumerate(played_cards):
-        for index, _card in enumerate((played_cards + dummys)[:4]):
+        for index, _card in enumerate((played_cards.cards + dummys)[:4]):
             self.show_card(_card, played_frame, text=labels[index], relief = FLAT, grid = (rows[index],columns[index]))                
         
  
@@ -102,24 +115,24 @@ class player_tk():
             # all images have filenames the match the card_list names + extension
             self.image_dict[card] = PhotoImage(file=self.image_dir+card+".gif")
             #print image_dir+card+".gif" # test
-    def show_suits(self, master):
+    def show_bid(self, master):
 
         self.bid_frame = Frame(master)
         self.bid_frame.pack()
 
-        self.spades = Button(self.bid_frame, text="Spades", command=say_spades)
+        self.spades = Button(self.bid_frame, text="Spades", command=self.say_spades)
         self.spades.pack(side=LEFT)
 
-        self.clubs = Button(self.bid_frame, text="Clubs", command=say_clubs)
+        self.clubs = Button(self.bid_frame, text="Clubs", command=self.say_clubs)
         self.clubs.pack(side=LEFT)
 
-        self.hearts = Button(self.bid_frame, text="Hearts", command=say_hearts)
+        self.hearts = Button(self.bid_frame, text="Hearts", command=self.say_hearts)
         self.hearts.pack(side=LEFT)
 
-        self.diamonds = Button(self.bid_frame, text="Diamonds", command=say_diamonds)
+        self.diamonds = Button(self.bid_frame, text="Diamonds", command=self.say_diamonds)
         self.diamonds.pack(side=LEFT)
 
-        self._pass = Button(self.bid_frame, text="Pass", command=say_pass)
+        self._pass = Button(self.bid_frame, text="Pass", command=self.say_pass)
         self._pass.pack(side=LEFT)
 
         self.button = Button(self.bid_frame, text="QUIT", fg="red", command=self.bid_frame.quit)
@@ -127,25 +140,16 @@ class player_tk():
 
     def show_yesno(self, master, top_card):
 
-        say_yes = {"S" : say_spades, "C" : say_clubs, "H" : say_hearts, "D" : say_diamonds,}[top_card.suit]
+        self.say_yes = {"S" : self.say_spades, "C" : self.say_clubs, "H" : self.say_hearts, "D" : self.say_diamonds,}[top_card.suit]
 
         self.bid_frame = Frame(master)
         self.bid_frame.pack()
 
-        self.yes = Button(self.bid_frame, text="Spades", command=say_yes)
+        self.yes = Button(self.bid_frame, text="Yes", command=self.say_yes)
         self.yes.pack(side=LEFT)
 
-        self.no = Button(self.bid_frame, text="No", command=say_pass)
+        self.no = Button(self.bid_frame, text="No", command=self.say_pass)
         self.no.pack(side=LEFT)
-
-        self.hearts = Button(self.bid_frame, text="Hearts", command=say_hearts)
-        self.hearts.pack(side=LEFT)
-
-        self.diamonds = Button(self.bid_frame, text="Diamonds", command=say_diamonds)
-        self.diamonds.pack(side=LEFT)
-
-        self._pass = Button(self.bid_frame, text="Pass", command=say_pass)
-        self._pass.pack(side=LEFT)
 
         self.button = Button(self.bid_frame, text="QUIT", fg="red", command=self.bid_frame.quit)
         self.button.pack(side=LEFT)
@@ -153,7 +157,8 @@ class player_tk():
     def show_cards(self, master, side=TOP):
         self.play_frame = Frame(master)
         self.play_frame.pack(side = side)
-
+        label = Label(self.play_frame, text = "Your cards: ")
+        label.pack(side=LEFT)
         commands = [self.say_1, self.say_2, self.say_3, self.say_4, self.say_5, self.say_6]
         for index, _card in enumerate(self.cards):
             self.show_card(_card, self.play_frame, func = commands[index])                
@@ -174,49 +179,61 @@ class player_tk():
             frame.pack(side=side)
         return button
 
-    def say_diamonds():
+    def say_diamonds(self):
+        self.send("D")
         self.bid = "D"
         self.bid_frame.pack_forget()
 
-    def say_hearts():
+    def say_hearts(self):
+        self.send("H")
         self.bid = "H"
         self.bid_frame.pack_forget()
         
-    def say_spades():
+    def say_spades(self):
+        self.send("S")
         self.bid = "S"
         self.bid_frame.pack_forget()
 
-    def say_clubs():
+    def say_clubs(self):
+        self.send("C")
         self.bid = "C"
         self.bid_frame.pack_forget()
 
-    def say_pass():
+    def say_pass(self):
+        self.send("P")
         self.bid = "P"
         self.bid_frame.pack_forget()
     def say_1(self):
+        self.send("1")
         self.play = "1"
         self.play_frame.pack_forget()
 
     def say_2(self):
+        self.send("1")
         self.play = "2"
         self.play_frame.pack_forget()
 
     def say_3(self):
+        self.send("3")
         self.play = "3"
         self.play_frame.pack_forget()
 
     def say_4(self):
+        self.send("4")
         self.play = "4"
         self.play_frame.pack_forget()
 
     def say_5(self):
+        self.send("5")
         self.play = "5"
         self.play_frame.pack_forget()
 
     def say_6(self):
+        self.send("6")
         self.play = "6"
         self.play_frame.pack_forget()
  
+    
 # Make me a row of buttons
 #p.bidder(root)
 
@@ -231,9 +248,20 @@ if __name__ == "__main__":
     root = Tk()
     root.title("Euchre")
 
-    p = player_tk()
-    p.cards = [A,B,C,D,E]
+    p = player_tk(root)
+    data = {}
+    data["quit"] = 0
 
+#    while not data["quit"]:
+#        data = p.recv()
+#        print data["msg"]
+#        p.ask(data)
+    from cPickle import load, dump
+    with open("data", "r") as f:
+        data = load(f)
+
+    p.ask(**data)
+    
     root.mainloop()
 
 

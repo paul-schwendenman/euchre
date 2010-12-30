@@ -23,16 +23,16 @@ class table:
     """Class for the table, has players.
     Needs to handle: leader, dealer, points etc."""
     def __init__(self):
-        self.server_socket = open_socket()
+#        self.server_socket = open_socket()
         self.players = []
-        self.players = [player_server(self.server_socket), comp(), comp(), comp(), ] 
+#        self.players = [player_server(self.server_socket), comp(), comp(), comp(), ] 
 #        self.players = [player_server(self.server_socket), comp(), player_server(self.server_socket), comp(), ] 
 #        self.players = [player_server(self.server_socket), comp(), player_curses(), comp(), ] 
 #        self.players = [player_curses(), comp(), player_curses(), comp(), ] 
 #        self.players = [player_curses(), comp(), comp(), comp(), ] 
 #        self.players = [player_test(), comp(), comp(), comp(), ] 
 #        self.players = [player(), player(), player(), player(), ] 
-#        self.players = [player(), comp(), player(), comp(), ] 
+        self.players = [player(), comp(), player(), comp(), ] 
 #        self.players = [comp(), comp(), comp(), comp(), ] 
         self.players[0].name = "Paul"
         self.players[1].name = "Phil"

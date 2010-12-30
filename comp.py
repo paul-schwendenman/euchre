@@ -6,6 +6,12 @@ class comp(player):
     
     def play(self, trump, played_cards, dealer, team, players):
         """Return the play from the "player" Compare the AI to the Human."""
+        from cPickle import load, dump
+        with open("data", "w") as f:
+            data = locals()
+            del data["f"]
+            dump(data, f)
+
         return self.ai(trump, played_cards)
     def get_play_test(self, trump, played_cards):
         """Return the play from the "player" Compare the AI to the Human."""

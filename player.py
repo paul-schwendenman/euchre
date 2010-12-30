@@ -138,3 +138,24 @@ class player(trick):
     def __setstate__(self, state):
         self.tricks_taken, state = state
         trick.__setstate__(self,state)
+    def mask(self, **data):
+        from cPickle import load, dump
+        print data['msg']
+        with open("data", "w") as f:
+            dump(data, f)
+        msg = data["msg"]
+        if (msg[:7] == "The win"): # Results
+            return
+        elif (msg[-6:] == "play? "): # Play
+#            if len(data['played_cards']) > 1:
+#                quit()
+            return "1"
+        elif (msg[-4:] == "up? "):
+            quit()
+            return "Y"
+        elif (msg[-6:] == "Pass? "): # Bid
+            return "S"
+        elif (msg[:5] == "Order"): # Pick it Up
+            return "6"
+        else: # Bad
+            raise
