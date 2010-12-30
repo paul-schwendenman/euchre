@@ -18,29 +18,9 @@ class player_client():
             print "No connection Found."
             exit()
     def chat(self):
-        data = self.client_socket.recv(4096)
-        try: 
-            data = loads(data)
-        except EOFError:
-            print "something is wrong"
-            data = {"quit":1}
-        except:
-            import sys
-            print "Unexpected error:", sys.exc_info()[0]
-            raise
-
-#        for card in data["cards"]:
-#            print card,
-#        print
-        if (data["quit"]):
-            self.client_socket.close()
-        else:
-            data = self.ask(data)
-            if (not data["quit"]):
-                self.client_socket.send(dumps(data["result"]))
-            else:
-                self.client_socket.send(dumps(data["result"]))
-                self.client_socket.close()
+        data = p.recv()
+        data = p.ask(data)
+        p.send(data)
         return data
     def ask(self, data):
         try:
@@ -54,15 +34,42 @@ class player_client():
         else:
             data["quit"] = 0
         return data
-    def recv():
-        data = self.client_socket.recv(1024)
-        #print data
-        try:
-            data = loads(da)
+    def recv(self):
+        data = self.client_socket.recv(4096)
+        try: 
+            data = loads(data)
+        except EOFError:
+            print "Connection Closed"
+            data = {"quit":1}
         except:
-            pass
-        return data
+            import sys
+            print "Unexpected error:", sys.exc_info()[0]
+            raise
 
+#        for card in data["cards"]:
+#            print card,
+#        print
+        if (data["quit"]):
+            self.client_socket.close()
+        return data
+    def send(self, data):
+        its = str(type(data))
+        if (its == "<type 'dict'>"):
+            if (not data["quit"]):
+                self.client_socket.send(dumps(data["result"]))
+            else:
+                self.client_socket.send(dumps(data["result"]))
+                self.client_socket.close()
+        elif (its == "<type 'str'>") or (its == "<type 'int'>"):
+            if (data != "Q"):
+                self.client_socket.send(dumps(data))
+            else:
+                self.client_socket.send(dumps(data))
+                self.client_socket.close()
+        else:
+            print its
+            raise
+        
 
 if __name__ == "__main__":
     #import player_test
@@ -76,5 +83,8 @@ if __name__ == "__main__":
     data["quit"] = 0
     while not data["quit"]:
         data = p.chat()
+        #data = p.recv()
+        #data = p.ask(data)
+        #p.send(data)
 
 

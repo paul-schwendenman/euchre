@@ -4,12 +4,16 @@ Whats next
 [ ] Add who made the bid
 [ ] Rules!!!
 [ ] Add a json settings file. use load and dump.
+[ ] Web interface.
+[ ] rewrite/expand player_server...
+[ ] ask expectations. [str vs int]
+[ ] change "team" to "score"
 
 Coding Problems
 [ ] clean and scrub
-[ ] Research kwargs for locals... then pass those instead.
+[ ] pass kwargs around ask
 [ ] Use for player in players._shift(leader) rather than [index + leader]
-
+[ ] Use callbacks?
 
 "Mental Mistakes"
 [ ] Fix leading - should think of left as right if they have the right etc.
@@ -19,7 +23,7 @@ Worthless and Cool
 [ ] Different Ways to Deal 22, 23, 32, 33
 [ ] Cut the Deck?
 [ ] Learning use (results) for logged memory and improvement.
-[ ] Make a self teaching euchre manual... auto generate rules
+[ ] Make a self teaching euchre manual... auto generate "rules of thumb"
 [ ] Teach it new styles of play 
 [ ] Self modifying card "value" sheet
 [ ] Self modifying code
