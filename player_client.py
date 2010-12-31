@@ -83,6 +83,7 @@ if __name__ == "__main__":
     data["quit"] = 0
     while not data["quit"]:
         data = p.chat()
+        print data["result"]
         #data = p.recv()
         #data = p.ask(data)
         #p.send(data)

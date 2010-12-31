@@ -25,7 +25,7 @@ class player_tk(player_client):
         self.create_images()
         #print image_dict # test
         
-        #player_client.__init__(self, None)
+        player_client.__init__(self, None)
 
     def display(self, top_card = None, trump = None, played_cards = 0, cards = [], msg = "", error = "", players = 0, dealer = None, team = []):
         pass
@@ -47,7 +47,7 @@ class player_tk(player_client):
         
         if (msg[:7] == "The win"): # Results
             self.show_played(self.top_frame, played_cards, dealer)
-
+            self.show_next(self.bottom_frame)
         elif (msg[-6:] == "play? "): # Play
             self.show_played(self.top_frame, played_cards, dealer)
             self.show_trump(self.bottom_frame, trump)
@@ -75,6 +75,7 @@ class player_tk(player_client):
             raise Exception("Should have called one of those ^")
 
         if error:
+            import tkMessageBox
             tkMessageBox.showerror("Error", error)
 
     def show_trump(self, master, trump):
@@ -140,7 +141,7 @@ class player_tk(player_client):
 
     def show_yesno(self, master, top_card):
 
-        self.say_yes = {"S" : self.say_spades, "C" : self.say_clubs, "H" : self.say_hearts, "D" : self.say_diamonds,}[top_card.suit]
+        #self.say_yes = {"S" : self.say_spades, "C" : self.say_clubs, "H" : self.say_hearts, "D" : self.say_diamonds,}[top_card.suit]
 
         self.bid_frame = Frame(master)
         self.bid_frame.pack()
@@ -151,7 +152,7 @@ class player_tk(player_client):
         self.no = Button(self.bid_frame, text="No", command=self.say_pass)
         self.no.pack(side=LEFT)
 
-        self.button = Button(self.bid_frame, text="QUIT", fg="red", command=self.bid_frame.quit)
+        self.button = Button(self.bid_frame, text="QUIT", fg="red", command=self.say_quit)
         self.button.pack(side=LEFT)
 
     def show_cards(self, master, side=TOP):
@@ -162,6 +163,15 @@ class player_tk(player_client):
         commands = [self.say_1, self.say_2, self.say_3, self.say_4, self.say_5, self.say_6]
         for index, _card in enumerate(self.cards):
             self.show_card(_card, self.play_frame, func = commands[index])                
+
+    def show_next(self, master):
+        frame = Frame(master)
+
+        button = Button(frame, text = "Next", command=self.say_next)
+        button.pack(side=LEFT)
+        
+        frame.pack()
+        return button
 
     def show_card(self, _card, master, text = "", func = Pass, side=LEFT, relief=RAISED, grid = None):
         frame = Frame(master)
@@ -179,59 +189,84 @@ class player_tk(player_client):
             frame.pack(side=side)
         return button
 
+    def say(self, result):
+        self.send(result) 
+        self.bid = result
+        #self.bid_frame.quit
+        self.top_frame.pack_forget()
+        self.bottom_frame.pack_forget()
+        root.quit()
+        
+    def say_quit(self):
+        self.bid = "Q"
+        self.say("Q")
+
+    def say_next(self):
+        self.bid = ""
+        self.say("")
+
+
+
     def say_diamonds(self):
-        self.send("D")
         self.bid = "D"
         self.bid_frame.pack_forget()
+        self.say("D")
 
     def say_hearts(self):
-        self.send("H")
         self.bid = "H"
         self.bid_frame.pack_forget()
+        self.say("H")
         
     def say_spades(self):
-        self.send("S")
         self.bid = "S"
         self.bid_frame.pack_forget()
+        self.say("S")
 
     def say_clubs(self):
-        self.send("C")
         self.bid = "C"
         self.bid_frame.pack_forget()
+        self.say("C")
 
     def say_pass(self):
-        self.send("P")
         self.bid = "P"
         self.bid_frame.pack_forget()
+        self.say("P")
+
+    def say_yes(self):
+        self.bid = "Y"
+        self.bid_frame.pack_forget()
+        self.say("Y")
+
+
     def say_1(self):
-        self.send("1")
         self.play = "1"
         self.play_frame.pack_forget()
+        self.say("1")
 
     def say_2(self):
-        self.send("1")
         self.play = "2"
         self.play_frame.pack_forget()
+        self.say("1")
 
     def say_3(self):
-        self.send("3")
         self.play = "3"
         self.play_frame.pack_forget()
+        self.say("3")
 
     def say_4(self):
-        self.send("4")
         self.play = "4"
         self.play_frame.pack_forget()
+        self.say("4")
 
     def say_5(self):
-        self.send("5")
         self.play = "5"
         self.play_frame.pack_forget()
+        self.say("5")
 
     def say_6(self):
-        self.send("6")
         self.play = "6"
         self.play_frame.pack_forget()
+        self.say("6")
  
     
 # Make me a row of buttons
@@ -252,17 +287,21 @@ if __name__ == "__main__":
     data = {}
     data["quit"] = 0
 
-#    while not data["quit"]:
-#        data = p.recv()
-#        print data["msg"]
-#        p.ask(data)
-    from cPickle import load, dump
-    with open("data", "r") as f:
-        data = load(f)
+    while not data["quit"]:
+        data = p.recv()
+        print data["msg"]
+        p.ask(**data)
+        root.mainloop()
+        
 
-    p.ask(**data)
+# ** debug mode **
+#    from cPickle import load, dump
+#    with open("data", "r") as f:
+#        data = load(f)
+
+#    p.ask(**data)
     
-    root.mainloop()
+#    root.mainloop()
 
 
 class extras():
