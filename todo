@@ -1,7 +1,6 @@
 Whats next
-[ ] TK
 [ ] Add going "alone"
-[ ] Add who made the bid
+[ ] Add who made the bid message
 [ ] Rules!!!
 [ ] Add a json settings file. use load and dump.
 [ ] Web interface.
@@ -9,15 +8,21 @@ Whats next
 [ ] ask expectations. [str vs int]
 [ ] change "team" to "score"
 
+TK problems
+[ ] Dealer wrong
+[ ] Fix layout atleast a little.
+
 Coding Problems
+[ ] Player  and "1?,2?,3?" - "4" logic fixed... threw a lower trump
+[X] Scoring trouble?  I thought i fixed that. =(
 [ ] clean and scrub
 [ ] pass kwargs around ask
 [ ] Use for player in players._shift(leader) rather than [index + leader]
-[ ] Use callbacks?
 
 "Mental Mistakes"
 [ ] Fix leading - should think of left as right if they have the right etc.
 [ ] make it know the the leading suit wins.
+[ ] Fix the bidding to conservative
 
 Worthless and Cool
 [ ] Different Ways to Deal 22, 23, 32, 33

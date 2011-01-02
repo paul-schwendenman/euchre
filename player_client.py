@@ -8,7 +8,8 @@ class player_client():
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             for i in range(0,15):
-                if not self.client_socket.connect_ex(("localhost", port)):
+                if not self.client_socket.connect_ex(("sarcasm.ath.cx", port)):
+#                if not self.client_socket.connect_ex(("localhost", port)):
                     break
                 time.sleep(1)
             self.client_socket.getpeername()

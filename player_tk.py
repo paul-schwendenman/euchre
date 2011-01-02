@@ -43,9 +43,12 @@ class player_tk(player_client):
         # in bottom: cards / msg / input / error /
         self.msg = Label(self.bottom_frame, text = msg)
         self.msg.pack()
-        self.show_score(self.bottom_frame, team)
+        self.show_score(self.top_frame, team)
+        
+        dealer = dealer % 4
         
         if (msg[:7] == "The win"): # Results
+            played_cards._shift(-1, destructive=1)
             self.show_played(self.top_frame, played_cards, dealer)
             self.show_next(self.bottom_frame)
         elif (msg[-6:] == "play? "): # Play
@@ -90,6 +93,7 @@ class player_tk(player_client):
         
         for index, score in enumerate(scores):
             label = Label(frame, text = teams[index] + str(score))
+            label.pack()
             
             
     def show_played(self, master, played_cards, dealer, side=TOP):
@@ -136,7 +140,7 @@ class player_tk(player_client):
         self._pass = Button(self.bid_frame, text="Pass", command=self.say_pass)
         self._pass.pack(side=LEFT)
 
-        self.button = Button(self.bid_frame, text="QUIT", fg="red", command=self.bid_frame.quit)
+        self.button = Button(self.bid_frame, text="QUIT", fg="red", command=self.say_quit)
         self.button.pack(side=LEFT)
 
     def show_yesno(self, master, top_card):
@@ -246,7 +250,7 @@ class player_tk(player_client):
     def say_2(self):
         self.play = "2"
         self.play_frame.pack_forget()
-        self.say("1")
+        self.say("2")
 
     def say_3(self):
         self.play = "3"

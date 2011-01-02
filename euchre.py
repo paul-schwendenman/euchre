@@ -23,9 +23,9 @@ class table:
     """Class for the table, has players.
     Needs to handle: leader, dealer, points etc."""
     def __init__(self):
-        self.server_socket = open_socket()
+#        self.server_socket = open_socket()
         self.players = []
-        self.players = [player_server(self.server_socket), comp(), comp(), comp(), ] 
+#        self.players = [player_server(self.server_socket), comp(), comp(), comp(), ] 
 #        self.players = [player_server(self.server_socket), comp(), player_server(self.server_socket), comp(), ] 
 #        self.players = [player_server(self.server_socket), comp(), player_curses(), comp(), ] 
 #        self.players = [player_curses(), comp(), player_curses(), comp(), ] 
@@ -33,7 +33,7 @@ class table:
 #        self.players = [player_test(), comp(), comp(), comp(), ] 
 #        self.players = [player(), player(), player(), player(), ] 
 #        self.players = [player(), comp(), player(), comp(), ] 
-#        self.players = [comp(), comp(), comp(), comp(), ] 
+        self.players = [comp(), comp(), comp(), comp(), ] 
         self.players[0].name = "Paul"
         self.players[1].name = "Phil"
         self.players[2].name = "Sierra"
@@ -107,7 +107,7 @@ class game:
             if self.good_bid(bid):
                 return (bid, index)
         return (bid, index)
-    def play(self, trump):
+    def play(self, trump, bidder):
         """Handles the card play given a bid"""
         team = 0
         #print "trump:\t\t", trump, "\ndealer:\t\t", self.dealer
@@ -133,7 +133,7 @@ class game:
                 _player_.results(winner, leader, _trick, self.team, self.table.players, self.dealer)
             
             leader = winner.owner
-            if (leader % 2):
+            if ((bidder + leader) % 2):
                 team -= 1
             else:
                 team += 1
@@ -163,35 +163,39 @@ class euchre:
         team = self.game.team
         self.game.dealer = 0
         log("********* New Game *****************")
+        redeals = 0
         while(team[0] < 10 and team[1] < 10):
             #keep playing until someone gets ten points.
             self.table.start(self.game)
             self.game.start(self.table)
-            (mybid, index) = self.game.bid()
-            log("Bid: ", mybid, " Index:", (index + self.game.dealer) % 4)
+            (thebid, bidder) = self.game.bid()
+            bidder = (bidder + self.game.dealer) % 4
+            log("Bid: ", thebid, " Bidder:", bidder)
             log("Dealer: ", self.game.dealer)
-            if (mybid == "P"):
+            if (thebid == "P"):
+                redeals += 1
                 continue
+            print "Redeals: ", redeals
+            redeals = 0
             
-            result = self.game.play(mybid)            
+            result = self.game.play(thebid, bidder)            
 
             log("Result:\t", result)
-
             if (result == 5):
                 #You took them all! Take two.
-                team[(index + 0) % 2] += 2
-                print "Team %c gains 2" % (['A', 'B'][index % 2])
-                log("Team %s gains 2" % (['A...0,2', 'B...1,3'][index % 2]))
+                team[(bidder + 0) % 2] += 2
+                print "Team %c gains 2" % (['A', 'B'][bidder % 2])
+                log("Team %s gains 2" % (['A...0,2', 'B...1,3'][bidder % 2]))
             elif (result > 0):
                 #Made the bid
-                team[(index + 0) % 2] +=1
-                print "Team %c gains 1" % (['A', 'B'][index % 2])
-                log("Team %s gains 1" % (['A...0,2', 'B...1,3'][index % 2]))
+                team[(bidder + 0) % 2] +=1
+                print "Team %c gains 1" % (['A', 'B'][bidder % 2])
+                log("Team %s gains 1" % (['A...0,2', 'B...1,3'][bidder % 2]))
             elif (result < 0):
                 #Other team won give them two.
-                team[(index + 1) % 2] +=2
-                print "Team %c euchred. Team %c gains 2" % ((['A', 'B'][(index) % 2]),(['A', 'B'][(index + 1) % 2]))
-                log("Team %s euchred. Team %s gains 2" % ((['A...0,2', 'B...1,3'][(index) % 2]),(['A...0,2', 'B...1,3'][(index + 1) % 2])))
+                team[(bidder + 1) % 2] +=2
+                print "Team %c euchred. Team %c gains 2" % ((['A', 'B'][(bidder) % 2]),(['A', 'B'][(bidder + 1) % 2]))
+                log("Team %s euchred. Team %s gains 2" % ((['A...0,2', 'B...1,3'][(bidder) % 2]),(['A...0,2', 'B...1,3'][(bidder + 1) % 2])))
             else:
                 raise IndexError
             log("Score:", team)
