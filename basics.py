@@ -139,7 +139,7 @@ class hand():
             self.cards.append(card(*_card_))
         
 class trick(hand):
-    """Trick is inherited from Hand. Has best_card"""
+    """Trick is inherited from Hand. Has some helpful functions"""
     def _suits(self, suit):
         lst = []
         for card in self.cards:
@@ -182,18 +182,19 @@ class trick(hand):
         else:
             return c
                                         
-    def best_card(self, trump, allowtrump = 0):
-        """Returns the index of the most valuable card"""
+    def best_card(self, trump):
+        """Function returns the best card given the first was lead and trump"""
         lead = self.cards[0].suit
-        best_card = self.cards[0]
-        best_value = best_card.value(trump, lead)
-        for each_card in self.cards:
-            if(each_card.value(trump, lead) > best_value):
-                best_card = each_card
-                best_value = best_card.value(trump, lead)                
-        this = self.cards.index(best_card)
-        # This print statement is for debugging
-        #print best_card, "is #", this + 1
+        
+        followed = trumped = trick()
+        trumped.cards = self._trump(trump)
+        if trumped:
+            trumped.bubble_sort(trump)
+            best_card = trumped[0]
+        else:
+            followed.cards = self._suits(lead)
+            followed.bubble_sort(trump)
+            best_card = followed[0]
         return best_card
 
 class deck(hand):

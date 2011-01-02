@@ -6,7 +6,7 @@ Whats next
 [ ] Web interface.
 [ ] rewrite/expand player_server...
 [ ] ask expectations. [str vs int]
-[ ] change "team" to "score"
+[ ] change "team" to "score"?
 
 TK problems
 [ ] Dealer wrong
@@ -14,14 +14,13 @@ TK problems
 
 Coding Problems
 [ ] Player  and "1?,2?,3?" - "4" logic fixed... threw a lower trump
-[X] Scoring trouble?  I thought i fixed that. =(
 [ ] clean and scrub
 [ ] pass kwargs around ask
 [ ] Use for player in players._shift(leader) rather than [index + leader]
 
 "Mental Mistakes"
 [ ] Fix leading - should think of left as right if they have the right etc.
-[ ] make it know the the leading suit wins.
+[X] make it know the the leading suit wins.
 [ ] Fix the bidding to conservative
 
 Worthless and Cool
@@ -35,9 +34,6 @@ Worthless and Cool
 [ ] Have it learn playing styles from humans... and mimic their style in
 background trying to learn how to beat them...agressive, passive, etc.
 [ ] Add color schemes for curses
-
-[ ] Look at sheet and other todo's
-[ ] Look at commit mesg. todos
 
 [ ] Figure out why for _trick in tricks, doesnt work for the next trick
 something to do with 2 * [trick()] and [trick(), trick()]

@@ -149,8 +149,6 @@ class game:
         else:
             return 0
 
-
-
 class euchre:
     """Highest level class creates a game for play"""
     def __init__(self):
