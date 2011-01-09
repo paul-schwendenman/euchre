@@ -7,6 +7,7 @@ class player_curses(player):
     """Player is inherited from player, is interactive. Has set_hand, get_play, get_bid, pick_it_up, worst_card and highest_nontrump"""
     def ask(self, top_card = None, trump = None, played_cards = [], cards = [], msg = "", error = "", team = [99,99], players = [], dealer = None, secret = 0):
         ## Pulled from curses.wrapper 2.6, modified.
+
         def printCard(card):
             if card == None:
                 pass
@@ -75,6 +76,7 @@ class player_curses(player):
                 pa = played_cards[1]
                 p3 = played_cards[2]
                 u  = played_cards[3]
+
         
         
             #player 1

@@ -4,12 +4,15 @@ import time
 
 class player_client():
     def __init__(self, player, port = 5000):
+    
+        self.dealer = -1
+        
         self.player = player
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             for i in range(0,15):
-                if not self.client_socket.connect_ex(("sarcasm.ath.cx", port)):
-#                if not self.client_socket.connect_ex(("localhost", port)):
+#                if not self.client_socket.connect_ex(("sarcasm.ath.cx", port)):
+                if not self.client_socket.connect_ex(("localhost", port)):
                     break
                 time.sleep(1)
             self.client_socket.getpeername()
@@ -47,9 +50,6 @@ class player_client():
             print "Unexpected error:", sys.exc_info()[0]
             raise
 
-#        for card in data["cards"]:
-#            print card,
-#        print
         if (data["quit"]):
             self.client_socket.close()
         return data

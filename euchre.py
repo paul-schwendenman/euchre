@@ -23,17 +23,19 @@ class table:
     """Class for the table, has players.
     Needs to handle: leader, dealer, points etc."""
     def __init__(self):
-#        self.server_socket = open_socket()
+        self.server_socket = open_socket()
+
         self.players = []
-#        self.players = [player_server(self.server_socket), comp(), comp(), comp(), ] 
+        self.players = [player_server(self.server_socket), comp(), comp(), comp(), ] 
 #        self.players = [player_server(self.server_socket), comp(), player_server(self.server_socket), comp(), ] 
 #        self.players = [player_server(self.server_socket), comp(), player_curses(), comp(), ] 
 #        self.players = [player_curses(), comp(), player_curses(), comp(), ] 
 #        self.players = [player_curses(), comp(), comp(), comp(), ] 
 #        self.players = [player_test(), comp(), comp(), comp(), ] 
 #        self.players = [player(), player(), player(), player(), ] 
+#        self.players = [player(), comp(), comp(), comp(), ] 
 #        self.players = [player(), comp(), player(), comp(), ] 
-        self.players = [comp(), comp(), comp(), comp(), ] 
+#        self.players = [comp(), comp(), comp(), comp(), ] 
         self.players[0].name = "Paul"
         self.players[1].name = "Phil"
         self.players[2].name = "Sierra"
@@ -49,8 +51,8 @@ class table:
         for each_player in self.players:
             each_player.tricks_taken = 0
             each_player.clear()
-    def __str__():
-        pass
+    def __str__(self):
+        return str([player.__class__ for player in self.players])
     def _split(self, n):
         return self.players[:n], self.players[n:]
 
@@ -68,6 +70,8 @@ class game:
     """Class for each hand in a game, meaning all the stuff needed to play for one hand."""
     def __init__(self):
         self.deck = deck()
+        #dealer = random.randrange(0,4)
+        #self.table._shift(self.dealer, 1)
         pass
 
 
@@ -75,8 +79,6 @@ class game:
         """Starts up the deck and deals"""
         self.table = table
         bid = ""
-        dealer = random.randrange(0,4)
-        self.table._shift(self.dealer, 1)
 
 #        players = self.table.players
 #        self.deck = basics.deck()
@@ -110,7 +112,6 @@ class game:
     def play(self, trump, bidder):
         """Handles the card play given a bid"""
         team = 0
-        #print "trump:\t\t", trump, "\ndealer:\t\t", self.dealer
         for each_player in self.table.players:
             each_player.cards = each_player.bubble_sort(trump)
         leader = self.dealer + 1
@@ -122,7 +123,7 @@ class game:
             for index in range(0, 4):
                 #print index
                 play_this_card = self.table.players[((leader + index) % 4)].play(trump, _trick, self.dealer, self.team, self.table.players)
-                log((leader + index)%4, ":\t", play_this_card)
+                log((leader + index) % 4, ":\t", play_this_card)
                 self.table.players[((leader + index) % 4)].give(play_this_card, _trick)
                 #print "this ", play_this_card
             #print
@@ -148,6 +149,26 @@ class game:
             return 1
         else:
             return 0
+    def score(self, result, bidder, team):
+        if (result == 5):
+            #You took them all! Take two.
+            team[(bidder + 0) % 2] += 2
+            #print "Team %c gains 2" % (['A', 'B'][bidder % 2])
+            log("Team %s gains 2" % (['A...0,2', 'B...1,3'][bidder % 2]))
+        elif (result > 0):
+            #Made the bid
+            team[(bidder + 0) % 2] +=1
+            #print "Team %c gains 1" % (['A', 'B'][bidder % 2])
+            log("Team %s gains 1" % (['A...0,2', 'B...1,3'][bidder % 2]))
+        elif (result < 0):
+            #Other team won give them two.
+            team[(bidder + 1) % 2] +=2
+            #print "Team %c euchred. Team %c gains 2" % ((['A', 'B'][(bidder) % 2]),(['A', 'B'][(bidder + 1) % 2]))
+            log("Team %s euchred. Team %s gains 2" % ((['A...0,2', 'B...1,3'][(bidder) % 2]),(['A...0,2', 'B...1,3'][(bidder + 1) % 2])))
+        else:
+            raise IndexError
+        return team
+
 
 class euchre:
     """Highest level class creates a game for play"""
@@ -167,37 +188,23 @@ class euchre:
             self.table.start(self.game)
             self.game.start(self.table)
             (thebid, bidder) = self.game.bid()
+            # adjust the bidder for the dealer. do earlier?
             bidder = (bidder + self.game.dealer) % 4
             log("Bid: ", thebid, " Bidder:", bidder)
             log("Dealer: ", self.game.dealer)
             if (thebid == "P"):
                 redeals += 1
                 continue
-            print "Redeals: ", redeals
+#            print "Redeals: ", redeals
             redeals = 0
             
             result = self.game.play(thebid, bidder)            
 
             log("Result:\t", result)
-            if (result == 5):
-                #You took them all! Take two.
-                team[(bidder + 0) % 2] += 2
-                print "Team %c gains 2" % (['A', 'B'][bidder % 2])
-                log("Team %s gains 2" % (['A...0,2', 'B...1,3'][bidder % 2]))
-            elif (result > 0):
-                #Made the bid
-                team[(bidder + 0) % 2] +=1
-                print "Team %c gains 1" % (['A', 'B'][bidder % 2])
-                log("Team %s gains 1" % (['A...0,2', 'B...1,3'][bidder % 2]))
-            elif (result < 0):
-                #Other team won give them two.
-                team[(bidder + 1) % 2] +=2
-                print "Team %c euchred. Team %c gains 2" % ((['A', 'B'][(bidder) % 2]),(['A', 'B'][(bidder + 1) % 2]))
-                log("Team %s euchred. Team %s gains 2" % ((['A...0,2', 'B...1,3'][(bidder) % 2]),(['A...0,2', 'B...1,3'][(bidder + 1) % 2])))
-            else:
-                raise IndexError
+            
+            team = self.game.score(result, bidder, team)
+            
             log("Score:", team)
-            self.table._shift(1)
             self.game.dealer += 1
             self.game.dealer %= 4
         if (team[0] > 10):

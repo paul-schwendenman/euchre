@@ -26,12 +26,21 @@ bbb = both()
 
 aaa.populate()
 
-for i in range(0,10):
-  aaa.shuffle()
-  bbb.cards = aaa.cards[:4]
-  print bbb
-  for suit in suits[1:]:
-    z = bbb.best_card(suit)
-    y = bbb.old_bestcard(suit)
-    if z != y:
-      print suit, z, y
+def ask(dealer):
+  dealer %= 4
+  if dealer == 0:
+    print " x \nx x\n D "
+  elif dealer == 1:
+    print " x \nD x\n x "
+  elif dealer == 2:
+    print " D \nx x\n x "
+  elif dealer == 3:
+    print " x \nx D\n x "
+
+for i in range(0, 4):
+  for j in range(i + 1, i + 5):
+#    if (i+2) % 4 == j % 4:
+      print "dealer", i, "you", j % 4
+      dealer = i - j
+      ask (dealer)
+

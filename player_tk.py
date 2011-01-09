@@ -44,9 +44,7 @@ class player_tk(player_client):
         self.msg = Label(self.bottom_frame, text = msg)
         self.msg.pack()
         self.show_score(self.top_frame, team)
-        
-        dealer = dealer % 4
-        
+
         if (msg[:7] == "The win"): # Results
             played_cards._shift(-1, destructive=1)
             self.show_played(self.top_frame, played_cards, dealer)
@@ -97,9 +95,9 @@ class player_tk(player_client):
             
             
     def show_played(self, master, played_cards, dealer, side=TOP):
-        labels = ["3:", "P:", "1:", "U:"]
-        if dealer:
-            labels[dealer] = "*" + labels[dealer] + "*"
+        labels = ["U:", "1:", "P:", "3:"]
+        labels[dealer] = "*" + labels[dealer] + "*"
+        labels.reverse()
         played_frame = Frame(master)
         played_frame.pack(side = side)
         rows = [1,0,1,2]
@@ -204,12 +202,12 @@ class player_tk(player_client):
     def say_quit(self):
         self.bid = "Q"
         self.say("Q")
+        self.client_socket.close()
+        quit = 1
 
     def say_next(self):
         self.bid = ""
         self.say("")
-
-
 
     def say_diamonds(self):
         self.bid = "D"
@@ -282,6 +280,7 @@ class player_tk(player_client):
 #print p.bid_frame.pack_slaves()
 #print p.play_frame.pack_slaves()
 #print root.pack_slaves()
+quit = 0
 
 if __name__ == "__main__":
     root = Tk()
@@ -291,7 +290,7 @@ if __name__ == "__main__":
     data = {}
     data["quit"] = 0
 
-    while not data["quit"]:
+    while not data["quit"] and not quit:
         data = p.recv()
         print data["msg"]
         p.ask(**data)

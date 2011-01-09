@@ -7,21 +7,29 @@ Whats next
 [ ] rewrite/expand player_server...
 [ ] ask expectations. [str vs int]
 [ ] change "team" to "score"?
+[ ] re-write the curses player to work like tk?
+[X] Dealer wrong - global issue not just tk
+-----[ ] Keep tracing the problem? where is index being set... what is going
+-----on etc.
+-----[ ] Fix the problem by changing what is pased to ask and by ask. the
+-----"dealer" should be adjusted. However it should be done correctly
+-----SHIT. figure this out
+
 
 TK problems
-[ ] Dealer wrong
 [ ] Fix layout atleast a little.
+[ ] ... something i forgot?
 
 Coding Problems
 [ ] Player  and "1?,2?,3?" - "4" logic fixed... threw a lower trump
 [ ] clean and scrub
 [ ] pass kwargs around ask
 [ ] Use for player in players._shift(leader) rather than [index + leader]
+test in playground
 
 "Mental Mistakes"
 [ ] Fix leading - should think of left as right if they have the right etc.
-[X] make it know the the leading suit wins.
-[ ] Fix the bidding to conservative
+[ ] Fix the bidding: too conservative
 
 Worthless and Cool
 [ ] Different Ways to Deal 22, 23, 32, 33
