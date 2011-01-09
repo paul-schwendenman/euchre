@@ -26,11 +26,11 @@ class table:
         self.server_socket = open_socket()
 
         self.players = []
-        self.players = [player_server(self.server_socket), comp(), comp(), comp(), ] 
+#        self.players = [player_server(self.server_socket), comp(), comp(), comp(), ] 
 #        self.players = [player_server(self.server_socket), comp(), player_server(self.server_socket), comp(), ] 
 #        self.players = [player_server(self.server_socket), comp(), player_curses(), comp(), ] 
 #        self.players = [player_curses(), comp(), player_curses(), comp(), ] 
-#        self.players = [player_curses(), comp(), comp(), comp(), ] 
+        self.players = [player_curses(), comp(), comp(), comp(), ] 
 #        self.players = [player_test(), comp(), comp(), comp(), ] 
 #        self.players = [player(), player(), player(), player(), ] 
 #        self.players = [player(), comp(), comp(), comp(), ] 

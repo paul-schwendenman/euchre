@@ -181,8 +181,8 @@ class player(trick):
             return "Y"
         elif (msg[-6:] == "Pass? "): # Bid
             return "S"
-        elif (msg[:5] == "Order"): # Pick it Up
+        elif (msg[-9:] == "discard? "): # Pick it Up
             return "6"
         else: # Bad
-            print msg
+            print "|%s|" % msg
             raise Exception("msg finder failed")

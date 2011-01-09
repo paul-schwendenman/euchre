@@ -15,6 +15,27 @@ def Pass():
 
 class player_tk(player_client):
     def __init__(self, master):
+        #Setup the Keybindings
+
+        master.bind('<space>', self.say_next)
+        master.bind('<Return>', self.say_next)
+        master.bind('q', self.say_quit)
+        master.bind('1', self.say_1)
+        master.bind('2', self.say_2)
+        master.bind('3', self.say_3)
+        master.bind('4', self.say_4)
+        master.bind('5', self.say_5)
+        master.bind('6', self.say_6)
+        master.bind('y', self.say_yes)
+        master.bind('n', self.say_pass)
+        master.bind('p', self.say_pass)
+        master.bind('s', self.say_spades)
+        master.bind('d', self.say_diamonds)
+        master.bind('h', self.say_hearts)
+        master.bind('c', self.say_clubs)
+        
+        
+
         # change this to the directory your card GIFs are in
         self.image_dir = "~/expanded-euchre/pics/"
         self.photo1 = PhotoImage(file=self.image_dir+"C2.gif")
@@ -65,7 +86,7 @@ class player_tk(player_client):
             self.show_cards(self.bottom_frame)
             self.show_bid(self.bottom_frame)
 
-        elif (msg[:5] == "Order"): # Pick it Up
+        elif (msg[-9:] == "discard? "): # Pick it Up
             trump = top_card.suit
             self.show_played(self.top_frame, played_cards, dealer)
             self.show_trump(self.bottom_frame, trump)
@@ -199,73 +220,73 @@ class player_tk(player_client):
         self.bottom_frame.pack_forget()
         root.quit()
         
-    def say_quit(self):
+    def say_quit(self, *args):
         self.bid = "Q"
         self.say("Q")
         self.client_socket.close()
-        quit = 1
+        self.quit = 1
 
-    def say_next(self):
+    def say_next(self, *args):
         self.bid = ""
         self.say("")
 
-    def say_diamonds(self):
+    def say_diamonds(self, *args):
         self.bid = "D"
         self.bid_frame.pack_forget()
         self.say("D")
 
-    def say_hearts(self):
+    def say_hearts(self, *args):
         self.bid = "H"
         self.bid_frame.pack_forget()
         self.say("H")
         
-    def say_spades(self):
+    def say_spades(self, *args):
         self.bid = "S"
         self.bid_frame.pack_forget()
         self.say("S")
 
-    def say_clubs(self):
+    def say_clubs(self, *args):
         self.bid = "C"
         self.bid_frame.pack_forget()
         self.say("C")
 
-    def say_pass(self):
+    def say_pass(self, *args):
         self.bid = "P"
         self.bid_frame.pack_forget()
         self.say("P")
 
-    def say_yes(self):
+    def say_yes(self, *args):
         self.bid = "Y"
         self.bid_frame.pack_forget()
         self.say("Y")
 
 
-    def say_1(self):
+    def say_1(self, *args):
         self.play = "1"
         self.play_frame.pack_forget()
         self.say("1")
 
-    def say_2(self):
+    def say_2(self, *args):
         self.play = "2"
         self.play_frame.pack_forget()
         self.say("2")
 
-    def say_3(self):
+    def say_3(self, *args):
         self.play = "3"
         self.play_frame.pack_forget()
         self.say("3")
 
-    def say_4(self):
+    def say_4(self, *args):
         self.play = "4"
         self.play_frame.pack_forget()
         self.say("4")
 
-    def say_5(self):
+    def say_5(self, *args):
         self.play = "5"
         self.play_frame.pack_forget()
         self.say("5")
 
-    def say_6(self):
+    def say_6(self, *args):
         self.play = "6"
         self.play_frame.pack_forget()
         self.say("6")
@@ -280,7 +301,6 @@ class player_tk(player_client):
 #print p.bid_frame.pack_slaves()
 #print p.play_frame.pack_slaves()
 #print root.pack_slaves()
-quit = 0
 
 if __name__ == "__main__":
     root = Tk()
@@ -289,10 +309,10 @@ if __name__ == "__main__":
     p = player_tk(root)
     data = {}
     data["quit"] = 0
+    p.quit = 0
 
-    while not data["quit"] and not quit:
+    while not data["quit"] and not p.quit:
         data = p.recv()
-        print data["msg"]
         p.ask(**data)
         root.mainloop()
         

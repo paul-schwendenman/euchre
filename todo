@@ -8,13 +8,6 @@ Whats next
 [ ] ask expectations. [str vs int]
 [ ] change "team" to "score"?
 [ ] re-write the curses player to work like tk?
-[X] Dealer wrong - global issue not just tk
------[ ] Keep tracing the problem? where is index being set... what is going
------on etc.
------[ ] Fix the problem by changing what is pased to ask and by ask. the
------"dealer" should be adjusted. However it should be done correctly
------SHIT. figure this out
-
 
 TK problems
 [ ] Fix layout atleast a little.
@@ -28,6 +21,7 @@ Coding Problems
 test in playground
 
 "Mental Mistakes"
+[ ] Reread and comment ai... make sure its logical
 [ ] Fix leading - should think of left as right if they have the right etc.
 [ ] Fix the bidding: too conservative
 
