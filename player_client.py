@@ -8,6 +8,9 @@ class player_client():
         self.dealer = -1
         
         self.player = player
+        self.open_socket(port)
+        
+    def open_socket(self, port = 5000):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             for i in range(0,15):
@@ -22,9 +25,9 @@ class player_client():
             print "No connection Found."
             exit()
     def chat(self):
-        data = p.recv()
-        data = p.ask(data)
-        p.send(data)
+        data = self.recv()
+        data = self.ask(data)
+        self.send(data)
         return data
     def ask(self, data):
         try:

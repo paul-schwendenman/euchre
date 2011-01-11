@@ -129,7 +129,6 @@ class player_tk(player_client):
         for index, _card in enumerate((played_cards.cards + dummys)[:4]):
             self.show_card(_card, played_frame, text=labels[index], relief = FLAT, grid = (rows[index],columns[index]))                
         
- 
     def create_images(self):
         """create all card images as a card_name:image_object dictionary"""
         card_list = [ suit + rank for suit in basics.suits[1:] for rank in basics.ranks[1:] ]
@@ -139,6 +138,7 @@ class player_tk(player_client):
             # all images have filenames the match the card_list names + extension
             self.image_dict[card] = PhotoImage(file=self.image_dir+card+".gif")
             #print image_dir+card+".gif" # test
+
     def show_bid(self, master):
 
         self.bid_frame = Frame(master)
