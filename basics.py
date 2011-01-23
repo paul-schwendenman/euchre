@@ -41,6 +41,8 @@ class card:
     def is_trump(self, trump):
         rs = self.relative_suit(trump)
         return ((rs).endswith("T")) or (rs == "LB")
+    def image(self):
+        return str(self.suit) + str(self.rank) + ".gif"
                 
     def __str__(self):
         """prints information of the card in the form: R of S, where R is rank and S is suit"""

@@ -1,91 +1,109 @@
-<html>
-<head>
-<title>Test</title>
-<script type="text/javascript">
-function callback(str)
-{
-document.getElementById("result").value=str;
-document.getElementById("frm").submit();
-//alert(str);
-}
 
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+<head>
+<title>Euchre</title>
+<link rel="shortcut icon" href="favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link rel="stylesheet" type="text/css" href="static/base.css" />
+<script type="text/javascript" src="static/jquery.js"></script>
+<script type="text/javascript" src="static/render.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	hideall();
+  	$("button").click(function(){
+		$.ajax({url:"/game", success:callback});		
+		mode = 0;
+		callback();
+ 	});
+});
 </script>
 
 </head>
 <body>
-% if played_cards:
-<table>
+<div class='top'>
+<table id='played_cards'>
 <tr><th>Played Cards</th></tr>
 <tr>
 <td></td>
-<td>P:<img src="pics/C9.gif" /></td>
+<td></td>
+<td>Partner:</td><td><img alt='{{played_cards[0]}}' src='{{"static/" + played_cards[0].image()}}' /></td>
 <td></td>
 </tr>
 <tr>
-<td>1:<img src="pics/DJ.gif" /></td>
+<td>Opponent 1:</td><td><img alt='{{played_cards[1]}}' src='{{"static/" + played_cards[1].image()}}' /></td>
 <td></td>
-<td>3:<img src="pics/CQ.gif" /></td>
+<td></td>
+<td>Opponent 3:</td><td><img alt='{{played_cards[2]}}' src='{{"static/" + played_cards[2].image()}}' /></td>
 </tr>
 <tr>
 <td></td>
-<td>U:<img src="pics/HA.gif" /></td>
+<td></td>
+<td>You:</td><td><img alt='{{played_cards[3]}}' src='{{"static/" + played_cards[3].image()}}' /></td>
 <td></td>
 </tr>
 </table>
+<h1 id="show_msg">{{str(msg)}}</h1>
+% if "result" in locals():
+<p>{{result}}</p>
 % end
-% if cards:
-<table>
-<tr><th>Your Cards</th></tr>
-<tr>
-% for index, card in enumurate(cards):
-<td><img src="{{p.imagedict[card]}}" /></td>
-</tr>
-<tr>
-<td><input type="button" value={{str(_card.suit) + str(_card.rank)}} onclick={{"callback(%s)" % str(index)}}  /></td>
-</tr>
+% if "trump" in locals():
+<p class='trump'>Trump: {{trump}}</p>
+% end
+</div>
+<div class='bottom'>
+<table id='cards'>
+  <tr><th>Your Cards:</th></tr>
+  <tr>
+  % for card in cards:
+  <td><img alt='{{card}}' src="{{'static/' + card.image()}}" /></td>
+	% end
+	</tr>
+	<tr>
+	% for index, card in enumerate(cards):
+  <td class='card_buttons'><button>{{str(card)}}</button></td>
+	% end
+  </tr>
 </table>
-% end
-% end
-% if suits:
-<form>
-<table>
-<tr><th>Suits</th></tr>
-<tr>
-<td><input type="button" value="Spades" onclick="callback('S')" /></td>
-<td><input type="button" value="Hearts" onclick="callback('H')" /></td>
-<td><input type="button" value="Clubs" onclick="callback('C')" /></td>
-<td><input type="button" value="Diamonds" onclick="callback('D')" /></td>
-<td><input type="button" value="Pass" onclick="callback('P')" /></td>
-</tr>
-</table>
-</form>
-% end
-% if yesno:
-<form>
-<table>
-<tr><th>Yes No</th></tr>
-<tr>
-<td><input type="button" value="Yes" onclick="callback('Y')" /></td>
-<td><input type="button" value="No" onclick="callback('P')" /></td>
-</tr>
-</table>
-</form>
-% end
-% if next:
-<form>
-<table>
-<tr><th>Next</th></tr>
-<tr>
-<td><input type="button" value="Next" onclick="callback(' ')" /></td>
-</tr>
-</table>
-</form>
-% end
 
-<form id="frm" method="POST">
-<input id="result" type="hidden" name="result" value="" />
-<input type="hidden" name="msg" value="{{msg}}" />
-</form>
+<div id='suits'>
+  <table>
+    <tr><th>Suits</th></tr>
+    <tr>
+    <td><button>Spades</button></td>
+    <td><button>Hearts</button></td>
+    <td><button>Clubs</button></td>
+    <td><button>Diamonds</button></td>
+    <td><button>Pass</button></td>
+    </tr>
+  </table>
+</div>
+        <div id='yesno'>
+        <table>
+                <tr><th>Yes No</th></tr>
+                <tr>
+                        <td><button>Yes</button></td>
+                        <td><button>No</button></td>
+                </tr>
+        </table>
+	</div>
+<div id='next'>
+  <table>
+    <tr><th>Next</th></tr>
+    <tr>
+	    <td><button>Next</button></td>
+    </tr>
+  </table>
+</div>
 
+<form id="frm" action="/" method="post">
+    <p>
+	<input id="result" type="hidden" name="result" value="" />
+	<input id="msg" type="hidden" name="msg" value='{{msg}}' />
+    </p>
+</form>
+</div>
 </body>
 </html>
