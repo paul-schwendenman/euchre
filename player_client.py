@@ -9,6 +9,12 @@ class player_client():
         
         self.player = player
         self.open_socket(port)
+        print "opening ", port
+        port = int(self.client_socket.recv(96))
+        self.client_socket.close()
+        print "opening ",port
+        self.open_socket(port)
+
         
     def open_socket(self, port = 5000):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -79,7 +85,8 @@ if __name__ == "__main__":
     #import player_test
     import player_curses
     #import comp
-
+    import player as _player_
+    player = _player_.player()
     player = player_curses.player_curses()
     #player = comp.comp()
     p = player_client(player)

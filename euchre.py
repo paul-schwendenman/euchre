@@ -22,9 +22,8 @@ from logger import log
 class table:
     """Class for the table, has players.
     Needs to handle: leader, dealer, points etc."""
-    def __init__(self):
-        self.server_socket = open_socket()
-
+    def __init__(self, port = 5000):
+        self.server_socket = open_socket(port)
         self.players = []
         self.players = [player_server(self.server_socket), comp(), comp(), comp(), ] 
 #        self.players = [player_server(self.server_socket), comp(), player_server(self.server_socket), comp(), ] 
@@ -172,9 +171,9 @@ class game:
 
 class euchre:
     """Highest level class creates a game for play"""
-    def __init__(self):
+    def __init__(self, port):
         """Sets up and starts a game."""
-        self.table = table()
+        self.table = table(port)
         
         index = 0
         self.game = game()
@@ -217,9 +216,11 @@ class euchre:
                 
                  
 
-def main():
-    euchre()
+def main(port):
+    print "running euchre"
+    euchre(port)
 
 if __name__ == "__main__":
+    port = 5000
     main()
 
