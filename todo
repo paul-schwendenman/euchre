@@ -1,3 +1,10 @@
+Things to do....
+[ ] add system close() message that kills tk, curses, sockets, everything.
+[ ] add game ending message
+[ ] add made bid message - unless you made the bid.
+[ ] add modes (configuration) ... handle incoming packet
+[ ] add gametypes control with manager.
+
 Whats next
 [ ] Add going "alone"
 [ ] Add who made the bid message
@@ -11,6 +18,7 @@ Whats next
 
 TK problems
 [ ] Fix layout atleast a little.
+[ ] Close more gracefully. 
 [ ] ... something i forgot?
 
 Coding Problems

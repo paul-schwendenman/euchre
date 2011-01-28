@@ -105,6 +105,7 @@ class game:
         for index in range(1, 5):
             bid = self.table.players[((self.dealer + index) % 4)].bid(team = self.team)
             log("I, ", self.dealer + index, "-", bid)
+
             if self.good_bid(bid):
                 return (bid, index)
         return (bid, index)
@@ -222,5 +223,5 @@ def main(port):
 
 if __name__ == "__main__":
     port = 5000
-    main()
+    main(port)
 

@@ -1,0 +1,10 @@
+<table>
+  <tr><th>Suits</th></tr>
+  <tr>
+  <td><button>Spades</button></td>
+  <td><button>Hearts</button></td>
+  <td><button>Clubs</button></td>
+  <td><button>Diamonds</button></td>
+  <td><button>Pass</button></td>
+  </tr>
+</table>

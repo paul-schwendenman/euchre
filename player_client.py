@@ -14,7 +14,6 @@ class player_client():
         self.client_socket.close()
         print "opening ",port
         self.open_socket(port)
-
         
     def open_socket(self, port = 5000):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

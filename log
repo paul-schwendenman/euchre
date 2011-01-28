@@ -1,10 +1,311 @@
 ********* New Game *****************
-kitty:  9 of C,   K of S,  10 of C,   Q of H,  
-0:  Q of C,   A of D,   K of D,  10 of D,  10 of S,  
-1:  J of H,  10 of H,   Q of D,   9 of D,   9 of S,  
-2:  9 of H,   A of C,   K of C,   J of D,   A of S,  
-3:  A of H,   K of H,   J of C,   Q of S,   J of S,  
-top card:  9 of C
+kitty:  K of C,  10 of C,  10 of D,   Q of C,  
+0: 10 of H,   9 of H,   A of C,   J of D,   Q of S,  
+1:  K of H,   Q of H,   J of C,   9 of C,   J of S,  
+2:  J of H,   9 of D,   K of S,  10 of S,   9 of S,  
+3:  A of H,   A of D,   K of D,   Q of D,   A of S,  
+top card:  K of C
+I, 1-C
+Bid: C Bidder:1
+Dealer: 0
+1:	 K of H
+2:	 J of H
+3:	 Q of D
+0:	 J of D
+1:	1
+1:	 Q of H
+2:	 9 of S
+3:	 K of D
+0:	 K of C
+0:	1
+0:	 A of C
+1:	 9 of C
+2:	 9 of D
+3:	 A of S
+0:	2
+0:	 Q of S
+1:	 J of S
+2:	 K of S
+3:	 A of D
+1:	2
+1:	 J of C
+2:	10 of S
+3:	 A of H
+0:	10 of H
+1:	3
+Result:	1
+Team B...1,3 gains 1
+Score:[0, 1]
+kitty: 10 of H,   K of H,  10 of S,   J of C,  
+0:  J of D,   A of D,   Q of D,   J of S,   A of C,  
+1:  K of D,   A of H,   K of S,   Q of H,   K of C,  
+2:  9 of C,   A of S,   Q of S,   J of H,   Q of C,  
+3: 10 of C,  10 of D,   9 of H,   9 of D,   9 of S,  
+top card: 10 of H
+I, 2-P
+I, 3-P
+I, 4-P
+I, 5-P
+I, 2-P
+I, 3-P
+I, 4-D
+Bid: D Bidder:0
+Dealer: 1
+2:	 A of S
+3:	 9 of S
+0:	 J of S
+1:	 K of D
+1:	1
+1:	 A of H
+2:	 J of H
+3:	 9 of H
+0:	 A of C
+2:	1
+2:	 Q of S
+3:	 9 of D
+0:	 J of D
+1:	 K of S
+0:	1
+0:	 A of D
+1:	 Q of H
+2:	 9 of C
+3:	10 of D
+0:	2
+0:	 Q of D
+1:	 K of C
+2:	 Q of C
+3:	10 of C
+0:	3
+Result:	3
+Team A...0,2 gains 1
+Score:[1, 1]
+kitty:  J of S,   Q of H,   A of C,   Q of D,  
+0:  K of C,   9 of H,   K of D,   9 of C,   K of S,  
+1:  J of C,   A of S,   A of H,  10 of C,  10 of S,  
+2:  J of H,   9 of D,  10 of H,   K of H,   Q of C,  
+3: 10 of D,   J of D,   Q of S,   A of D,   9 of S,  
+top card:  J of S
+I, 3-P
+********* New Game *****************
+kitty:  A of D,   Q of H,   9 of C,   J of H,  
+0:  A of H,   9 of H,   K of C,   A of S,   9 of S,  
+1:  J of C,  10 of C,   K of D,   J of D,   J of S,  
+2: 10 of H,   Q of D,  10 of D,   9 of D,   K of S,  
+3:  K of H,   A of C,   Q of C,   Q of S,  10 of S,  
+top card:  A of D
+I, 1-P
+I, 2-P
+I, 3-P
+I, 4-D
+Bid: D Bidder:0
+Dealer: 0
+1:	 J of C
+2:	 9 of D
+3:	 A of C
+0:	 A of D
+0:	1
+0:	 K of C
+1:	10 of C
+2:	10 of H
+3:	10 of S
+0:	2
+0:	 9 of H
+1:	 K of D
+2:	10 of D
+3:	 Q of S
+1:	1
+1:	 J of S
+2:	 K of S
+3:	 Q of C
+0:	 A of S
+0:	3
+0:	 9 of S
+1:	 J of D
+2:	 Q of D
+3:	 K of H
+1:	2
+Result:	1
+Team A...0,2 gains 1
+Score:[1, 0]
+kitty:  J of H,   A of D,   A of C,  10 of S,  
+0: 10 of D,   Q of S,  10 of C,   K of D,   K of S,  
+1:  A of H,   9 of S,   K of C,   J of C,   K of H,  
+2:  9 of D,   Q of H,   J of S,   9 of C,   Q of D,  
+3:  J of D,   A of S,   Q of C,  10 of H,   9 of H,  
+top card:  J of H
+I, 2-P
+I, 3-P
+********* New Game *****************
+kitty: 10 of S,  10 of H,   Q of D,   A of S,  
+0:  A of H,   9 of H,   A of C,   J of C,   J of S,  
+1:  J of H,   K of C,   Q of C,   K of D,   Q of S,  
+2:  Q of H,  10 of C,   9 of C,   A of D,   9 of D,  
+3:  K of H,   J of D,  10 of D,   K of S,   9 of S,  
+top card: 10 of S
+I, 1-P
+I, 2-P
+I, 3-P
+********* New Game *****************
+kitty:  K of D,   Q of H,   J of D,   J of S,  
+0:  A of H,   K of H,   Q of C,   A of S,   K of S,  
+1:  J of H,  10 of H,  10 of C,  10 of D,  10 of S,  
+2:  9 of H,   J of C,   9 of C,   Q of D,   9 of S,  
+3:  A of C,   K of C,   A of D,   9 of D,   Q of S,  
+top card:  K of D
+I, 1-P
+I, 2-P
+I, 3-P
+I, 4-D
+Bid: D Bidder:0
+Dealer: 0
+1:	10 of H
+2:	 9 of H
+3:	 Q of S
+0:	 K of D
+0:	1
+0:	 A of H
+1:	10 of D
+2:	 Q of D
+3:	 9 of D
+2:	1
+2:	 J of C
+3:	 A of C
+0:	 A of S
+1:	 J of H
+1:	1
+1:	10 of C
+2:	 9 of C
+3:	 K of C
+0:	 K of H
+3:	1
+3:	 A of D
+0:	 K of S
+1:	10 of S
+2:	 9 of S
+3:	2
+Result:	-1
+Team A...0,2 euchred. Team B...1,3 gains 2
+Score:[0, 2]
+kitty: 10 of S,  10 of C,   K of D,   J of C,  
+0: 10 of D,   9 of D,   9 of S,   K of H,   A of C,  
+1:  9 of H,   K of C,   Q of H,   Q of D,   Q of S,  
+2:  J of D,   A of H,   A of D,   K of S,   J of H,  
+3: 10 of H,   Q of C,   9 of C,   J of S,   A of S,  
+top card: 10 of S
+I, 2-P
+I, 3-P
+I, 4-S
+Bid: S Bidder:0
+Dealer: 1
+2:	 A of H
+3:	10 of H
+0:	 9 of S
+1:	10 of S
+1:	1
+1:	 K of C
+2:	 K of S
+3:	 9 of C
+0:	 A of C
+2:	1
+2:	 A of D
+3:	 A of S
+0:	 K of H
+1:	 Q of D
+3:	1
+3:	 Q of C
+0:	10 of D
+1:	 Q of H
+2:	 J of H
+3:	2
+3:	 J of S
+0:	 9 of D
+1:	 Q of S
+2:	 J of D
+3:	3
+Result:	-3
+Team A...0,2 euchred. Team B...1,3 gains 2
+Score:[0, 4]
+kitty:  Q of S,   9 of D,   A of C,   J of H,  
+0:  9 of C,   A of D,   Q of C,   K of H,   J of D,  
+1:  A of S,  10 of D,   K of S,   J of S,   K of C,  
+2:  9 of S,   A of H,  10 of H,   Q of D,  10 of C,  
+3: 10 of S,   Q of H,   J of C,   9 of H,   K of D,  
+top card:  Q of S
+I, 3-P
+I, 4-S
+Bid: S Bidder:0
+Dealer: 2
+3:	 K of D
+0:	 A of D
+1:	10 of D
+2:	 Q of D
+0:	1
+0:	 K of H
+1:	 K of S
+2:	 A of H
+3:	 9 of H
+1:	1
+1:	 K of C
+2:	 9 of S
+3:	10 of S
+0:	 Q of C
+3:	1
+3:	 Q of H
+0:	 J of D
+1:	 A of S
+2:	 Q of S
+1:	2
+1:	 J of S
+2:	10 of H
+3:	 J of C
+0:	 9 of C
+1:	3
+Result:	-3
+Team A...0,2 euchred. Team B...1,3 gains 2
+Score:[0, 6]
+kitty:  9 of D,   K of S,   K of D,   Q of S,  
+0:  9 of S,   Q of C,   K of C,   J of D,   9 of H,  
+1:  A of S,  10 of S,   A of H,   A of D,  10 of H,  
+2: 10 of D,   J of H,   Q of D,   Q of H,   J of C,  
+3: 10 of C,   A of C,   J of S,   9 of C,   K of H,  
+top card:  9 of D
+I, 4-D
+Bid: D Bidder:0
+Dealer: 3
+0:	 J of D
+1:	 A of D
+2:	10 of D
+3:	 9 of D
+0:	1
+0:	 K of C
+1:	10 of H
+2:	 J of C
+3:	 A of C
+3:	1
+3:	 K of H
+0:	 Q of C
+1:	10 of S
+2:	 Q of D
+2:	1
+2:	 Q of H
+3:	10 of C
+0:	 9 of S
+1:	 A of H
+1:	1
+1:	 A of S
+2:	 J of H
+3:	 J of S
+0:	 9 of H
+2:	2
+Result:	1
+Team A...0,2 gains 1
+Score:[1, 6]
+kitty: 10 of S,   A of C,   K of D,  10 of D,  
+0: 10 of C,   K of S,   9 of S,   9 of D,   Q of C,  
+1:  J of D,   J of C,   Q of S,   A of H,   J of H,  
+2:  9 of C,   Q of D,   J of S,   A of D,   Q of H,  
+3:  K of C,   9 of H,  10 of H,   K of H,   A of S,  
+top card: 10 of S
 I, 1-P
 I, 2-P
 I, 3-P
@@ -12,3 +313,712 @@ I, 4-P
 I, 1-P
 I, 2-P
 I, 3-P
+I, 4-P
+Bid: P Bidder:0
+Dealer: 0
+kitty:  K of D,   9 of S,  10 of S,   Q of C,  
+0:  K of S,   J of H,   Q of S,  10 of D,   Q of H,  
+1:  A of S,   A of C,   J of S,   9 of C,   A of H,  
+2: 10 of H,   9 of D,   J of D,   K of H,  10 of C,  
+3:  Q of D,   J of C,   K of C,   9 of H,   A of D,  
+top card:  K of D
+I, 1-P
+I, 2-P
+I, 3-P
+I, 4-D
+Bid: D Bidder:0
+Dealer: 0
+1:	 A of S
+2:	 9 of D
+3:	 Q of D
+0:	 K of S
+3:	1
+3:	 K of C
+0:	10 of D
+1:	 A of C
+2:	10 of C
+0:	1
+0:	 J of H
+1:	 9 of C
+2:	 J of D
+3:	 A of D
+2:	1
+2:	 K of H
+3:	 9 of H
+0:	 K of D
+1:	 A of H
+0:	2
+0:	 Q of H
+1:	 J of S
+2:	10 of H
+3:	 J of C
+0:	3
+Result:	3
+Team A...0,2 gains 1
+Score:[2, 6]
+kitty:  A of S,   K of H,   K of D,  10 of C,  
+0:  9 of S,   A of H,  10 of H,   9 of C,   Q of D,  
+1:  9 of H,   A of C,   Q of C,  10 of S,   Q of H,  
+2:  J of D,   J of S,   J of C,   Q of S,   J of H,  
+3:  9 of D,  10 of D,   K of S,   K of C,   A of D,  
+top card:  A of S
+I, 2-S
+Bid: S Bidder:2
+Dealer: 1
+2:	 J of D
+3:	 A of D
+0:	 9 of S
+1:	10 of S
+1:	1
+1:	 A of C
+2:	 Q of S
+3:	 K of C
+0:	 A of H
+2:	1
+2:	 J of H
+3:	 K of S
+0:	 Q of D
+1:	 Q of H
+3:	1
+3:	10 of D
+0:	10 of H
+1:	 Q of C
+2:	 J of C
+2:	2
+2:	 J of S
+3:	 9 of D
+0:	 9 of C
+1:	 A of S
+2:	3
+Result:	1
+Team A...0,2 gains 1
+Score:[3, 6]
+kitty:  Q of D,   Q of S,   9 of S,   Q of H,  
+0:  K of H,   J of D,  10 of S,   A of D,   J of H,  
+1: 10 of D,   K of S,  10 of H,   K of C,   A of H,  
+2:  J of S,  10 of C,   K of D,   Q of C,   9 of H,  
+3:  9 of D,   A of S,   J of C,   9 of C,   A of C,  
+top card:  Q of D
+I, 3-P
+I, 4-D
+Bid: D Bidder:0
+Dealer: 2
+3:	 A of S
+0:	 J of D
+1:	 K of S
+2:	 J of S
+0:	1
+0:	 J of H
+1:	10 of D
+2:	 Q of D
+3:	 9 of D
+0:	2
+0:	 A of D
+1:	10 of H
+2:	 K of D
+3:	 9 of C
+0:	3
+0:	 K of H
+1:	 A of H
+2:	10 of C
+3:	 J of C
+1:	1
+1:	 K of C
+2:	 Q of C
+3:	 A of C
+0:	10 of S
+3:	1
+Result:	1
+Team A...0,2 gains 1
+Score:[4, 6]
+kitty:  K of D,   9 of S,  10 of S,   A of S,  
+0:  Q of H,  10 of C,   A of H,   Q of S,   9 of H,  
+1:  J of H,   9 of D,  10 of H,   9 of C,   J of D,  
+2: 10 of D,   Q of C,   A of C,   J of C,   K of S,  
+3:  A of D,   J of S,   K of C,   K of H,   Q of D,  
+top card:  K of D
+********* New Game *****************
+kitty:  Q of D,   J of S,   K of D,   9 of D,  
+0:  K of H,   A of C,  10 of D,   Q of S,  10 of S,  
+1:  Q of H,   J of H,   Q of C,   K of S,   9 of S,  
+2:  A of H,  10 of H,   9 of H,   K of C,   J of C,  
+3: 10 of C,   9 of C,   A of D,   J of D,   A of S,  
+top card:  Q of D
+I, 1-P
+I, 2-P
+I, 3-P
+I, 4-D
+Bid: D Bidder:0
+Dealer: 0
+1:	 K of S
+2:	 9 of H
+3:	 9 of C
+0:	10 of D
+0:	1
+0:	 A of C
+1:	 Q of C
+2:	 J of C
+3:	 A of D
+3:	1
+3:	 A of S
+0:	 K of H
+1:	 9 of S
+2:	10 of H
+3:	2
+3:	10 of C
+0:	 Q of S
+1:	 J of H
+2:	 K of C
+1:	1
+1:	 Q of H
+2:	 A of H
+3:	 J of D
+0:	10 of S
+3:	3
+Result:	-3
+Team A...0,2 euchred. Team B...1,3 gains 2
+Score:[0, 2]
+kitty:  Q of H,   A of H,   J of D,  10 of S,  
+0: 10 of D,   J of S,   9 of S,   K of S,   K of C,  
+1:  Q of D,   Q of C,  10 of C,   Q of S,   A of D,  
+2:  9 of D,   9 of H,  10 of H,   J of C,   K of H,  
+3:  9 of C,   A of C,   J of H,   K of D,   A of S,  
+top card:  Q of H
+I, 2-P
+I, 3-P
+I, 4-H
+Bid: H Bidder:0
+Dealer: 1
+2:	 J of C
+3:	 A of C
+0:	 K of S
+1:	 Q of S
+3:	1
+3:	 A of S
+0:	 K of C
+1:	 Q of C
+2:	 9 of H
+2:	1
+2:	 9 of D
+3:	 K of D
+0:	 J of S
+1:	 Q of D
+3:	2
+3:	 9 of C
+0:	10 of D
+1:	 Q of H
+2:	10 of H
+1:	1
+1:	 A of D
+2:	 K of H
+3:	 J of H
+0:	 9 of S
+3:	3
+Result:	-3
+Team A...0,2 euchred. Team B...1,3 gains 2
+Score:[0, 4]
+kitty:  9 of S,   Q of S,   A of C,   J of C,  
+0:  J of H,   9 of D,  10 of D,   Q of D,   9 of H,  
+1:  9 of C,   J of S,   K of S,   A of S,   K of H,  
+2:  A of D,   A of H,  10 of C,   Q of C,   J of D,  
+3: 10 of S,   Q of H,   K of C,   K of D,  10 of H,  
+top card:  9 of S
+I, 3-P
+I, 4-S
+Bid: S Bidder:0
+Dealer: 2
+3:	 K of C
+0:	 Q of D
+1:	 9 of C
+2:	 9 of S
+2:	1
+2:	 A of D
+3:	 K of D
+0:	 J of H
+1:	 K of S
+1:	1
+1:	 K of H
+2:	 A of H
+3:	10 of H
+0:	10 of D
+2:	2
+2:	 Q of C
+3:	10 of S
+0:	 9 of D
+1:	 A of S
+1:	2
+1:	 J of S
+2:	 J of D
+3:	 Q of H
+0:	 9 of H
+1:	3
+Result:	-1
+Team A...0,2 euchred. Team B...1,3 gains 2
+Score:[0, 6]
+kitty:  A of H,   J of C,   9 of C,   A of C,  
+0: 10 of H,  10 of C,   K of H,   9 of H,   9 of S,  
+1:  Q of H,   9 of D,  10 of D,  10 of S,   A of S,  
+2:  J of S,   K of C,   Q of D,   Q of C,   J of H,  
+3:  Q of S,   K of S,   K of D,   A of D,   J of D,  
+top card:  A of H
+I, 4-H
+Bid: H Bidder:0
+Dealer: 3
+0:	 K of H
+1:	 Q of H
+2:	 J of H
+3:	 J of D
+2:	1
+2:	 K of C
+3:	 A of H
+0:	10 of H
+1:	 9 of D
+3:	1
+3:	 A of D
+0:	 9 of H
+1:	10 of D
+2:	 Q of D
+0:	1
+0:	10 of C
+1:	10 of S
+2:	 J of S
+3:	 K of D
+0:	2
+0:	 9 of S
+1:	 A of S
+2:	 Q of C
+3:	 K of S
+1:	1
+Result:	1
+Team A...0,2 gains 1
+Score:[1, 6]
+kitty:  J of C,   Q of H,   K of H,   9 of D,  
+0:  A of H,   J of H,   J of S,   A of C,   9 of H,  
+1:  J of D,  10 of C,   A of S,   Q of C,   K of S,  
+2: 10 of H,   K of C,   9 of S,  10 of S,   Q of S,  
+3:  A of D,   Q of D,   K of D,  10 of D,   9 of C,  
+top card:  J of C
+I, 1-P
+I, 2-P
+I, 3-P
+I, 4-C
+Bid: C Bidder:0
+Dealer: 0
+1:	 A of S
+2:	 9 of S
+3:	10 of D
+0:	 J of S
+0:	1
+0:	 A of C
+1:	10 of C
+2:	 K of C
+3:	 9 of C
+0:	2
+0:	 A of H
+1:	 Q of C
+2:	10 of H
+3:	 Q of D
+1:	1
+1:	 K of S
+2:	10 of S
+3:	 K of D
+0:	 J of H
+1:	2
+1:	 J of D
+2:	 Q of S
+3:	 A of D
+0:	 9 of H
+3:	1
+Result:	-1
+Team A...0,2 euchred. Team B...1,3 gains 2
+Score:[1, 8]
+kitty: 10 of S,   J of D,  10 of C,  10 of D,  
+0:  Q of S,   K of H,   J of S,   Q of C,   A of H,  
+1: 10 of H,   J of H,   A of C,   9 of C,   9 of D,  
+2:  J of C,   K of C,   A of D,   A of S,   Q of D,  
+3:  9 of S,   K of S,   9 of H,   Q of H,   K of D,  
+top card: 10 of S
+I, 2-P
+I, 3-P
+I, 4-S
+Bid: S Bidder:0
+Dealer: 1
+2:	 A of D
+3:	 K of D
+0:	 J of S
+1:	10 of S
+0:	1
+0:	 Q of S
+1:	 9 of C
+2:	 J of C
+3:	 9 of S
+2:	1
+2:	 K of C
+3:	 K of S
+0:	 A of H
+1:	10 of H
+3:	1
+3:	 Q of H
+0:	 K of H
+1:	 J of H
+2:	 Q of D
+0:	2
+0:	 Q of C
+1:	 A of C
+2:	 A of S
+3:	 9 of H
+2:	2
+Result:	3
+Team A...0,2 gains 1
+Score:[2, 8]
+kitty: 10 of H,  10 of S,   K of H,   K of S,  
+0:  9 of C,   J of S,   A of H,   A of S,   9 of D,  
+1:  Q of C,   K of C,   Q of S,  10 of D,   J of C,  
+2:  9 of H,   J of D,   9 of S,   A of C,   A of D,  
+3:  Q of H,   Q of D,  10 of C,   K of D,   J of H,  
+top card: 10 of H
+I, 3-P
+I, 4-H
+Bid: H Bidder:0
+Dealer: 2
+3:	 K of D
+0:	 A of H
+1:	10 of D
+2:	 A of D
+0:	1
+0:	 A of S
+1:	 Q of S
+2:	 A of C
+3:	 Q of H
+3:	1
+3:	 Q of D
+0:	 J of S
+1:	 J of C
+2:	 9 of H
+2:	1
+2:	 J of D
+3:	 J of H
+0:	 9 of C
+1:	 Q of C
+3:	2
+3:	10 of C
+0:	 9 of D
+1:	 K of C
+2:	10 of H
+2:	2
+Result:	1
+Team A...0,2 gains 1
+Score:[3, 8]
+kitty:  A of H,   9 of H,   Q of D,   Q of S,  
+0:  Q of C,  10 of C,   K of S,   9 of D,   J of H,  
+1:  9 of S,   Q of H,   K of D,   J of S,   A of S,  
+2: 10 of S,   A of C,   J of C,   K of H,   J of D,  
+3:  9 of C,  10 of D,  10 of H,   A of D,   K of C,  
+top card:  A of H
+I, 4-H
+Bid: H Bidder:0
+Dealer: 3
+0:	 J of H
+1:	 Q of H
+2:	 J of D
+3:	10 of H
+0:	1
+0:	 K of S
+1:	 A of S
+2:	10 of S
+3:	10 of D
+1:	1
+1:	 K of D
+2:	 K of H
+3:	 A of D
+0:	 Q of C
+2:	1
+2:	 A of C
+3:	 K of C
+0:	10 of C
+1:	 9 of S
+2:	2
+2:	 J of C
+3:	 A of H
+0:	 9 of D
+1:	 J of S
+3:	1
+Result:	1
+Team A...0,2 gains 1
+Score:[4, 8]
+kitty:  J of C,   J of S,   9 of S,   Q of S,  
+0:  A of H,   9 of C,   K of H,   K of C,  10 of D,  
+1: 10 of C,   A of C,   Q of D,   Q of H,   Q of C,  
+2:  A of S,   K of S,   J of D,  10 of S,  10 of H,  
+3:  J of H,   K of D,   9 of H,   9 of D,   A of D,  
+top card:  J of C
+I, 1-P
+I, 2-P
+I, 3-P
+I, 4-C
+Bid: C Bidder:0
+Dealer: 0
+1:	 Q of D
+2:	 J of D
+3:	 9 of D
+0:	 K of C
+0:	1
+0:	 9 of C
+1:	 A of C
+2:	10 of H
+3:	 9 of H
+1:	1
+1:	 Q of H
+2:	10 of S
+3:	 J of H
+0:	 A of H
+0:	2
+0:	 K of H
+1:	10 of C
+2:	 K of S
+3:	 K of D
+1:	2
+1:	 Q of C
+2:	 A of S
+3:	 A of D
+0:	10 of D
+1:	3
+Result:	-1
+Team A...0,2 euchred. Team B...1,3 gains 2
+Score:[4, 10]
+Team B wins!... 1, 3
+********* New Game *****************
+kitty:  Q of C,   A of H,   A of D,   K of D,  
+0:  9 of H,   K of C,   J of C,   Q of D,   A of S,  
+1:  K of H,   Q of H,   9 of C,   9 of D,   K of S,  
+2:  A of C,   J of D,  10 of D,   Q of S,  10 of S,  
+3:  J of H,  10 of H,  10 of C,   J of S,   9 of S,  
+top card:  Q of C
+I, 1-P
+I, 2-P
+I, 3-P
+I, 4-C
+Bid: C Bidder:0
+Dealer: 0
+1:	 K of H
+2:	 A of C
+3:	10 of H
+0:	 K of C
+2:	1
+2:	 Q of S
+3:	 9 of S
+0:	 Q of C
+1:	 K of S
+0:	1
+0:	 A of S
+1:	 9 of C
+2:	10 of S
+3:	 J of H
+1:	1
+1:	 Q of H
+2:	10 of D
+3:	10 of C
+0:	 Q of D
+3:	1
+3:	 J of S
+0:	 9 of H
+1:	 9 of D
+2:	 J of D
+3:	2
+Result:	-1
+Team A...0,2 euchred. Team B...1,3 gains 2
+Score:[0, 2]
+kitty:  A of C,   K of H,   9 of S,   Q of S,  
+0: 10 of D,   A of D,   A of H,   J of S,   Q of H,  
+1:  9 of H,   K of C,   A of S,   K of D,  10 of H,  
+2:  J of D,  10 of S,   Q of D,   K of S,   J of H,  
+3:  9 of D,  10 of C,   J of C,   9 of C,   Q of C,  
+top card:  A of C
+I, 2-P
+I, 3-P
+I, 4-C
+Bid: C Bidder:0
+Dealer: 1
+2:	 K of S
+3:	 9 of C
+0:	 J of S
+1:	 A of S
+0:	1
+0:	 A of D
+1:	 K of D
+2:	 J of D
+3:	10 of C
+3:	1
+3:	 9 of D
+0:	 A of H
+1:	 K of C
+2:	 Q of D
+1:	1
+1:	10 of H
+2:	 J of H
+3:	 Q of C
+0:	 Q of H
+3:	2
+3:	 J of C
+0:	10 of D
+1:	 A of C
+2:	10 of S
+3:	3
+Result:	-3
+Team A...0,2 euchred. Team B...1,3 gains 2
+Score:[0, 4]
+kitty:  J of S,   A of H,   K of H,   Q of S,  
+0:  Q of D,   A of C,   Q of H,   9 of C,  10 of C,  
+1: 10 of S,   Q of C,   K of C,   K of S,   9 of S,  
+2:  J of H,  10 of D,   J of D,   J of C,  10 of H,  
+3:  A of S,   9 of H,   9 of D,   K of D,   A of D,  
+top card:  J of S
+I, 3-P
+I, 4-S
+Bid: S Bidder:0
+Dealer: 2
+3:	 A of D
+0:	 A of C
+1:	 Q of C
+2:	 J of C
+2:	1
+2:	 J of H
+3:	 9 of H
+0:	 Q of D
+1:	 9 of S
+1:	1
+1:	 K of C
+2:	 J of S
+3:	 A of S
+0:	 Q of H
+2:	2
+2:	 J of D
+3:	 K of D
+0:	10 of C
+1:	10 of S
+1:	2
+1:	 K of S
+2:	10 of D
+3:	 9 of D
+0:	 9 of C
+1:	3
+Result:	-1
+Team A...0,2 euchred. Team B...1,3 gains 2
+Score:[0, 6]
+kitty:  A of S,   Q of D,   J of S,  10 of H,  
+0:  K of C,   A of D,   Q of S,  10 of C,   K of H,  
+1:  J of H,   A of H,   A of C,   9 of D,   9 of C,  
+2:  J of C,   9 of S,   Q of C,   J of D,   Q of H,  
+3:  9 of H,   K of D,  10 of D,   K of S,  10 of S,  
+top card:  A of S
+I, 4-S
+Bid: S Bidder:0
+Dealer: 3
+0:	 Q of S
+1:	 9 of C
+2:	 9 of S
+3:	10 of S
+0:	1
+0:	 A of D
+1:	 9 of D
+2:	 J of D
+3:	 K of S
+3:	1
+3:	 K of D
+0:	 K of C
+1:	 J of H
+2:	 J of C
+2:	1
+2:	 Q of C
+3:	 A of S
+0:	 K of H
+1:	 A of C
+3:	2
+3:	10 of D
+0:	10 of C
+1:	 A of H
+2:	 Q of H
+3:	3
+Result:	-1
+Team A...0,2 euchred. Team B...1,3 gains 2
+Score:[0, 8]
+kitty:  9 of H,   J of D,  10 of C,   J of C,  
+0:  K of S,   J of H,   A of H,   A of S,   9 of C,  
+1:  K of D,  10 of D,   A of D,   K of H,   Q of D,  
+2:  Q of C,   A of C,  10 of S,  10 of H,   J of S,  
+3:  9 of D,   K of C,   Q of S,   Q of H,   9 of S,  
+top card:  9 of H
+I, 1-P
+I, 2-P
+I, 3-P
+I, 4-H
+Bid: H Bidder:0
+Dealer: 0
+1:	 A of D
+2:	10 of H
+3:	 9 of D
+0:	 A of H
+0:	1
+0:	 9 of H
+1:	 K of H
+2:	10 of S
+3:	 Q of H
+1:	1
+1:	 K of D
+2:	 J of S
+3:	 9 of S
+0:	 A of S
+1:	2
+1:	 Q of D
+2:	 Q of C
+3:	 Q of S
+0:	 K of S
+1:	3
+1:	10 of D
+2:	 A of C
+3:	 K of C
+0:	 9 of C
+1:	4
+Result:	-3
+Team A...0,2 euchred. Team B...1,3 gains 2
+Score:[0, 10]
+Team B wins!... 1, 3
+********* New Game *****************
+kitty:  A of H,   J of H,   J of C,  10 of S,  
+0: 10 of H,   K of C,  10 of C,   K of D,   9 of S,  
+1:  Q of H,   9 of H,   Q of D,   9 of D,   J of S,  
+2:  K of H,   9 of C,   J of D,  10 of D,   A of S,  
+3:  A of C,   Q of C,   A of D,   K of S,   Q of S,  
+top card:  A of H
+I, 1-P
+I, 2-P
+I, 3-P
+********* New Game *****************
+kitty:  A of S,   Q of D,   J of S,   A of D,  
+0:  A of H,   J of H,   J of C,   K of D,   9 of S,  
+1:  9 of H,   J of D,  10 of D,   9 of D,   Q of S,  
+2:  K of H,   K of C,   Q of C,  10 of C,   9 of C,  
+3:  Q of H,  10 of H,   A of C,   K of S,  10 of S,  
+top card:  A of S
+I, 1-P
+I, 2-P
+I, 3-P
+********* New Game *****************
+kitty:  K of S,   9 of H,  10 of D,   Q of H,  
+0:  A of H,   J of H,   A of D,   J of D,   9 of D,  
+1:  K of H,   K of C,  10 of C,   A of S,   Q of S,  
+2:  A of C,   Q of C,   9 of C,   9 of S,   J of S,  
+3: 10 of H,   J of C,   K of D,   Q of D,  10 of S,  
+top card:  K of S
+I, 1-P
+I, 2-P
+I, 3-P
+********* New Game *****************
+kitty:  A of D,   A of H,   9 of D,   9 of S,  
+0: 10 of H,   9 of C,   K of D,   Q of S,   J of S,  
+1:  K of H,   A of C,   Q of C,   J of C,  10 of S,  
+2:  J of H,   9 of H,   Q of D,   J of D,  10 of D,  
+3:  Q of H,   K of C,  10 of C,   A of S,   K of S,  
+top card:  A of D
+I, 1-P
+I, 2-D
