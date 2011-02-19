@@ -10,7 +10,8 @@ class player_client():
         self.player = player
         self.open_socket(port)
         print "opening ", port
-        port = int(self.client_socket.recv(96))
+        input = self.client_socket.recv(4096)
+        port = int(input)
         self.client_socket.close()
         print "opening ",port
         self.open_socket(port)

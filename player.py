@@ -5,6 +5,13 @@ from basics import trick, suits
 
 class player(trick):
     """A simple shell player is inherited from trick, is interactive. No "graphics" """
+    def msg(self, msg, quit):
+        answer = self.ask(msg = msg, quit = quit)
+        if answer == "Q":
+            print "someone quit"
+            quit()#exit()
+            pass
+
     def results(self, winner, leader, played_cards, team, players, dealer):
         perspective = trick()
         try:
@@ -17,7 +24,12 @@ class player(trick):
         perspective.cards = played_cards._shift(shift)
         players = players[self.index:] + players[:self.index]
         dealer = ((dealer - self.index) % 4)
-        self.ask(msg = msg, played_cards = perspective, team = team, players = players, cards = self.cards, dealer = dealer)
+        answer = self.ask(msg = msg, played_cards = perspective, team = team, players = players, cards = self.cards, dealer = dealer)
+        if answer == "Q":
+            print "someone quit"
+            quit()#exit
+            pass
+
         leader = winner
     
     def play(self, trump, played_cards, dealer, team, players):
@@ -30,7 +42,7 @@ class player(trick):
         card = self.ask(msg = "Which card would you like to play? ", played_cards = played_cards, trump = trump, dealer = dealer, team = team, players = players, cards = self.cards)
         card = ((card + " ").upper()[0])
         while(not self.good_play(card)):
-            if (card == "Q"):    exit()            
+            if (card == "Q"):    quit()#exit()            
             if (card == "I"):
                 card = self.ask(msg = "Which card would you like to play? ", played_cards = played_cards, trump = trump, players = players, dealer = dealer, team = team, secret = 1, cards = self.cards)
             else:
@@ -52,7 +64,7 @@ class player(trick):
                 if (bid == "S" or bid == "C" or bid == "H" or bid == "D"):
                     return bid
                 elif (bid == "Q"):
-                    exit()
+                    quit() #exit()
                 elif (bid == "P"):
                     break
                 else:
@@ -70,7 +82,7 @@ class player(trick):
                 elif (bid == "N" or bid == "P"):
                     break
                 elif (bid == "Q"):
-                    exit()
+                    quit() #exit()
                 else:
                     bid = self.ask(msg = msg, error="Invalid Bid", top_card = top_card, dealer = dealer, team = team, cards = self.cards)
                     bid = bid.upper()
@@ -85,7 +97,7 @@ class player(trick):
         card = card.upper()
         while(not ("1" <= card and card <= "6")):
             if (card == "Q"):
-                exit()            
+                quit() #exit()            
             card = self.ask(msg = "Which card do you want to discard? ", error="Invalid Card", dealer = dealer, top_card = top_card, team = team, cards = self.cards)
             card = card.upper()
         index = 0        

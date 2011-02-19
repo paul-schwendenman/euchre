@@ -5,7 +5,7 @@ suits = [None, "S", "D", "C", "H"]
 
 class player_curses(player):
     """Player is inherited from player, is interactive. Has set_hand, get_play, get_bid, pick_it_up, worst_card and highest_nontrump"""
-    def ask(self, top_card = None, trump = None, played_cards = [], cards = [], msg = "", error = "", team = [99,99], players = [], dealer = None, secret = 0):
+    def ask(self, top_card = None, trump = None, played_cards = [], cards = [], msg = "", error = "", team = [99,99], players = [], dealer = None, secret = 0, quit = 0):
         ## Pulled from curses.wrapper 2.6, modified.
 
         def printCard(card):
@@ -189,7 +189,12 @@ class player_curses(player):
             stdscr.border()
     #        stdscr.move(12,22) move to center
             #return stdscr.getch()
-            return stdscr.getkey()
+            if not quit:
+                return stdscr.getkey()
+            else:
+                stdscr.getkey()
+                print "Done"
+                raise Exception("quit")
         finally:
             # Set everything back to normal
             stdscr.keypad(0)

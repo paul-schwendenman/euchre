@@ -23,6 +23,12 @@ class table:
     """Class for the table, has players.
     Needs to handle: leader, dealer, points etc."""
     def __init__(self, port = 5000):
+        if port == 5000:
+            self.server_socket = open_socket(port)
+            port = 3000
+            client = self.server_socket.accept()
+            client[0].send(str(port))
+            client[0].close()
         self.server_socket = open_socket(port)
         self.players = []
         self.players = [player_server(self.server_socket), comp(), comp(), comp(), ] 
@@ -50,6 +56,15 @@ class table:
         for each_player in self.players:
             each_player.tricks_taken = 0
             each_player.clear()
+
+    def global_message(self, msg, quit, players = []):	
+        for _player_ in self.players:
+            if _player_ != players:
+                _player_.msg(msg, quit)
+            elif quit:
+                _player_.msg(msg, quit)
+            
+
     def __str__(self):
         return str([player.__class__ for player in self.players])
     def _split(self, n):
@@ -63,7 +78,12 @@ class table:
             self.players = c
         else:
             return c
-        
+    def quit(self, msg = ''):
+        if msg:
+            self.global_message(msg, 1)
+        self.server_socket.close()
+        exit()
+            
     
 class game:
     """Class for each hand in a game, meaning all the stuff needed to play for one hand."""
@@ -100,6 +120,7 @@ class game:
             bid = self.table.players[((self.dealer + index) % 4)].bid(top_card, self.dealer, self.table.players, self.team)
             log("I, ", self.dealer + index, "-", bid)
             if self.good_bid(bid):
+                self.table.global_message(str(index) + ' ordered up ' + str(top_card) + '. So trump is '  + bid, 0 , self.table.players[index % 4])
                 self.table.players[self.dealer].pick_it_up(top_card, self.dealer, self.team)
                 return (bid, index)
         for index in range(1, 5):
@@ -107,7 +128,9 @@ class game:
             log("I, ", self.dealer + index, "-", bid)
 
             if self.good_bid(bid):
+                self.table.global_message(str(index) + ' called ' + str(bid) + ' trump\n', 0 , self.table.players[index % 4])
                 return (bid, index)
+
         return (bid, index)
     def play(self, trump, bidder):
         """Handles the card play given a bid"""
@@ -155,16 +178,20 @@ class game:
             team[(bidder + 0) % 2] += 2
             #print "Team %c gains 2" % (['A', 'B'][bidder % 2])
             log("Team %s gains 2" % (['A...0,2', 'B...1,3'][bidder % 2]))
+            self.table.global_message("Team %s gains 2" % (['A...0,2', 'B...1,3'][bidder % 2]), 0)
+
         elif (result > 0):
             #Made the bid
             team[(bidder + 0) % 2] +=1
             #print "Team %c gains 1" % (['A', 'B'][bidder % 2])
             log("Team %s gains 1" % (['A...0,2', 'B...1,3'][bidder % 2]))
+            self.table.global_message("Team %s gains 1" % (['A...0,2', 'B...1,3'][bidder % 2]), 0)
         elif (result < 0):
             #Other team won give them two.
             team[(bidder + 1) % 2] +=2
             #print "Team %c euchred. Team %c gains 2" % ((['A', 'B'][(bidder) % 2]),(['A', 'B'][(bidder + 1) % 2]))
             log("Team %s euchred. Team %s gains 2" % ((['A...0,2', 'B...1,3'][(bidder) % 2]),(['A...0,2', 'B...1,3'][(bidder + 1) % 2])))
+            self.table.global_message("Team %s euchred. Team %s gains 2" % ((['A...0,2', 'B...1,3'][(bidder) % 2]),(['A...0,2', 'B...1,3'][(bidder + 1) % 2])), 0)
         else:
             raise IndexError
         return team
@@ -174,7 +201,10 @@ class euchre:
     """Highest level class creates a game for play"""
     def __init__(self, port):
         """Sets up and starts a game."""
+        global quit
+
         self.table = table(port)
+        quit = self.table.quit()
         
         index = 0
         self.game = game()
@@ -208,18 +238,20 @@ class euchre:
             self.game.dealer += 1
             self.game.dealer %= 4
         if (team[0] > 10):
-            print "Team A wins!... 0, 2"
-            log("Team A wins!... 0, 2")
+            msg = "Team A wins!... 0, 2"
         else:
-            print "Team B wins!... 1, 3"
-            log("Team B wins!... 1, 3")
-
-                
-                 
+            msg ="Team B wins!... 1, 3"
+        print msg 
+        log(msg)
+        self.table.global_message(msg, 1)
+def quit():
+    print "should have been over written"
+    exit()
 
 def main(port):
     print "running euchre"
-    euchre(port)
+    a  = euchre(port)
+    print "game over"
 
 if __name__ == "__main__":
     port = 5000

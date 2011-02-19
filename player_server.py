@@ -18,7 +18,6 @@ class player_server(player):
         data["cards"] = self.cards
         try:
             data["quit"]
-
         except KeyError:
             data["quit"] = 0
         if (data["quit"]):

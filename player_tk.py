@@ -92,6 +92,13 @@ class player_tk(player_client):
             self.show_trump(self.bottom_frame, trump)
             self.show_cards(self.bottom_frame)
 
+        elif (1): #someone bid. points scored, and game over?
+            #import tkMessageBox
+            self.hide_score()
+            self.show_next(self.bottom_frame)
+            #tkMessageBox.showinfo("Info", msg)
+            #self.say("")
+            
         else: # Bad
             print "|%s|" % msg
             raise Exception("Should have called one of those ^")
@@ -106,14 +113,15 @@ class player_tk(player_client):
 
 
     def show_score(self, master, scores):
-        frame = Frame(master)
-        frame.pack(side=RIGHT)
+        self.score = Frame(master)
+        self.score.pack(side=RIGHT)
         teams = ["Your Team: ", "Other Team: "]
         
         for index, score in enumerate(scores):
-            label = Label(frame, text = teams[index] + str(score))
+            label = Label(self.score, text = teams[index] + str(score))
             label.pack()
-            
+    def hide_score(self):
+        self.score.pack_forget()        
             
     def show_played(self, master, played_cards, dealer, side=TOP):
         labels = ["U:", "1:", "P:", "3:"]

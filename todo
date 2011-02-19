@@ -5,7 +5,10 @@ Things to do....
 [ ] add modes (configuration) ... handle incoming packet
 [ ] add gametypes control with manager.
 
+
 Whats next
+[ ] Integrate the use of names. should be more important, would make things
+less confusing.
 [ ] Add going "alone"
 [ ] Add who made the bid message
 [ ] Rules!!!
@@ -15,6 +18,10 @@ Whats next
 [ ] ask expectations. [str vs int]
 [ ] change "team" to "score"?
 [ ] re-write the curses player to work like tk?
+[ ] use execfile() in manager?
+[ ] use filter and min for the type casting ex. trumps, ranks
+[ ] use decorators for logging. caching... ?
+[ ] pass score in the 'notifications'
 
 TK problems
 [ ] Fix layout atleast a little.
@@ -47,3 +54,10 @@ background trying to learn how to beat them...agressive, passive, etc.
 
 [ ] Figure out why for _trick in tricks, doesnt work for the next trick
 something to do with 2 * [trick()] and [trick(), trick()]
+
+Silias and Matt
+[ ] No JS 
+[ ] /game/{sha 1}
+[ ] /lobby
+[ ] /game/connect/{sha 1}
+[ ] manager needs to hold 

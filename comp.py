@@ -3,6 +3,8 @@ from player import *
 class comp(player):
     """Comp is inherited from player, is a "computer" player and has limited AI. Has get_play, get_bid, pick_it_up"""
     """ Cards that it can beat vs cards that beat it"""
+    def msg(self, msg, number = 0, list = []):
+        pass
     
     def play(self, trump, played_cards, dealer, team, players):
         """Return the play from the "player" Compare the AI to the Human."""
