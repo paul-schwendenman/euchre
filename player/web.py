@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import basics
-from player_client import *
+from client import *
 
 class player_web(player_client):
     def __init__(self):

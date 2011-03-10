@@ -1,4 +1,4 @@
-import "comp"
+from comp import *
 
 class comp_if(comp):
     """Comp_if is inherited from comp and picks the cards different, everything else the same."""

@@ -7,7 +7,7 @@
 from Tkinter import *
 import random
 import basics
-from player_client import player_client
+from client import player_client
 
  
 def Pass():
@@ -323,8 +323,10 @@ if __name__ == "__main__":
         data = p.recv()
         p.ask(**data)
         root.mainloop()
-        
-
+else:
+    print __name__        
+print hi
+print __name__
 # ** debug mode **
 #    from cPickle import load, dump
 #    with open("data", "r") as f:

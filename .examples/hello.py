@@ -74,6 +74,8 @@ def send_image(filename):
 def download(filename):
     return static_file(filename, root='/path/to/static/files', download=filename)
 
+if __name__ == '__main__':
+    debug()
+    run(host='localhost', port=8080)
+    
 
-debug()
-run(host='localhost', port=8080)

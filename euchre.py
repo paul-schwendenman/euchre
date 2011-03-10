@@ -3,10 +3,10 @@ import random
 
 #import basics
 from basics import deck
-from player_curses import *
-from player_test import *
-from player_server import *
-from comp import *
+from player.curses import *
+from player.test import *
+from player.server import *
+from comp.comp import comp as comp
 from logger import log
 
 #shuffle

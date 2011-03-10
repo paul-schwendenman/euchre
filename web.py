@@ -9,7 +9,7 @@ if __name__ != '__main__':
 
 
 import basics
-from player_web import *
+from player.web import *
 
 #@route('/index')
 @get('/')
