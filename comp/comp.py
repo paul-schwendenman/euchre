@@ -1,4 +1,8 @@
-from player import *
+from player import player
+import basics
+
+suits = basics.suits
+trick = basics.trick
 
 class comp(player):
     """Comp is inherited from player, is a "computer" player and has limited AI. Has get_play, get_bid, pick_it_up"""

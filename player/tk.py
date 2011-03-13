@@ -226,7 +226,7 @@ class player_tk(player_client):
         #self.bid_frame.quit
         self.top_frame.pack_forget()
         self.bottom_frame.pack_forget()
-        root.quit()
+#        root.quit()
         
     def say_quit(self, *args):
         self.bid = "Q"
@@ -310,7 +310,7 @@ class player_tk(player_client):
 #print p.play_frame.pack_slaves()
 #print root.pack_slaves()
 
-if __name__ == "__main__":
+def run():
     root = Tk()
     root.title("Euchre")
 
@@ -323,10 +323,7 @@ if __name__ == "__main__":
         data = p.recv()
         p.ask(**data)
         root.mainloop()
-else:
-    print __name__        
-print hi
-print __name__
+
 # ** debug mode **
 #    from cPickle import load, dump
 #    with open("data", "r") as f:

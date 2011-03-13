@@ -1,0 +1,8 @@
+rm CLEAN~
+rm bzr_log.*
+rm *.py{c,~}
+rm player/*.py{c,~}
+rm comp/*.py{c,~}
+rm {.,player,comp}/*.html
+rm DEADJOE
+rm log

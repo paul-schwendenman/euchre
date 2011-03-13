@@ -79,23 +79,30 @@ class player_client():
         else:
             print its
             raise
-        
 
-if __name__ == "__main__":
-    #import player_test
-    import player_curses
-    #import comp
+def run():
     import player as _player_
     player = _player_.player()
-    player = player_curses.player_curses()
-    #player = comp.comp()
     p = player_client(player)
     data = {}
     data["quit"] = 0
     while not data["quit"]:
         data = p.chat()
-        #data = p.recv()
-        #data = p.ask(data)
-        #p.send(data)
-
-
+def run_curses():
+    import curses_ as curses
+    import player as _player_
+    player = _player_.player()
+    player = curses.player_curses()
+    p = player_client(player)
+    data = {}
+    data["quit"] = 0
+    while not data["quit"]:
+        data = p.chat()
+def run_comp():
+    import comp
+    player = comp.comp()
+    p = player_client(player)
+    data = {}
+    data["quit"] = 0
+    while not data["quit"]:
+        data = p.chat()

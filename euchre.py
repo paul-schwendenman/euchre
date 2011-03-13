@@ -1,13 +1,27 @@
-import random
-#import basics, player
+#!/usr/bin/python
 
-#import basics
-from basics import deck
-from player.curses import *
-from player.test import *
-from player.server import *
-from comp.comp import comp as comp
-from logger import log
+import random
+import basics
+import player.curses_
+import player.test
+import player.server
+import comp.comp
+import logger
+
+#from basics import deck
+#from player.curses_ import *
+#from player.test import *
+#from player.server import *
+#from comp.comp import comp as comp
+#from logger import log
+
+log = logger.log
+comp = comp.comp
+player_server = player.server.player_server
+player_curses = player.curses_.player_curses
+open_socket = player.server.open_socket
+deck = basics.deck
+trick = basics.trick
 
 #shuffle
 #set scores to zero
@@ -23,13 +37,7 @@ class table:
     """Class for the table, has players.
     Needs to handle: leader, dealer, points etc."""
     def __init__(self, port = 5000):
-        if port == 5000:
-            self.server_socket = open_socket(port)
-            port = 3000
-            client = self.server_socket.accept()
-            client[0].send(str(port))
-            client[0].close()
-        self.server_socket = open_socket(port)
+        self.setup_socket(port)
         self.players = []
         self.players = [player_server(self.server_socket), comp(), comp(), comp(), ] 
 #        self.players = [player_server(self.server_socket), comp(), player_server(self.server_socket), comp(), ] 
@@ -46,7 +54,14 @@ class table:
         self.players[2].name = "Sierra"
         self.players[3].name = "Julia"
 
-        pass
+    def setup_socket(self, port):
+        if port == 5000:
+            self.server_socket = open_socket(port)
+            port = 3000
+            client = self.server_socket.accept()
+            client[0].send(str(port))
+            client[0].close()
+        self.server_socket = open_socket(port)
 
     def start(self, game):
         """begins a game by adding players"""
@@ -64,9 +79,9 @@ class table:
             elif quit:
                 _player_.msg(msg, quit)
             
-
     def __str__(self):
         return str([player.__class__ for player in self.players])
+
     def _split(self, n):
         return self.players[:n], self.players[n:]
 
@@ -81,7 +96,10 @@ class table:
     def quit(self, msg = ''):
         if msg:
             self.global_message(msg, 1)
-        self.server_socket.close()
+        try:
+            self.server_socket.close()
+        except:
+            pass
         exit()
             
     
@@ -204,7 +222,7 @@ class euchre:
         global quit
 
         self.table = table(port)
-        quit = self.table.quit()
+        quit = self.table.quit
         
         index = 0
         self.game = game()

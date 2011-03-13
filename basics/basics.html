@@ -1,0 +1,206 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module basics</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>basics</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/paul/expanded-euchre/basics/basics.py">/home/paul/expanded-euchre/basics/basics.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="random.html">random</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="basics.html#card">card</a>
+</font></dt><dt><font face="helvetica, arial"><a href="basics.html#hand">hand</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="basics.html#deck">deck</a>
+</font></dt><dt><font face="helvetica, arial"><a href="basics.html#trick">trick</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="card">class <strong>card</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Cards&nbsp;are&nbsp;used&nbsp;by&nbsp;the&nbsp;players&nbsp;to&nbsp;organize&nbsp;the&nbsp;game&nbsp;play.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="card-__getstate__"><strong>__getstate__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="card-__init__"><strong>__init__</strong></a>(self, rank<font color="#909090">=None</font>, suit<font color="#909090">=None</font>)</dt><dd><tt>Makes&nbsp;a&nbsp;new&nbsp;<a href="#card">card</a>.&nbsp;by&nbsp;default&nbsp;the&nbsp;<a href="#card">card</a>&nbsp;is&nbsp;blank&nbsp;or&nbsp;has&nbsp;no&nbsp;suit&nbsp;or&nbsp;value&nbsp;(rank).</tt></dd></dl>
+
+<dl><dt><a name="card-__setstate__"><strong>__setstate__</strong></a>(self, state)</dt></dl>
+
+<dl><dt><a name="card-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>prints&nbsp;information&nbsp;of&nbsp;the&nbsp;<a href="#card">card</a>&nbsp;in&nbsp;the&nbsp;form:&nbsp;R&nbsp;of&nbsp;S,&nbsp;where&nbsp;R&nbsp;is&nbsp;rank&nbsp;and&nbsp;S&nbsp;is&nbsp;suit</tt></dd></dl>
+
+<dl><dt><a name="card-image"><strong>image</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="card-is_trump"><strong>is_trump</strong></a>(self, trump)</dt></dl>
+
+<dl><dt><a name="card-relative_suit"><strong>relative_suit</strong></a>(self, trump)</dt></dl>
+
+<dl><dt><a name="card-value"><strong>value</strong></a>(self, trump, lead<font color="#909090">=None</font>)</dt><dd><tt>Calculates&nbsp;the&nbsp;value&nbsp;of&nbsp;the&nbsp;<a href="#card">card</a>&nbsp;bassed&nbsp;on&nbsp;trump&nbsp;and&nbsp;a&nbsp;lead?<br>
+better&nbsp;was&nbsp;to&nbsp;do&nbsp;this?</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="deck">class <strong>deck</strong></a>(<a href="basics.html#hand">hand</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Deck&nbsp;is&nbsp;inherited&nbsp;from&nbsp;Hand.&nbsp;has:&nbsp;populate,&nbsp;deal,&nbsp;and&nbsp;shuffle<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="deck-deal"><strong>deal</strong></a>(self, hands, dealer<font color="#909090">=0</font>)</dt><dd><tt>Basic&nbsp;euchre&nbsp;dealing&nbsp;function</tt></dd></dl>
+
+<dl><dt><a name="deck-populate"><strong>populate</strong></a>(self)</dt><dd><tt>Builds&nbsp;the&nbsp;<a href="#deck">deck</a>&nbsp;with&nbsp;cards</tt></dd></dl>
+
+<dl><dt><a name="deck-shuffle"><strong>shuffle</strong></a>(self)</dt><dd><tt>Random&nbsp;shuffle&nbsp;function</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="basics.html#hand">hand</a>:<br>
+<dl><dt><a name="deck-__getitem__"><strong>__getitem__</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="deck-__getstate__"><strong>__getstate__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="deck-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Blank&nbsp;<a href="#hand">hand</a>.&nbsp;No&nbsp;Cards&nbsp;yet.</tt></dd></dl>
+
+<dl><dt><a name="deck-__len__"><strong>__len__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="deck-__setstate__"><strong>__setstate__</strong></a>(self, state)</dt></dl>
+
+<dl><dt><a name="deck-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Prints&nbsp;a&nbsp;list&nbsp;of&nbsp;cards.</tt></dd></dl>
+
+<dl><dt><a name="deck-add"><strong>add</strong></a>(self, card)</dt><dd><tt>Adds&nbsp;a&nbsp;<a href="#card">card</a>,&nbsp;given&nbsp;<a href="#card">card</a>&nbsp;object</tt></dd></dl>
+
+<dl><dt><a name="deck-bubble_sort"><strong>bubble_sort</strong></a>(self, trump<font color="#909090">=None</font>)</dt><dd><tt>Sorts&nbsp;a&nbsp;list&nbsp;in&nbsp;place&nbsp;and&nbsp;returns&nbsp;it.&nbsp;Either&nbsp;by&nbsp;trump&nbsp;if&nbsp;given&nbsp;or&nbsp;by&nbsp;suit.<br>
+Separate&nbsp;the&nbsp;two&nbsp;functions?</tt></dd></dl>
+
+<dl><dt><a name="deck-clear"><strong>clear</strong></a>(self)</dt><dd><tt>Erases&nbsp;all&nbsp;cards&nbsp;in&nbsp;<a href="#hand">hand</a></tt></dd></dl>
+
+<dl><dt><a name="deck-give"><strong>give</strong></a>(self, card, other_hand)</dt><dd><tt>Removes&nbsp;a&nbsp;specific&nbsp;<a href="#card">card</a>&nbsp;and&nbsp;then&nbsp;adds&nbsp;it&nbsp;to&nbsp;another&nbsp;<a href="#hand">hand</a></tt></dd></dl>
+
+<dl><dt><a name="deck-remove"><strong>remove</strong></a>(self, card)</dt><dd><tt>Removes&nbsp;a&nbsp;specific&nbsp;<a href="#card">card</a></tt></dd></dl>
+
+<dl><dt><a name="deck-search"><strong>search</strong></a>(self, suit<font color="#909090">=None</font>, rank<font color="#909090">=None</font>)</dt><dd><tt>Searches&nbsp;for&nbsp;a&nbsp;type&nbsp;of&nbsp;<a href="#card">card</a>&nbsp;and&nbsp;then&nbsp;returns&nbsp;the&nbsp;list&nbsp;of&nbsp;all&nbsp;matches<br>
+Must&nbsp;be&nbsp;better&nbsp;way&nbsp;to&nbsp;accomplish&nbsp;this</tt></dd></dl>
+
+<dl><dt><a name="deck-steal"><strong>steal</strong></a>(self, card, other_hand)</dt><dd><tt>Removes&nbsp;a&nbsp;specific&nbsp;<a href="#card">card</a>&nbsp;from&nbsp;another&nbsp;<a href="#hand">hand</a>&nbsp;and&nbsp;then&nbsp;adds&nbsp;it</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="hand">class <strong>hand</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Hand&nbsp;is&nbsp;used&nbsp;as&nbsp;the&nbsp;base&nbsp;class&nbsp;for&nbsp;all&nbsp;the&nbsp;rest&nbsp;of&nbsp;the&nbsp;<a href="#card">card</a>&nbsp;handlers.&nbsp;Hand&nbsp;of&nbsp;playing&nbsp;cards,&nbsp;base&nbsp;class&nbsp;__init__,&nbsp;__str__,&nbsp;clear,&nbsp;add,&nbsp;remove,&nbsp;and&nbsp;give<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="hand-__getitem__"><strong>__getitem__</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="hand-__getstate__"><strong>__getstate__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="hand-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Blank&nbsp;<a href="#hand">hand</a>.&nbsp;No&nbsp;Cards&nbsp;yet.</tt></dd></dl>
+
+<dl><dt><a name="hand-__len__"><strong>__len__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="hand-__setstate__"><strong>__setstate__</strong></a>(self, state)</dt></dl>
+
+<dl><dt><a name="hand-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Prints&nbsp;a&nbsp;list&nbsp;of&nbsp;cards.</tt></dd></dl>
+
+<dl><dt><a name="hand-add"><strong>add</strong></a>(self, card)</dt><dd><tt>Adds&nbsp;a&nbsp;<a href="#card">card</a>,&nbsp;given&nbsp;<a href="#card">card</a>&nbsp;object</tt></dd></dl>
+
+<dl><dt><a name="hand-bubble_sort"><strong>bubble_sort</strong></a>(self, trump<font color="#909090">=None</font>)</dt><dd><tt>Sorts&nbsp;a&nbsp;list&nbsp;in&nbsp;place&nbsp;and&nbsp;returns&nbsp;it.&nbsp;Either&nbsp;by&nbsp;trump&nbsp;if&nbsp;given&nbsp;or&nbsp;by&nbsp;suit.<br>
+Separate&nbsp;the&nbsp;two&nbsp;functions?</tt></dd></dl>
+
+<dl><dt><a name="hand-clear"><strong>clear</strong></a>(self)</dt><dd><tt>Erases&nbsp;all&nbsp;cards&nbsp;in&nbsp;<a href="#hand">hand</a></tt></dd></dl>
+
+<dl><dt><a name="hand-give"><strong>give</strong></a>(self, card, other_hand)</dt><dd><tt>Removes&nbsp;a&nbsp;specific&nbsp;<a href="#card">card</a>&nbsp;and&nbsp;then&nbsp;adds&nbsp;it&nbsp;to&nbsp;another&nbsp;<a href="#hand">hand</a></tt></dd></dl>
+
+<dl><dt><a name="hand-remove"><strong>remove</strong></a>(self, card)</dt><dd><tt>Removes&nbsp;a&nbsp;specific&nbsp;<a href="#card">card</a></tt></dd></dl>
+
+<dl><dt><a name="hand-search"><strong>search</strong></a>(self, suit<font color="#909090">=None</font>, rank<font color="#909090">=None</font>)</dt><dd><tt>Searches&nbsp;for&nbsp;a&nbsp;type&nbsp;of&nbsp;<a href="#card">card</a>&nbsp;and&nbsp;then&nbsp;returns&nbsp;the&nbsp;list&nbsp;of&nbsp;all&nbsp;matches<br>
+Must&nbsp;be&nbsp;better&nbsp;way&nbsp;to&nbsp;accomplish&nbsp;this</tt></dd></dl>
+
+<dl><dt><a name="hand-steal"><strong>steal</strong></a>(self, card, other_hand)</dt><dd><tt>Removes&nbsp;a&nbsp;specific&nbsp;<a href="#card">card</a>&nbsp;from&nbsp;another&nbsp;<a href="#hand">hand</a>&nbsp;and&nbsp;then&nbsp;adds&nbsp;it</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="trick">class <strong>trick</strong></a>(<a href="basics.html#hand">hand</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Trick&nbsp;is&nbsp;inherited&nbsp;from&nbsp;Hand.&nbsp;Has&nbsp;some&nbsp;helpful&nbsp;functions<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="trick-best_card"><strong>best_card</strong></a>(self, trump)</dt><dd><tt>Function&nbsp;returns&nbsp;the&nbsp;best&nbsp;<a href="#card">card</a>&nbsp;given&nbsp;the&nbsp;first&nbsp;was&nbsp;lead&nbsp;and&nbsp;trump</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="basics.html#hand">hand</a>:<br>
+<dl><dt><a name="trick-__getitem__"><strong>__getitem__</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="trick-__getstate__"><strong>__getstate__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="trick-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Blank&nbsp;<a href="#hand">hand</a>.&nbsp;No&nbsp;Cards&nbsp;yet.</tt></dd></dl>
+
+<dl><dt><a name="trick-__len__"><strong>__len__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="trick-__setstate__"><strong>__setstate__</strong></a>(self, state)</dt></dl>
+
+<dl><dt><a name="trick-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Prints&nbsp;a&nbsp;list&nbsp;of&nbsp;cards.</tt></dd></dl>
+
+<dl><dt><a name="trick-add"><strong>add</strong></a>(self, card)</dt><dd><tt>Adds&nbsp;a&nbsp;<a href="#card">card</a>,&nbsp;given&nbsp;<a href="#card">card</a>&nbsp;object</tt></dd></dl>
+
+<dl><dt><a name="trick-bubble_sort"><strong>bubble_sort</strong></a>(self, trump<font color="#909090">=None</font>)</dt><dd><tt>Sorts&nbsp;a&nbsp;list&nbsp;in&nbsp;place&nbsp;and&nbsp;returns&nbsp;it.&nbsp;Either&nbsp;by&nbsp;trump&nbsp;if&nbsp;given&nbsp;or&nbsp;by&nbsp;suit.<br>
+Separate&nbsp;the&nbsp;two&nbsp;functions?</tt></dd></dl>
+
+<dl><dt><a name="trick-clear"><strong>clear</strong></a>(self)</dt><dd><tt>Erases&nbsp;all&nbsp;cards&nbsp;in&nbsp;<a href="#hand">hand</a></tt></dd></dl>
+
+<dl><dt><a name="trick-give"><strong>give</strong></a>(self, card, other_hand)</dt><dd><tt>Removes&nbsp;a&nbsp;specific&nbsp;<a href="#card">card</a>&nbsp;and&nbsp;then&nbsp;adds&nbsp;it&nbsp;to&nbsp;another&nbsp;<a href="#hand">hand</a></tt></dd></dl>
+
+<dl><dt><a name="trick-remove"><strong>remove</strong></a>(self, card)</dt><dd><tt>Removes&nbsp;a&nbsp;specific&nbsp;<a href="#card">card</a></tt></dd></dl>
+
+<dl><dt><a name="trick-search"><strong>search</strong></a>(self, suit<font color="#909090">=None</font>, rank<font color="#909090">=None</font>)</dt><dd><tt>Searches&nbsp;for&nbsp;a&nbsp;type&nbsp;of&nbsp;<a href="#card">card</a>&nbsp;and&nbsp;then&nbsp;returns&nbsp;the&nbsp;list&nbsp;of&nbsp;all&nbsp;matches<br>
+Must&nbsp;be&nbsp;better&nbsp;way&nbsp;to&nbsp;accomplish&nbsp;this</tt></dd></dl>
+
+<dl><dt><a name="trick-steal"><strong>steal</strong></a>(self, card, other_hand)</dt><dd><tt>Removes&nbsp;a&nbsp;specific&nbsp;<a href="#card">card</a>&nbsp;from&nbsp;another&nbsp;<a href="#hand">hand</a>&nbsp;and&nbsp;then&nbsp;adds&nbsp;it</tt></dd></dl>
+
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>bower</strong> = 'J'<br>
+<strong>cardname</strong> = [None, '9', '10', 'J', 'Q', 'K', 'A', '9T', '10T', 'QT', 'KT', 'AT', 'LB', 'JT']<br>
+<strong>cardvalu</strong> = [-1, 1, 2, 3, 4, 5, 10, 12, 15, 20, 25, 30, 31, 35]<br>
+<strong>left</strong> = {'C': 'S', 'D': 'H', 'H': 'D', 'S': 'C'}<br>
+<strong>ranks</strong> = [None, '9', '10', 'J', 'Q', 'K', 'A']<br>
+<strong>suit_chars</strong> = [None, u'<font color="#c040c0">\u2660</font>', u'<font color="#c040c0">\u2663</font>', u'<font color="#c040c0">\u2665</font>', u'<font color="#c040c0">\u2666</font>']<br>
+<strong>suits</strong> = [None, 'S', 'D', 'C', 'H']<br>
+<strong>values</strong> = {None: -1, '10': 2, '10T': 15, '9': 1, '9T': 12, 'A': 10, 'AT': 30, 'J': 3, 'JT': 35, 'K': 5, ...}</td></tr></table>
+</body></html>

@@ -1,4 +1,4 @@
-from basics import trick, suits
+from basics import trick#, suits
 
 #suits = [None, "S", "D", "C", "H"]
 

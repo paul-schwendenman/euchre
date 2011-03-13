@@ -22,7 +22,6 @@ class player_curses(player):
         try:
             # Initialize curses
             stdscr = curses.initscr()
-    
             # Turn off echoing of keys, and enter cbreak mode,
             # where no buffering is performed on keyboard input
             curses.noecho()
@@ -201,5 +200,3 @@ class player_curses(player):
             curses.echo()
             curses.nocbreak()
             curses.endwin()
-
-

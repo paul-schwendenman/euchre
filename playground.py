@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from basics import *
 
 a = card("A","C")

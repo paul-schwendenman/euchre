@@ -1,3 +1,3 @@
-__all__ = ['client', 'curses', 'player', 'server', 'test', 'tk', 'web']
+__all__ = ['client', 'curses_', 'player', 'server', 'test', 'tk', 'web']
 
 from player import *
