@@ -197,8 +197,7 @@ class game:
             #print "Team %c gains 2" % (['A', 'B'][bidder % 2])
             log("Team %s gains 2" % (['A...0,2', 'B...1,3'][bidder % 2]))
             self.table.global_message("Team %s gains 2" % (['A...0,2', 'B...1,3'][bidder % 2]), 0)
-
-        elif (result > 0):
+        elif (result == 3 or result == 1):
             #Made the bid
             team[(bidder + 0) % 2] +=1
             #print "Team %c gains 1" % (['A', 'B'][bidder % 2])
@@ -211,6 +210,7 @@ class game:
             log("Team %s euchred. Team %s gains 2" % ((['A...0,2', 'B...1,3'][(bidder) % 2]),(['A...0,2', 'B...1,3'][(bidder + 1) % 2])))
             self.table.global_message("Team %s euchred. Team %s gains 2" % ((['A...0,2', 'B...1,3'][(bidder) % 2]),(['A...0,2', 'B...1,3'][(bidder + 1) % 2])), 0)
         else:
+            print "Result was ", result
             raise IndexError
         return team
 
@@ -224,13 +224,15 @@ class euchre:
         self.table = table(port)
         quit = self.table.quit
         
-        index = 0
         self.game = game()
         self.game.team = [0, 0]
-        team = self.game.team
         self.game.dealer = 0
         log("********* New Game *****************")
+
+    def play(self):
         redeals = 0
+        team = self.game.team
+
         while(team[0] < 10 and team[1] < 10):
             #keep playing until someone gets ten points.
             self.table.start(self.game)
@@ -269,6 +271,8 @@ def quit():
 def main(port):
     print "running euchre"
     a  = euchre(port)
+    print "playing euchre"
+    a.play()
     print "game over"
 
 if __name__ == "__main__":
