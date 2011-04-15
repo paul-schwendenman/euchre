@@ -1,10 +1,10 @@
 import curses
-import euchre
+import basics
 
-A = euchre.card("A","C")
-B = euchre.card("9","C")
-C = euchre.card("K","H")
-D = euchre.card("J","D")
+A = basics.card("A","C")
+B = basics.card("9","C")
+C = basics.card("K","H")
+D = basics.card("J","D")
 
 def display(top_card = None, trump = "S", dealer = 0, played_cards = [], cards = None, team = [4,5], msg = "", error = ""):
     ## Pulled from curses.wrapper 2.6, modified.
@@ -123,7 +123,7 @@ class table():
         self.played_cards = [A, C]
 #        self.played_cards = [A]
 #        self.played_cards = []
-        self.cards = euchre.hand()
+        self.cards = basics.hand()
         self.cards.cards = 4 * [A] + [B]
         self.team = [4, 5]
         self.msg = "play these cards? "
